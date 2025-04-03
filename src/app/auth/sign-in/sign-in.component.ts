@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ResponseApi } from 'app/core/models/response-api.model';
 
 @Component({
   selector: 'app-sign-in',
@@ -17,9 +18,13 @@ export class SignInComponent {
   
   singIn(usuario:string, id:number):void{
     this._authService.signIn(usuario, id).subscribe({
-      next: (resp)=>{
-        const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-        this._router.navigateByUrl(redirectURL);
+      next: (resp:ResponseApi)=>{
+        if(resp.status==='OK'){
+          const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+          this._router.navigateByUrl(redirectURL);
+        }else{
+          console.log('error iniciar sesion');
+        }       
       },
       error: ()=>{}
     });
