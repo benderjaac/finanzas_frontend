@@ -26,7 +26,7 @@ export class AuthService {
     {
         return throwError('El usuario ya esta logueado');
     }
-    this._authApiService.signIn({user:user, pass:'123'}).subscribe({
+    this._authApiService.signIn({username:user, pass:'123'}).subscribe({
       next: (response:ResponseApi) =>{
         console.log('respuesta: ', response);
       },

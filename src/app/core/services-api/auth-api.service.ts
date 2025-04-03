@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ResponseApi } from 'app/core/models/response-api.model';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +14,10 @@ export class AuthApiService {
   
   constructor(
   ) {
-    this.urlApi='localhost';
+    this.urlApi=environment.apiUrl;
   }
 
-  signIn(credentials:any):Observable<ResponseApi>{
-    return this._httpClient.post<ResponseApi>(this.urlApi+'login', credentials);
+  signIn(credentials:{username:string, pass:string}):Observable<ResponseApi>{
+    return this._httpClient.post<ResponseApi>(this.urlApi+'/login', credentials);
   }
 }
