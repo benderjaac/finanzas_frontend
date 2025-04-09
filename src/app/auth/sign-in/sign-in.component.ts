@@ -2,31 +2,49 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponseApi } from 'app/core/models/response-api.model';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { PasswordModule } from 'primeng/password';
+
 
 @Component({
   selector: 'app-sign-in',
-  imports: [],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.css'
+  styleUrl: './sign-in.component.scss'
 })
 export class SignInComponent {
 
+  loginForm!: FormGroup;
   
   private _authService = inject(AuthService);
   private _activatedRoute = inject(ActivatedRoute);
   private _router = inject(Router);
-  
-  singIn(usuario:string, id:number):void{
-    this._authService.signIn(usuario, id).subscribe({
-      next: (resp:ResponseApi)=>{
-        if(resp.status==='OK'){
-          const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-          this._router.navigateByUrl(redirectURL);
-        }else{
-          console.log('error iniciar sesion');
-        }       
-      },
-      error: ()=>{}
+
+  private fb = inject(FormBuilder);
+
+  ngOnInit(){
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
     });
   }
+
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this._authService.signIn(this.loginForm.value).subscribe({
+        next: ()=>{
+          const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
+          console.log('Redireccionar a: ', redirectURL);
+          this._router.navigateByUrl(redirectURL);
+        },
+        error: (error)=>{
+          console.log('error iniciar sesion', error.error.error);
+        }
+      });
+    }
+  } 
+  
 }

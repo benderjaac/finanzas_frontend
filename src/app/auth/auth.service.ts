@@ -1,7 +1,8 @@
 import { Inject, Injectable, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { ResponseApi } from 'app/core/models/response-api.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, tap, throwError } from 'rxjs';
 
 interface usuario {
   name:string,
@@ -15,33 +16,35 @@ interface usuario {
 export class AuthService {
   
   public _authenticated = signal<boolean>(false);
-  public _user = signal<usuario>({name:'', id:0});
+  public _user = signal<usuario | null>(null);
+  private _router = Inject(Router);
   
   constructor(
     private _authApiService: AuthApiService
   ) { }
 
-  signIn(user:string, id:number):Observable<any>{
-    if ( this._authenticated() )
-    {
+  signIn(credentials:{username:string, password:string}):Observable<any>{
+    if ( this._authenticated() ){
         return throwError('El usuario ya esta logueado');
     }
-    this._authApiService.signIn({username:user, pass:'123'}).subscribe({
-      next: (response:ResponseApi) =>{
-        console.log('respuesta: ', response);
-      },
-      error: (error:any) =>{
-        console.log('Error: ', error);
-      },
-    });
-    this._user.set({name:user, id:id});
-    this._authenticated.set(true);
-    return of(true);
+    return this._authApiService.signIn(credentials).pipe(
+      tap((response: any) => {        
+        localStorage.setItem('auth_token', response.token);
+        this._user.set({ name: credentials.username, id: 1 });
+        this._authenticated.set(true);        
+      })
+    );
   }
 
-  signOut(): Observable<any>{
+  signOut(): void{
+    localStorage.removeItem('auth_token');
+    this._user.set(null);
     this._authenticated.set(false);
-    return of(true);
+    this._router.navigateByUrl('/sign-in');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('auth_token');
   }
   
 }

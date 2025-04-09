@@ -17,7 +17,7 @@ export class AuthApiService {
     this.urlApi=environment.apiUrl;
   }
 
-  signIn(credentials:{username:string, pass:string}):Observable<ResponseApi>{
-    return this._httpClient.post<ResponseApi>(this.urlApi+'/login', credentials);
+  signIn(credentials:{username:string, password:string}):Observable<ResponseApi>{
+    return this._httpClient.post<ResponseApi>(this.urlApi+'/auth/login', credentials);
   }
 }

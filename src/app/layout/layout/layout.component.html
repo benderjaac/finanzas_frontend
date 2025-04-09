@@ -1,4 +1,4 @@
 <p>aca va el menu</p>
-<p>USUARIO LOGUEADO {{_authService._user().name}}</p>
+<p>USUARIO LOGUEADO {{_authService._user()?.name}}</p>
 <button (click)="singOut()">Cerrar sesion</button>
 <router-outlet></router-outlet>

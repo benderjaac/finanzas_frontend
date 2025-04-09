@@ -12,14 +12,6 @@ private _router = inject(Router);
 public _authService = inject(AuthService);
 
 singOut():void{
-  this._router.navigate(['/sign-out']);
-  /*this._authService.signOut().subscribe({
-    next:()=>{
-
-    },
-    error:()=>{
-      console.error('Error al cerrar sesion');
-    }
-  });*/
+  this._router.navigate(['/sign-out']);  
 }
 }
