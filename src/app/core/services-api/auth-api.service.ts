@@ -20,4 +20,8 @@ export class AuthApiService {
   signIn(credentials:{username:string, password:string}):Observable<ResponseApi>{
     return this._httpClient.post<ResponseApi>(this.urlApi+'/auth/login', credentials);
   }
+
+  checkMe():Observable<ResponseApi>{
+    return this._httpClient.get<ResponseApi>(this.urlApi+'/api/users/me');
+  }
 }

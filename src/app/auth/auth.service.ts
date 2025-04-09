@@ -2,7 +2,7 @@ import { Inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResponseApi } from 'app/core/models/response-api.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
-import { Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 interface usuario {
   name:string,
@@ -45,6 +45,22 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('auth_token');
+  }
+
+  checkToken(): Observable<boolean>{
+    return this._authApiService.checkMe().pipe(
+      tap((response: ResponseApi) => {
+        console.log('respuesta:', response);
+        this._user.set({ name: response.data.name, id: response.data.id });
+        this._authenticated.set(true);
+        console.log('return true en service');
+      }),
+      map(() => true),
+      catchError(() => {
+        console.log('return false en service');
+        return of(false);
+      })
+    );  
   }
   
 }
