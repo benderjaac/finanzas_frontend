@@ -6,7 +6,6 @@ import { AuthService } from 'app/auth/auth.service';
   selector: 'app-layout',
   imports: [RouterOutlet],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
 private _router = inject(Router);

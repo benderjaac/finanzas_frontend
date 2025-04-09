@@ -4,15 +4,19 @@ import { Toast } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 
+import { ViewChild } from '@angular/core';
+import { DrawerModule } from 'primeng/drawer';
+import { AvatarModule } from 'primeng/avatar';
+import { StyleClass } from 'primeng/styleclass';
+import { Drawer } from 'primeng/drawer';
+
 @Component({
   selector: 'app-pruebas',
-  imports: [Toast, ButtonModule, Ripple],
+  imports: [Toast, ButtonModule, Ripple, DrawerModule, AvatarModule, StyleClass],
   templateUrl: './pruebas.component.html',
-  styleUrl: './pruebas.component.css',
   providers: [MessageService]
 })
 export class PruebasComponent {
-  title = 'Ejemplos';
   constructor(
     private messageService: MessageService
   ){
@@ -30,4 +34,12 @@ export class PruebasComponent {
       { severity: 'info', summary: 'Info', detail: 'Message Content', life: 3000 }
     );
   }
+
+  @ViewChild('drawerRef') drawerRef!: Drawer;
+
+    closeCallback(e:any): void {
+        this.drawerRef.close(e);
+    }
+
+    visible: boolean = false;
 }
