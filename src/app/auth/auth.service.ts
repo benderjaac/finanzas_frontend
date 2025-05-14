@@ -59,5 +59,16 @@ export class AuthService {
       })
     );  
   }
+
+  register(data:{username:string, password:string, email:string}):Observable<any>{
+    localStorage.removeItem('auth_token');
+    return this._authApiService.register(data).pipe(
+      tap((response: any) => {        
+        localStorage.setItem('auth_token', response.token);
+        this._user.set({ name: data.username, id: 1 });
+        this._authenticated.set(true);        
+      })
+    );
+  }
   
 }

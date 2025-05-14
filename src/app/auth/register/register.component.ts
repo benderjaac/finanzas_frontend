@@ -1,42 +1,43 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
+import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { PasswordModule } from 'primeng/password';
 
-
 @Component({
-  selector: 'app-sign-in',
+  selector: 'app-register',
   imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
-  templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.scss'
 })
-export class SignInComponent {
+export class RegisterComponent {
 
-  loginForm!: FormGroup;
-  
+  registerForm!: FormGroup;
+
   private _authService = inject(AuthService);
   private _activatedRoute = inject(ActivatedRoute);
   private _router = inject(Router);
+  private _authApiService = inject(AuthApiService);
 
   private fb = inject(FormBuilder);
 
   ngOnInit(){
-    this.loginForm = this.fb.group({
+    this.registerForm = this.fb.group({
       username: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this._authService.signIn(this.loginForm.value).subscribe({
+    if (this.registerForm.valid) {
+      this._authService.register(this.registerForm.value).subscribe({
         next: ()=>{
-          const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-          this._router.navigate([redirectURL]);
+          this._router.navigate(['/inicio']);
         },
         error: (error)=>{
           console.error('error iniciar sesion', error.error.error);
@@ -44,5 +45,5 @@ export class SignInComponent {
       });
     }
   } 
-  
+
 }

@@ -24,4 +24,8 @@ export class AuthApiService {
   checkMe():Observable<ResponseApi>{
     return this._httpClient.get<ResponseApi>(this.urlApi+'/api/users/me');
   }
+
+  register(data:{username:string, password:string, email:string}):Observable<ResponseApi>{
+    return this._httpClient.post<ResponseApi>(this.urlApi+'/auth/register', data);
+  }
 }
