@@ -37,11 +37,10 @@ export class SignInComponent {
       this._authService.signIn(this.loginForm.value).subscribe({
         next: ()=>{
           const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-          console.log('Redireccionar a: ', redirectURL);
-          this._router.navigateByUrl(redirectURL);
+          this._router.navigate([redirectURL]);
         },
         error: (error)=>{
-          console.log('error iniciar sesion', error.error.error);
+          console.error('error iniciar sesion', error.error.error);
         }
       });
     }

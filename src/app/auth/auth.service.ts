@@ -16,11 +16,11 @@ interface usuario {
 export class AuthService {
   
   public _authenticated = signal<boolean>(false);
-  public _user = signal<usuario | null>(null);
-  private _router = Inject(Router);
+  public _user = signal<usuario | null>(null);  
   
   constructor(
-    private _authApiService: AuthApiService
+    private _authApiService: AuthApiService,
+    private _router: Router
   ) { }
 
   signIn(credentials:{username:string, password:string}):Observable<any>{
@@ -40,8 +40,7 @@ export class AuthService {
   signOut(): void{
     localStorage.removeItem('auth_token');
     this._user.set(null);
-    this._authenticated.set(false);
-    this._router.navigateByUrl('/sign-in');
+    this._authenticated.set(false);    
   }
 
   getToken(): string | null {
