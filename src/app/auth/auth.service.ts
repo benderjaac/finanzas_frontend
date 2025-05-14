@@ -27,6 +27,7 @@ export class AuthService {
     if ( this._authenticated() ){
         return throwError('El usuario ya esta logueado');
     }
+    localStorage.removeItem('auth_token');
     return this._authApiService.signIn(credentials).pipe(
       tap((response: any) => {        
         localStorage.setItem('auth_token', response.token);
