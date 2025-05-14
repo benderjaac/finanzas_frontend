@@ -51,14 +51,11 @@ export class AuthService {
   checkToken(): Observable<boolean>{
     return this._authApiService.checkMe().pipe(
       tap((response: ResponseApi) => {
-        console.log('respuesta:', response);
         this._user.set({ name: response.data.name, id: response.data.id });
-        this._authenticated.set(true);
-        console.log('return true en service');
+        this._authenticated.set(true);        
       }),
       map(() => true),
       catchError(() => {
-        console.log('return false en service');
         return of(false);
       })
     );  
