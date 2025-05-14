@@ -12,7 +12,7 @@
             formControlName="username"
             class="w-full"
           />
-          <small *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-red-500">
+          <small *ngIf="loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched" class="text-red-500">
             Usuario requerido
           </small>
         </div>
@@ -26,7 +26,7 @@
             formControlName="password"
             class="w-full"
           />
-          <small *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500">
+          <small *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched" class="text-red-500">
             Contraseña requerida
           </small>
         </div>
