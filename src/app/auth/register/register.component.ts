@@ -4,13 +4,13 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule],
+  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
