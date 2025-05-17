@@ -24,6 +24,7 @@
             type="password"
             pPassword
             formControlName="password"
+            [feedback]="false"
             class="w-full"
           />
           <small *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched" class="text-red-500">
@@ -39,8 +40,9 @@
           [disabled]="loginForm.invalid"
         ></button>
       </form>
-      
-      <a class="mt-10"  [routerLink]="['/register']"> Registrarme </a>
+      <div class="mt-4">
+        <a [routerLink]="['/register']"> Registrarme </a>
+      </div>      
 
     </div>
   </div>
