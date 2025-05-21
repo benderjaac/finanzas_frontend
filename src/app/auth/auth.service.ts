@@ -1,12 +1,29 @@
-import { Inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ResponseApi } from 'app/core/models/response-api.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 interface usuario {
-  name:string,
   id:number,
+  username:string,
+  email:string,  
+  perfil:perfil
+}
+
+interface perfil {
+  id:number,
+  descri:string,  
+  nombre:string,  
+  permisos: permiso[]
+}
+
+interface permiso {
+  id:number,
+  descri:string,  
+  nombre:string,  
+  rol: string,
+  visible: boolean,
 }
 
 @Injectable({
@@ -16,7 +33,7 @@ interface usuario {
 export class AuthService {
   
   public _authenticated = signal<boolean>(false);
-  public _user = signal<usuario | null>(null);  
+  public _user = signal<usuario | null>(null);    
   
   constructor(
     private _authApiService: AuthApiService,
@@ -31,7 +48,7 @@ export class AuthService {
     return this._authApiService.signIn(credentials).pipe(
       tap((response: any) => {        
         localStorage.setItem('auth_token', response.token);
-        this._user.set({ name: credentials.username, id: 1 });
+        this._user.set(response.user);
         this._authenticated.set(true);        
       })
     );
@@ -50,7 +67,7 @@ export class AuthService {
   checkToken(): Observable<boolean>{
     return this._authApiService.checkMe().pipe(
       tap((response: ResponseApi) => {
-        this._user.set({ name: response.data.name, id: response.data.id });
+        this._user.set(response.data);
         this._authenticated.set(true);        
       }),
       map(() => true),
@@ -65,7 +82,7 @@ export class AuthService {
     return this._authApiService.register(data).pipe(
       tap((response: any) => {        
         localStorage.setItem('auth_token', response.token);
-        this._user.set({ name: data.username, id: 1 });
+        this._user.set(response);
         this._authenticated.set(true);        
       })
     );
