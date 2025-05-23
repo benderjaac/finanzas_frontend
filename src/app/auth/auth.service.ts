@@ -82,7 +82,7 @@ export class AuthService {
     return this._authApiService.register(data).pipe(
       tap((response: any) => {        
         localStorage.setItem('auth_token', response.token);
-        this._user.set(response);
+        this._user.set(response.user);
         this._authenticated.set(true);        
       })
     );

@@ -6,7 +6,7 @@ import { I18nPluralPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-sign-out',
-  imports: [NgIf, I18nPluralPipe],
+  imports: [NgIf, I18nPluralPipe, RouterLink],
   templateUrl: './sign-out.component.html',
   styleUrl: './sign-out.component.css'
 })
