@@ -25,27 +25,16 @@
             
         </div>                
     </ng-template>
-    
-    <ng-template #footer>
-        <hr class="mb-4 mx-4 border-t border-0 border-surface" />
-        <div class="flex items-center gap-2">
-            <button pButton label="Cuenta" icon="pi pi-user" class="w-full" outlined></button>
-            <button pButton label="Cerrar sesión" (click)="singOut()" icon="pi pi-sign-out" class="w-full" severity="danger" text></button>
-        </div>
-    </ng-template>
 </p-drawer>
 
 <div class="flex h-screen" [ngClass]="{'ml-80 transition-all': showSidebar() && !isMobile()}">
 	<div class="flex flex-col flex-1">
 		<!-- Header -->
-		<div class="bg-gray-300 text-white p-4 shadow-md">
-			<div class="flex">
-				<!-- Botón hamburguesa (visible solo en móvil) -->
-				<p-button *ngIf="!showSidebar()" (click)="toggleSidebar()" icon="pi pi-bars" />
-				<p class="ml-10">usuario: {{_authService._user()?.username}}</p>
-				<p class="ml-10">email {{_authService._user()?.email}}</p>
-				<p class="ml-10">perfil {{_authService._user()?.perfil?.nombre}}</p>				
-			</div>			
+		<div class="flex justify-end bg-gray-200 text-white p-4 shadow-md">
+			<div class="flex  gap-2">
+                <button pButton [label]="_authService._user()!.username" icon="pi pi-user" class="bg-white w-40" outlined></button>
+                <button pButton label="Cerrar sesión" (click)="singOut()" icon="pi pi-sign-out" class="bg-white w-40" severity="danger" text></button>
+            </div>			
 		</div>
 
 		<!-- Zona de trabajo -->
