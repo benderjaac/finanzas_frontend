@@ -8,7 +8,7 @@
             <ng-container *ngFor="let Menu of menuPrincipal.hijos">
             @if(Menu.hijos.length==0){
                 <li>
-                    <a pRipple class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                    <a pRipple [routerLink]="[Menu.link]" class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
                         <i class="pi pi-home mr-2"></i>
                         <span class="font-medium">{{Menu.nombre}}</span>
                     </a>
@@ -31,7 +31,7 @@
                         <ng-container *ngFor="let subMenu of Menu.hijos">
                             @if(subMenu.hijos.length==0){
                                 <li *ngIf="subMenu.visible">
-                                    <a pRipple class="flex items-center ml-4 cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                                    <a pRipple [routerLink]="[subMenu.link]" class="flex items-center ml-4 cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
                                         <i class="pi pi-home mr-2"></i>
                                         <span class="font-medium">{{subMenu.nombre}}</span>
                                     </a>
@@ -53,7 +53,7 @@
                                     <ul class="list-none p-0 m-0 overflow-hidden">
                                         <ng-container *ngFor="let subsubMenu of subMenu.hijos">                                            
                                             <li *ngIf="subsubMenu.visible">
-                                                <a pRipple class="ml-8 flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                                                <a pRipple [routerLink]="[subsubMenu.link]" class="ml-8 flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
                                                     <i class="pi pi-home mr-2"></i>
                                                     <span class="font-medium">{{subsubMenu.nombre}}</span>
                                                 </a>
