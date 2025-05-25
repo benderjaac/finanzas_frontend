@@ -1,0 +1,77 @@
+<div class="overflow-y-auto">
+
+    <ng-container *ngFor="let menuPrincipal of perfilMenu">
+
+        <div class="justify-center">{{menuPrincipal.nombre}}</div>
+        <ul class="list-none p-4 m-0">
+            
+            <ng-container *ngFor="let Menu of menuPrincipal.hijos">
+            @if(Menu.hijos.length==0){
+                <li>
+                    <a pRipple class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                        <i class="pi pi-home mr-2"></i>
+                        <span class="font-medium">{{Menu.nombre}}</span>
+                    </a>
+                </li>
+            }@else {
+                <li>
+                    <div
+                        pRipple
+                        pStyleClass="@next"
+                        enterFromClass="hidden"
+                        enterActiveClass="animate-slidedown"
+                        leaveToClass="hidden"
+                        leaveActiveClass="animate-slideup"
+                        class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer p-ripple"
+                    >
+                        <span class="font-medium">{{Menu.nombre}}</span>
+                        <i class="pi pi-chevron-down"></i>
+                    </div>
+                    <ul class="list-none p-0 m-0 overflow-hidden">
+                        <ng-container *ngFor="let subMenu of Menu.hijos">
+                            @if(subMenu.hijos.length==0){
+                                <li *ngIf="subMenu.visible">
+                                    <a pRipple class="flex items-center ml-4 cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                                        <i class="pi pi-home mr-2"></i>
+                                        <span class="font-medium">{{subMenu.nombre}}</span>
+                                    </a>
+                                </li>
+                            }@else {
+                                <li *ngIf="subMenu.visible">
+                                    <div
+                                        pRipple
+                                        pStyleClass="@next"
+                                        enterFromClass="hidden"
+                                        enterActiveClass="animate-slidedown"
+                                        leaveToClass="hidden"
+                                        leaveActiveClass="animate-slideup"
+                                        class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer p-ripple"
+                                    >
+                                        <span class="ml-4 font-medium">{{subMenu.nombre}}</span>
+                                        <i class="pi pi-chevron-down"></i>
+                                    </div>
+                                    <ul class="list-none p-0 m-0 overflow-hidden">
+                                        <ng-container *ngFor="let subsubMenu of subMenu.hijos">                                            
+                                            <li *ngIf="subsubMenu.visible">
+                                                <a pRipple class="ml-8 flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
+                                                    <i class="pi pi-home mr-2"></i>
+                                                    <span class="font-medium">{{subsubMenu.nombre}}</span>
+                                                </a>
+                                            </li>                                            
+                                        </ng-container>
+                                        
+                                    </ul>
+                                </li>
+                            }                            
+                        </ng-container>
+                        
+                    </ul>
+                </li>
+            }
+            </ng-container>
+                             
+        </ul>
+
+    </ng-container>   
+    
+</div>
