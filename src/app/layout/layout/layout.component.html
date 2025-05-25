@@ -29,12 +29,18 @@
 
 <div class="flex h-screen" [ngClass]="{'ml-80 transition-all': showSidebar() && !isMobile()}">
 	<div class="flex flex-col flex-1">
-		<!-- Header -->
-		<div class="flex justify-end bg-gray-200 text-white p-4 shadow-md">
-			<div class="flex  gap-2">
+        <!-- Header -->
+		<div class="flex justify-between items-center bg-gray-200 p-4 shadow-md">            
+            <div>
+                <p-button *ngIf="!showSidebar()" (click)="toggleSidebar()" icon="pi pi-bars" />
+            </div>  
+            
+            <div class="flex gap-2">                
                 <button pButton [label]="_authService._user()!.username" icon="pi pi-user" class="bg-white w-40" outlined></button>
                 <button pButton label="Cerrar sesión" (click)="singOut()" icon="pi pi-sign-out" class="bg-white w-40" severity="danger" text></button>
             </div>			
+            
+			
 		</div>
 
 		<!-- Zona de trabajo -->
