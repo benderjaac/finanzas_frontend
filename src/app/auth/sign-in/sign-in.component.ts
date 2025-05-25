@@ -12,7 +12,7 @@ import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-sign-in',
-  imports: [Toast , CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
+  imports: [Toast, CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',
   providers: [MessageService]
