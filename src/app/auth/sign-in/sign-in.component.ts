@@ -6,13 +6,16 @@ import { CommonModule } from '@angular/common';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { PasswordModule } from 'primeng/password';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 
 @Component({
   selector: 'app-sign-in',
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
+  imports: [Toast , CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
   templateUrl: './sign-in.component.html',
-  styleUrl: './sign-in.component.scss'
+  styleUrl: './sign-in.component.scss',
+  providers: [MessageService]
 })
 export class SignInComponent {
 
@@ -21,6 +24,7 @@ export class SignInComponent {
   private _authService = inject(AuthService);
   private _activatedRoute = inject(ActivatedRoute);
   private _router = inject(Router);
+  private messageService=inject(MessageService);
 
   private fb = inject(FormBuilder);
 
@@ -34,12 +38,14 @@ export class SignInComponent {
   onSubmit() {
     if (this.loginForm.valid) {
       this._authService.signIn(this.loginForm.value).subscribe({
-        next: ()=>{
+        next: ()=>{          
           const redirectURL = this._activatedRoute.snapshot.queryParamMap.get('redirectURL') || '/signed-in-redirect';
-          this._router.navigate([redirectURL]);
+          this._router.navigate([redirectURL]);          
         },
         error: (error)=>{
-          console.error('error iniciar sesion', error.error.error);
+          this.messageService.add(
+            { severity: 'error', summary: 'Error de sesión', detail: error.error.message, life: 3000 }
+          );          
         }
       });
     }

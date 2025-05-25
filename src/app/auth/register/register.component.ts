@@ -7,21 +7,23 @@ import { AuthService } from '../auth.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { PasswordModule } from 'primeng/password';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
+  imports: [Toast, CommonModule, ReactiveFormsModule, InputTextModule, ButtonModule, PasswordModule, RouterModule],
   templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
+  providers: [MessageService]
 })
 export class RegisterComponent {
 
   registerForm!: FormGroup;
 
   private _authService = inject(AuthService);
-  private _activatedRoute = inject(ActivatedRoute);
   private _router = inject(Router);
-  private _authApiService = inject(AuthApiService);
+  private messageService=inject(MessageService);
 
   private fb = inject(FormBuilder);
 
@@ -40,7 +42,9 @@ export class RegisterComponent {
           this._router.navigate(['/inicio']);
         },
         error: (error)=>{
-          console.error('error iniciar sesion', error.error.error);
+          this.messageService.add(
+            { severity: 'error', summary: 'Error de registro', detail: error.error.message, life: 3000 }
+          ); 
         }
       });
     }
