@@ -8,8 +8,8 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
   const _authService = inject(AuthService);
   const router: Router = inject(Router);
   
+  //validacion de autenticacion
   if(!_authService._authenticated()){
-
     return _authService.checkToken().pipe(
       map((isValid) => {
         if (isValid) {
@@ -19,6 +19,12 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
         return router.parseUrl(`sign-in?${redirectURL}`);
       })
     );
+  }
+  //validacion de permisos
+  if(state.url!='/404-not-found' && state.url!='/inicio'){
+    if(!_authService.permiso(state.url)){
+      return router.parseUrl(`404-not-found`);
+    }
   }
   return of(true);  
 };

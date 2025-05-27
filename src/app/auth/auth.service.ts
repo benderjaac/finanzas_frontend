@@ -96,11 +96,15 @@ export class AuthService {
     this._roles.clear();
     const traverse = (permisos: PermisoDTO[]) => {
       for (const p of permisos) {
-        if (p.rol) this._roles.add(p.rol);
+        if (p.rol) this._roles.add("/"+p.link);
         if (p.hijos) traverse(p.hijos);
       }
     };
-    traverse(permisos);  
+    traverse(permisos); 
+  }
+
+  permiso(url:string):boolean{
+    return this._roles.has(url);
   }
   
 }
