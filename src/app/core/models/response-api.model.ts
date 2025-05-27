@@ -7,11 +7,11 @@ export interface ResponseApi{
     timestamp:string
 }
 
-export interface ResponseType<T> extends ResponseApi{
+export interface ResponseApiType<T> extends ResponseApi{
     data:T[]    
 }
 
-export interface ResponseSimple<T> extends ResponseApi{
+export interface ResponseApiSimple<T> extends ResponseApi{
     data:T    
 }
 

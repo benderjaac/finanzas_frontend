@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { ResponseApi, ResponseAuth, ResponseSimple } from 'app/core/models/response-api.model';
+import { ResponseApi, ResponseAuth, ResponseApiSimple } from 'app/core/models/response-api.model';
 import { User } from 'app/core/models/user.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { MenuItem } from 'primeng/api';
@@ -68,7 +68,7 @@ export class AuthService {
 
   checkToken(): Observable<boolean>{
     return this._authApiService.checkMe().pipe(
-      tap((response: ResponseSimple<User>) => {
+      tap((response: ResponseApiSimple<User>) => {
         this._user.set(response.data);
         this._authenticated.set(true);        
         this.extractRoles(response.data.perfil.menu);
