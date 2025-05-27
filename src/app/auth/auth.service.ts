@@ -1,16 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { ResponseApi } from 'app/core/models/response-api.model';
+import { ResponseApi, ResponseAuth, ResponseSimple } from 'app/core/models/response-api.model';
+import { User } from 'app/core/models/user.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
 import { MenuItem } from 'primeng/api';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-
-export interface usuario {
-  id:number,
-  username:string,
-  email:string,  
-  perfil:perfil
-}
 
 export interface perfil {
   id:number,
@@ -38,7 +32,7 @@ export interface PermisoDTO{
 export class AuthService {
   
   public _authenticated = signal<boolean>(false);
-  public _user = signal<usuario | null>(null); 
+  public _user = signal<User | null>(null); 
   public _roles = new Set<string>();   
   
   constructor(
@@ -46,13 +40,13 @@ export class AuthService {
     private _router: Router
   ) { }
 
-  signIn(credentials:{username:string, password:string}):Observable<any>{
+  signIn(credentials:{username:string, password:string}):Observable<ResponseAuth>{
     if ( this._authenticated() ){
         return throwError('El usuario ya esta logueado');
     }
     localStorage.removeItem('auth_token');
     return this._authApiService.signIn(credentials).pipe(
-      tap((response: any) => {        
+      tap((response: ResponseAuth) => {        
         localStorage.setItem('auth_token', response.token);
         this._user.set(response.user);        
         this._authenticated.set(true);
@@ -74,7 +68,7 @@ export class AuthService {
 
   checkToken(): Observable<boolean>{
     return this._authApiService.checkMe().pipe(
-      tap((response: ResponseApi) => {
+      tap((response: ResponseSimple<User>) => {
         this._user.set(response.data);
         this._authenticated.set(true);        
         this.extractRoles(response.data.perfil.menu);
@@ -86,10 +80,10 @@ export class AuthService {
     );  
   }
 
-  register(data:{username:string, password:string, email:string}):Observable<any>{
+  register(data:{username:string, password:string, email:string}):Observable<ResponseAuth>{
     localStorage.removeItem('auth_token');
     return this._authApiService.register(data).pipe(
-      tap((response: any) => {        
+      tap((response: ResponseAuth) => {        
         localStorage.setItem('auth_token', response.token);
         this._user.set(response.user);
         this._authenticated.set(true);
