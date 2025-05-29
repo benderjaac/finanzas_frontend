@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { PruebasComponent } from './pruebas/pruebas/pruebas.component';
 import { LayoutComponent } from './layout/layout/layout.component';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { NoAuthGuard } from './auth/guards/no-auth.guard';
@@ -8,7 +7,6 @@ import { NotFoundComponent } from './modules/not-found/not-found.component';
 import { EmptyComponent } from './layout/empty/empty.component';
 
 export const routes: Routes = [
-    {path:'pruebas', component: PruebasComponent},
     {path:'', pathMatch : 'full', redirectTo: 'inicio'},
     {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'inicio'},
         
@@ -81,7 +79,6 @@ export const routes: Routes = [
         ]  
     },
 
-    {path: 'pruebas', pathMatch: 'full', component: PruebasComponent},
     {path: '404-not-found', pathMatch: 'full', component: NotFoundComponent},
     {path: '**', redirectTo: '404-not-found'}
 
