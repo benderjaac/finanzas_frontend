@@ -1,19 +1,33 @@
 
 <div class="flex justify-end ml-4 mb-8">
-    <div>
-        
+    <div class="">
+        Lista de usuarios
     </div>
 </div>
-<p-table [value]="usuarios" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template #header>
+<p-table 
+    [value]="usuarios" 
+    [lazy]="true"
+    
+    [paginator]="true"
+    [rowsPerPageOptions]="[2, 4, 8]"
+    [rows]="2"
+    [totalRecords]="totalRecords"[showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} usuarios"
+    
+    
+    (onLazyLoad)="getUsersData($event)"
+    
+    [loading]="loading"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
         <tr>
-            <th>ID</th>
-            <th>Email</th>
-            <th>Username</th>
-            <th>Perfil</th>
+            <th pSortableColumn="id"><p-sortIcon field="id" /> ID</th>
+            <th pSortableColumn="email"><p-sortIcon field="email" /> Email</th>
+            <th pSortableColumn="username"><p-sortIcon field="username" /> Username</th>
+            <th pSortableColumn="perfilNombre"><p-sortIcon field="perfilNombre" /> Perfil</th>
         </tr>
     </ng-template>
-    <ng-template #body let-usuario>
+    <ng-template pTemplate="body" let-usuario>
         <tr>
             <td>{{ usuario.id }}</td>
             <td>{{ usuario.email }}</td>
