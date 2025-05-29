@@ -1,1 +1,24 @@
 
+<div class="flex justify-end ml-4 mb-8">
+    <div>
+        
+    </div>
+</div>
+<p-table [value]="usuarios" [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template #header>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Perfil</th>
+        </tr>
+    </ng-template>
+    <ng-template #body let-usuario>
+        <tr>
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.username }}</td>
+            <td>{{ usuario.perfilNombre }}</td>
+        </tr>
+    </ng-template>
+</p-table>

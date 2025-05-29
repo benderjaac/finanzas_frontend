@@ -1,29 +1,10 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { ResponseApi, ResponseAuth, ResponseApiSimple } from 'app/core/models/response-api.model';
+import { PermisoDTO } from 'app/core/models/permisoDTO.model';
+import { ResponseAuth, ResponseApiSimple } from 'app/core/models/response-api.model';
 import { User } from 'app/core/models/user.model';
 import { AuthApiService } from 'app/core/services-api/auth-api.service';
-import { MenuItem } from 'primeng/api';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
-
-export interface perfil {
-  id:number,
-  descri:string,  
-  nombre:string,  
-  menu: PermisoDTO[]
-}
-
-export interface PermisoDTO{
-  id: number,
-  nombre: string | null,
-  descri: string | null,
-  icon: string | null,  
-  link: string | null,  
-  padre_id: number | null,
-  rol : null,
-  visible : boolean,
-  hijos: PermisoDTO[],
-}
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +18,6 @@ export class AuthService {
   
   constructor(
     private _authApiService: AuthApiService,
-    private _router: Router
   ) { }
 
   signIn(credentials:{username:string, password:string}):Observable<ResponseAuth>{
@@ -50,7 +30,7 @@ export class AuthService {
         localStorage.setItem('auth_token', response.token);
         this._user.set(response.user);        
         this._authenticated.set(true);
-        this.extractRoles(response.user.perfil.menu);        
+        this.extractRoles(response.user.perfil!.menu);        
       })
     );
   }
@@ -71,7 +51,7 @@ export class AuthService {
       tap((response: ResponseApiSimple<User>) => {
         this._user.set(response.data);
         this._authenticated.set(true);        
-        this.extractRoles(response.data.perfil.menu);
+        this.extractRoles(response.data.perfil!.menu);
       }),
       map(() => true),
       catchError(() => {
@@ -87,7 +67,7 @@ export class AuthService {
         localStorage.setItem('auth_token', response.token);
         this._user.set(response.user);
         this._authenticated.set(true);
-        this.extractRoles(response.user.perfil.menu);        
+        this.extractRoles(response.user.perfil!.menu);        
       })
     );
   } 

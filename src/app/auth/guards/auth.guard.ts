@@ -21,7 +21,7 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
     );
   }
   //validacion de permisos
-  if(state.url!='/404-not-found' && state.url!='/inicio'){
+  if(state.url!='/404-not-found' && state.url!='/inicio' && state.url!='/sign-out'){
     if(!_authService.permiso(state.url)){
       return router.parseUrl(`404-not-found`);
     }

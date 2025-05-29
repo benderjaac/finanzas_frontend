@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { AuthService, PermisoDTO } from 'app/auth/auth.service';
+import { AuthService} from 'app/auth/auth.service';
+import { PermisoDTO } from 'app/core/models/permisoDTO.model';
 import { Ripple } from 'primeng/ripple';
 import { StyleClass } from 'primeng/styleclass';
 
@@ -20,6 +21,6 @@ export class MenuComponent {
   ) {}
 
   ngOnInit():void{
-    this.perfilMenu = this._authService._user()?.perfil.menu ?? [];    
+    this.perfilMenu = this._authService._user()?.perfil!.menu ?? [];    
   }
 }
