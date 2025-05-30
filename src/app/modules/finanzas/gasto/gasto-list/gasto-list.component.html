@@ -11,7 +11,7 @@
         </button>
     </div>
 </div>
-<p-table 
+<p-table #dt
     [value]="gastos" 
     [lazy]="true"
     
@@ -22,25 +22,58 @@
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} gastos"
     
+    filterMode="row"
     
-    (onLazyLoad)="getgastosData($event)"
+    (onLazyLoad)="getGastosData($event)"
     
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem' }">
     <ng-template pTemplate="header">
+        <!-- filtros -->
+         <tr>
+            <th>
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                type="text"
+                (input)="onFilterInput($event, 'fecha', 'contains')"
+                />
+            </th>
+            <th>
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                type="text"
+                (input)="onFilterInput($event, 'descri', 'contains')"
+                />
+            </th>
+            <th>
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                type="text"
+                (input)="onFilterInput($event, 'monto', 'number')"
+                />
+            </th>
+        </tr>
         <tr>
-            <th pSortableColumn="id"><p-sortIcon field="id" /> ID</th>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> monto</th>
+            <th>Acciones</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-gasto>
         <tr>
-            <td>{{ gasto.id }}</td>
             <td>{{ gasto.fecha }}</td>
             <td>{{ gasto.descri }}</td>            
             <td>{{ gasto.monto }}</td>
+            <td>
+                <button
+                    pButton
+                    (click)="addGasto()" 
+                    icon="pi pi-pen-to-square" 
+                    class="bg-white" 
+                    severity="success" text>
+                </button>
+            </td>
         </tr>
     </ng-template>
 </p-table>

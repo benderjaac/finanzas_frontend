@@ -2,7 +2,7 @@ export interface ApiFilter{
     field: string,
     operator: string,
     value: any,
-    tyoe: string
+    type: string
 }
 
 export interface ApiSort{
