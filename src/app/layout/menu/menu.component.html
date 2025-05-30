@@ -9,8 +9,8 @@
             @if(Menu.hijos.length==0){
                 <li>
                     <a pRipple [routerLink]="[Menu.link]" class="flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                        <i class="pi pi-home mr-2"></i>
-                        <span class="font-medium">{{Menu.nombre}}</span>
+                        <i *ngIf="Menu.icon!=null" [class]="Menu.icon"></i>
+                        <span class="font-medium ml-2">{{Menu.nombre}}</span>
                     </a>
                 </li>
             }@else {
@@ -32,8 +32,8 @@
                             @if(subMenu.hijos.length==0){
                                 <li *ngIf="subMenu.visible">
                                     <a pRipple [routerLink]="[subMenu.link]" class="flex items-center ml-4 cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                                        <i class="pi pi-home mr-2"></i>
-                                        <span class="font-medium">{{subMenu.nombre}}</span>
+                                        <i *ngIf="subMenu.icon!=null" [class]="subMenu.icon"></i>
+                                        <span class="font-medium ml-2">{{subMenu.nombre}}</span>
                                     </a>
                                 </li>
                             }@else {
@@ -54,8 +54,8 @@
                                         <ng-container *ngFor="let subsubMenu of subMenu.hijos">                                            
                                             <li *ngIf="subsubMenu.visible">
                                                 <a pRipple [routerLink]="[subsubMenu.link]" class="ml-8 flex items-center cursor-pointer p-4 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                                                    <i class="pi pi-home mr-2"></i>
-                                                    <span class="font-medium">{{subsubMenu.nombre}}</span>
+                                                    <i *ngIf="subsubMenu.icon!=null" [class]="subsubMenu.icon"></i>
+                                                    <span class="font-medium  ml-2">{{subsubMenu.nombre}}</span>
                                                 </a>
                                             </li>                                            
                                         </ng-container>
