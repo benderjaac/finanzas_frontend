@@ -16,6 +16,10 @@ export class UsersListComponent {
   
   usuarios : User[] = [];
   totalRecords = 0;
+  
+  rowsPerPageOptions: number[] = [];
+  rowsDefault = 0;
+
   loading = false;
 
   destroy$ = new Subject<void>();
@@ -23,7 +27,8 @@ export class UsersListComponent {
   constructor(
     private _userService: UserService,
   ){
-
+    this.rowsPerPageOptions = [10, 20, 50, 100]
+    this.rowsDefault = this.rowsPerPageOptions[0];
   }
 
   ngOnInit():void{

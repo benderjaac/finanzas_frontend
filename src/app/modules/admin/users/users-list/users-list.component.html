@@ -9,9 +9,10 @@
     [lazy]="true"
     
     [paginator]="true"
-    [rowsPerPageOptions]="[2, 4, 8]"
-    [rows]="2"
-    [totalRecords]="totalRecords"[showCurrentPageReport]="true"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [rows]="rowsDefault"
+    [totalRecords]="totalRecords"
+    [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} usuarios"
     
     
@@ -24,7 +25,7 @@
             <th pSortableColumn="id"><p-sortIcon field="id" /> ID</th>
             <th pSortableColumn="email"><p-sortIcon field="email" /> Email</th>
             <th pSortableColumn="username"><p-sortIcon field="username" /> Username</th>
-            <th pSortableColumn="perfilNombre"><p-sortIcon field="perfilNombre" /> Perfil</th>
+            <th pSortableColumn="perfil.nombre"><p-sortIcon field="perfil.nombre" /> Perfil</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-usuario>
