@@ -11,25 +11,36 @@
         </button>
     </div>
 </div>
-<p-table [value]="gastos" [tableStyle]="{ 'min-width': '50rem' }">
-    <ng-template #header>
+<p-table 
+    [value]="gastos" 
+    [lazy]="true"
+    
+    [paginator]="true"
+    [rowsPerPageOptions]="rowsPerPageOptions"
+    [rows]="rowsDefault"
+    [totalRecords]="totalRecords"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} gastos"
+    
+    
+    (onLazyLoad)="getgastosData($event)"
+    
+    [loading]="loading"
+    [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="header">
         <tr>
-            <th>ID</th>
-            <th>Fecha</th>
-            <th>Descripción</th>
-            <th>Monto</th>
-            <th>id usuario</th>
-            <th>Contado</th>
+            <th pSortableColumn="id"><p-sortIcon field="id" /> ID</th>
+            <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
+            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
+            <th pSortableColumn="monto"><p-sortIcon field="monto" /> monto</th>
         </tr>
     </ng-template>
-    <ng-template #body let-gasto>
+    <ng-template pTemplate="body" let-gasto>
         <tr>
             <td>{{ gasto.id }}</td>
             <td>{{ gasto.fecha }}</td>
-            <td>{{ gasto.descri }}</td>
+            <td>{{ gasto.descri }}</td>            
             <td>{{ gasto.monto }}</td>
-            <td>{{ gasto.idusuario }}</td>
-            <td>{{ gasto.contado }}</td>
         </tr>
     </ng-template>
 </p-table>
