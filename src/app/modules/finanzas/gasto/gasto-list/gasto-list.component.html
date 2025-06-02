@@ -1,16 +1,4 @@
-<div class="flex justify-end ml-4 mb-8">
-    <div>
-        <button
-            pButton
-            label="Agregar gasto" 
-            (click)="addGasto()" 
-            icon="pi pi-cart-plus" 
-            class="bg-white w-40" 
-            severity="info" text>
-            
-        </button>
-    </div>
-</div>
+<!-- <div class="bg-sky-800 bg-emerald-800 bg-rose-500 bg-red-600 bg-lime-700 bg-cyan-500 bg-yellow-400 bg-green-500 bg-violet-500 bg-lime-700 bg-orange-600 bg-red-400 bg-orange-800 bg-slate-600 bg-fuchsia-800 bg-indigo-600 bg-teal-300 "></div> -->
 <p-table #dt
     [value]="gastos" 
     [lazy]="true"
@@ -28,15 +16,36 @@
     
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem' }">
+    <ng-template pTemplate="caption">
+        <div class="flex items-center justify-between">
+            <span class="text-xl font-bold">Gastos</span>
+            <button
+                pButton
+                label="Agregar gasto" 
+                (click)="addGasto()" 
+                icon="pi pi-cart-plus" 
+                class="bg-white w-40" 
+                severity="info" text>
+                
+            </button>
+            <div>
+                <p-button icon="pi pi-eraser" 
+                    class="mr-2"
+                    (click)="resetTable()" rounded raised />
+                <p-button icon="pi pi-filter-fill" 
+                    class="mr-2"
+                    (click)="showFilters=!showFilters" rounded raised />
+                <p-button icon="pi pi-refresh" 
+                    (click)="reloadTable()" rounded raised />
+            </div>
+            
+            
+        </div>
+    </ng-template>
     <ng-template pTemplate="header">
         <!-- filtros -->
-         <tr>
-            <th>
-                <input class="border-solid border-2 rounded-full"
-                pInputText
-                type="text"
-                (input)="onFilterInput($event, 'fecha', 'contains')"
-                />
+         <tr *ngIf="showFilters">
+            <th>                
             </th>
             <th>
                 <input class="border-solid border-2 rounded-full"
@@ -45,18 +54,22 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
+            <th>                
+            </th>
             <th>
                 <input class="border-solid border-2 rounded-full"
                 pInputText
                 type="text"
-                (input)="onFilterInput($event, 'monto', 'number')"
+                (input)="onFilterInput($event, 'categoria.nombre', 'contains')"
                 />
             </th>
+            <th></th>
         </tr>
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
-            <th pSortableColumn="monto"><p-sortIcon field="monto" /> monto</th>
+            <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
+            <th pSortableColumn="categoria.nombre"><p-sortIcon field="categoria.nombre" /> Categoria</th>
             <th>Acciones</th>
         </tr>
     </ng-template>
@@ -65,6 +78,12 @@
             <td>{{ gasto.fecha }}</td>
             <td>{{ gasto.descri }}</td>            
             <td>{{ gasto.monto }}</td>
+            <td>
+                <div class="rounded-full px-2 text-white text-shadow-md text-shadow-black" [ngClass]="gasto.categoriaColor">
+                    <i *ngIf="gasto.categoriaIcon!=null" [class]="gasto.categoriaIcon"></i>
+                    {{ gasto.categoriaNombre }}
+                </div>
+            </td>
             <td>
                 <button
                     pButton

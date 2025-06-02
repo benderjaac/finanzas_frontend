@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { Gasto } from 'app/core/models/gasto.model';
-import { ResponseApiType } from 'app/core/models/response-api.model';
 import { GastoService } from 'app/core/services-api/gasto.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
-import { ApiFilter, ApiQuery, ApiSort } from 'app/core/models/query.model';
+import { ApiSort } from 'app/core/models/query.model';
 import { FilterService } from 'app/modules/utils/filter.service';
 
 @Component({
@@ -24,7 +23,9 @@ export class GastoListComponent {
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
   OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
-  ApiQuery : ApiQuery;
+
+  lastEvent : TableLazyLoadEvent|null = null;
+  showFilters : boolean = false;
 
   loading = false;
 
@@ -35,15 +36,7 @@ export class GastoListComponent {
     private _filterService: FilterService
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
-    this.rowsDefault = this.rowsPerPageOptions[0];
-    this.ApiQuery = {
-      filters: [], // Más adelante puedes llenar con filtros
-      sorter: this.OrderDefault,
-      pagination: {
-        perPage:this.rowsDefault,
-        currentPage: 1,
-      },
-    };
+    this.rowsDefault = this.rowsPerPageOptions[0];    
   }
 
   ngOnInit():void{
@@ -56,10 +49,10 @@ export class GastoListComponent {
   }
   
   getGastosData(event: TableLazyLoadEvent):void{
-      
+    this.lastEvent=event;
     this.loading = true;
-    const query = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
-    this._gastoService.getDataGastos(query)
+    const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
+    this._gastoService.getDataGastos(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res)=>{
@@ -83,5 +76,30 @@ export class GastoListComponent {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
   } 
+
+  reloadTable():void{
+    if (this.lastEvent!=null) {
+      this.getGastosData(this.lastEvent);
+    }
+  }
+
+  resetTable():void{
+    // Limpia filtros y ordenamiento
+    this.dt.clear(); // limpia filtros y orden
+    this.dt.sortField = '';
+    this.dt.sortOrder = 1;
+
+    // Reinicia paginación manualmente
+    const event = {
+      first: 0,
+      rows: this.rowsDefault,
+      sortField: null,
+      sortOrder: null,
+      filters: {},
+      globalFilter: null
+    };
+    this.showFilters=false;
+    this.getGastosData(event); // dispara la carga manual
+  }
 
 }
