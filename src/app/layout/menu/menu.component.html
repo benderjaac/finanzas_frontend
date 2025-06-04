@@ -2,7 +2,7 @@
 
     <ng-container *ngFor="let menuPrincipal of perfilMenu">
 
-        <div class="justify-center">{{menuPrincipal.nombre}}</div>
+        <div class="justify-center font-semibold text-green-700">{{menuPrincipal.nombre}}</div>
         <ul class="list-none p-4 m-0">
             
             <ng-container *ngFor="let Menu of menuPrincipal.hijos">
@@ -24,7 +24,10 @@
                         leaveActiveClass="animate-slideup"
                         class="p-4 flex items-center justify-between text-surface-600 dark:text-surface-200 cursor-pointer p-ripple"
                     >
-                        <span class="font-medium">{{Menu.nombre}}</span>
+                        <span>
+                            <i *ngIf="Menu.icon!=null" [class]="Menu.icon"></i>
+                            <span class="font-medium ml-2">{{Menu.nombre}}</span>
+                        </span>
                         <i class="pi pi-chevron-down"></i>
                     </div>
                     <ul class="list-none p-0 m-0 overflow-hidden">
