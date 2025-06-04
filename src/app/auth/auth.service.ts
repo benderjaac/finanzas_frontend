@@ -49,9 +49,9 @@ export class AuthService {
   checkToken(): Observable<boolean>{
     return this._authApiService.checkMe().pipe(
       tap((response: ResponseApiSimple<User>) => {
-        this._user.set(response.data);
+        this._user.set(response.result);
         this._authenticated.set(true);        
-        this.extractRoles(response.data.perfil!.menu);
+        this.extractRoles(response.result.perfil!.menu);
       }),
       map(() => true),
       catchError(() => {

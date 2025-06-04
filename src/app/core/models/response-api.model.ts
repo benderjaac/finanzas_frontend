@@ -8,11 +8,23 @@ export interface ResponseApi{
 }
 
 export interface ResponseApiType<T> extends ResponseApi{
-    data:T[]    
+    result:{
+        data: T[],
+        pagination: Pagination
+    }
 }
 
 export interface ResponseApiSimple<T> extends ResponseApi{
-    data:T    
+    result:T    
+}
+
+export interface Pagination{
+    currentPage: number,
+    nextPage:number,
+    perPage:number | null,
+    prevPage:number | null,
+    totalItems: number,
+    totalPages: number,
 }
 
 export interface ResponseAuth{

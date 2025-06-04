@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ApiQuery, ApiSort } from 'app/core/models/query.model';
+import { ResponseApiType } from 'app/core/models/response-api.model';
 import { User } from 'app/core/models/user.model';
 import { UserService } from 'app/core/services-api/user.service';
 import { ButtonModule } from 'primeng/button';
@@ -64,7 +65,7 @@ export class UsersListComponent {
     this._userService.getDataUsers(query)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res)=>{
+        next: (res: ResponseApiType<User>)=>{
           this.usuarios = res.result.data;
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          
