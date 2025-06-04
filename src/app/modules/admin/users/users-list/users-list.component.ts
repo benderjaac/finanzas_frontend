@@ -1,25 +1,35 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ApiQuery, ApiSort } from 'app/core/models/query.model';
+import { Component, ViewChild } from '@angular/core';
+import { ApiSort } from 'app/core/models/query.model';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { User } from 'app/core/models/user.model';
 import { UserService } from 'app/core/services-api/user.service';
+import { FilterService } from 'app/modules/utils/filter.service';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
-import { TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-users-list',
-  imports: [TableModule, CommonModule, ButtonModule],
+  imports: [Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './users-list.component.html',
+  providers: [MessageService]
 })
 export class UsersListComponent {
+
+  @ViewChild('dt') dt!: Table;
   
   usuarios : User[] = [];
   totalRecords = 0;
   
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
+  OrderDefault: ApiSort[] = [{field:'id', order:'DESC'}];
+
+  lastEvent : TableLazyLoadEvent|null = null;
+  showFilters : boolean = false;
 
   loading = false;
 
@@ -27,6 +37,8 @@ export class UsersListComponent {
 
   constructor(
     private _userService: UserService,
+    private _filterService: FilterService,
+    private _messageService: MessageService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -42,27 +54,11 @@ export class UsersListComponent {
   }
 
   getUsersData(event: TableLazyLoadEvent):void{
-    
+    this.lastEvent=event;
     this.loading = true;
 
-    const page = (event.first ?? 0) / (event.rows ?? 10) + 1;
-    const perPage = event.rows ?? 10;
-
-    const query: ApiQuery = {
-      filters: [], // Más adelante puedes llenar con filtros
-      sorter: typeof event.sortField === 'string'
-      ? [{
-          field: event.sortField,
-          order: event.sortOrder === 1 ? 'ASC' : 'DESC',
-        }]
-      : [],
-      pagination: {
-        perPage,
-        currentPage: page,
-      },
-    };
-
-    this._userService.getDataUsers(query)
+    const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);    
+    this._userService.getDataUsers(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: ResponseApiType<User>)=>{
@@ -74,8 +70,54 @@ export class UsersListComponent {
           this.usuarios=[];
           this.totalRecords = 0;
           this.loading = false;
+          this._messageService.add(
+            { severity: 'error', summary: 'Error de consulta', detail: error.error.message, life: 3000 }
+          );
         }
       });
+  }
+
+  showHiddeFilters(){
+    this.showFilters=!this.showFilters;
+    if(!this.showFilters){
+      if (this.lastEvent!=null) {
+        this.dt.filters={};
+        this.lastEvent.filters={};
+        this.getUsersData(this.lastEvent);
+      }
+    }
+  }
+
+  onFilterInput(event: Event, field: string, tipo:string) {
+    const input = event.target as HTMLInputElement;
+    this.dt.filter(input.value, field, tipo);
+  } 
+
+  reloadTable():void{
+    if (this.lastEvent!=null) {
+      this.getUsersData(this.lastEvent);
+    }
+  }
+
+  resetTable():void{
+    this.dt.clear();
+    this.dt.sortField = this.OrderDefault[0].field;
+    this.dt.sortOrder = 1;
+
+    const event = {
+      first: 0,
+      rows: this.rowsDefault,
+      sortField: null,
+      sortOrder: null,
+      filters: {},
+      globalFilter: null
+    };
+    this.showFilters=false;
+    this.getUsersData(event);
+  }
+
+  addUser():void{
+
   }
   
 }

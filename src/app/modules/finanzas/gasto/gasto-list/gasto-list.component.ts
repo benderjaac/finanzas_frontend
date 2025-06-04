@@ -7,11 +7,14 @@ import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ApiSort } from 'app/core/models/query.model';
 import { FilterService } from 'app/modules/utils/filter.service';
+import { MessageService } from 'primeng/api';
+import { Toast } from 'primeng/toast';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [TableModule, CommonModule, ButtonModule],
+  imports: [Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './gasto-list.component.html',
+  providers: [MessageService]
 })
 export class GastoListComponent {
 
@@ -33,7 +36,8 @@ export class GastoListComponent {
 
   constructor(
     private _gastoService: GastoService,
-    private _filterService: FilterService
+    private _filterService: FilterService,
+    private _messageService: MessageService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];    
@@ -64,12 +68,26 @@ export class GastoListComponent {
           this.gastos=[];
           this.totalRecords = 0;
           this.loading = false;
+          this._messageService.add(
+            { severity: 'error', summary: 'Error de consulta', detail: error.error.message, life: 3000 }
+          );
         }
       });
   }
 
   addGasto():void{
 
+  }
+
+  showHiddeFilters(){
+    this.showFilters=!this.showFilters;
+    if(!this.showFilters){
+      if (this.lastEvent!=null) {
+        this.dt.filters={};
+        this.lastEvent.filters={};
+        this.getGastosData(this.lastEvent);
+      }
+    }
   }
 
   onFilterInput(event: Event, field: string, tipo:string) {
@@ -84,12 +102,10 @@ export class GastoListComponent {
   }
 
   resetTable():void{
-    // Limpia filtros y ordenamiento
-    this.dt.clear(); // limpia filtros y orden
-    this.dt.sortField = '';
+    this.dt.clear();
+    this.dt.sortField = this.OrderDefault[0].field;
     this.dt.sortOrder = 1;
 
-    // Reinicia paginación manualmente
     const event = {
       first: 0,
       rows: this.rowsDefault,
