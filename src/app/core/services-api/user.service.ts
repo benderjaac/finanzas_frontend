@@ -19,11 +19,7 @@ export class UserService {
     this.urlApi=environment.apiUrl;
   }
 
-  getUsers():Observable<ResponseApiType<User>>{
-    return this._httpClient.get<ResponseApiType<User>>(this.urlApi+'/api/users');
-  }
-
-  getDataUsers(query: ApiQuery):Observable<any>{
-    return this._httpClient.post<any>(this.urlApi+'/api/users/data', query);
+  getDataUsers(query: ApiQuery):Observable<ResponseApiType<User>>{
+    return this._httpClient.post<ResponseApiType<User>>(this.urlApi+'/api/users/data', query);
   }
 }
