@@ -95,7 +95,7 @@
     [style]="{ width: '40vw' }" 
     [draggable]="false" 
     [resizable]="false">
-    <app-users-create 
+    <app-users-create *ngIf="visibleAddUser" 
         (msjEvent)="mostrarMensaje($event)"
         (cerrarDialog)="closeDialog($event)">
 
