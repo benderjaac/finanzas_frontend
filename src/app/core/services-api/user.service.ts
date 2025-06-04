@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
-import { ResponseApiType } from '../models/response-api.model';
+import { ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import { User } from '../models/user.model';
 import { ApiQuery } from '../models/query.model';
 
@@ -21,5 +21,9 @@ export class UserService {
 
   getDataUsers(query: ApiQuery):Observable<ResponseApiType<User>>{
     return this._httpClient.post<ResponseApiType<User>>(this.urlApi+'/api/users/data', query);
+  }
+
+  createUser(data:any):Observable<ResponseApiSimple<any>>{
+    return this._httpClient.post<ResponseApiType<User>>(this.urlApi+'/api/users', data);
   }
 }

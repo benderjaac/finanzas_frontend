@@ -44,7 +44,7 @@ export class SignInComponent {
         },
         error: (error)=>{
           this.messageService.add(
-            { severity: 'error', summary: 'Error de sesión', detail: error.error.message, life: 3000 }
+            { severity: 'error', summary: 'Error de sesión', detail: error.error.error, life: 3000 }
           );          
         }
       });

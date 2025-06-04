@@ -10,10 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
+import { Dialog } from 'primeng/dialog';
+import { UsersCreateComponent } from '../users-create/users-create.component';
 
 @Component({
   selector: 'app-users-list',
-  imports: [Toast, TableModule, CommonModule, ButtonModule],
+  imports: [UsersCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './users-list.component.html',
   providers: [MessageService]
 })
@@ -32,6 +34,8 @@ export class UsersListComponent {
   showFilters : boolean = false;
 
   loading = false;
+
+  visibleAddUser = false;
 
   destroy$ = new Subject<void>();
 
@@ -117,7 +121,23 @@ export class UsersListComponent {
   }
 
   addUser():void{
+    this.visibleAddUser=true;
+  }
 
+  closeDialog(update:boolean) {
+      this.visibleAddUser = false;
+      if(update){
+        this.reloadTable();
+      }
+  }
+
+  mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
+    this._messageService.add({
+      severity: detalle.tipo,
+      summary: detalle.tipo==='error'?'Error de registro':'Exito de registro',
+      detail: detalle.mensaje,
+      life: 3000
+    });
   }
   
 }

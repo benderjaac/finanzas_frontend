@@ -43,7 +43,7 @@ export class RegisterComponent {
         },
         error: (error)=>{
           this.messageService.add(
-            { severity: 'error', summary: 'Error de registro', detail: error.error.message, life: 3000 }
+            { severity: 'error', summary: 'Error de registro', detail: error.error.error, life: 3000 }
           ); 
         }
       });
