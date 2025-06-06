@@ -1,32 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { Gasto } from 'app/core/models/gasto.model';
-import { GastoService } from 'app/core/services-api/gasto.service';
-import { Subject, takeUntil } from 'rxjs';
-import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
+import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
 import { ApiSort } from 'app/core/models/query.model';
+import { ResponseApiType } from 'app/core/models/response-api.model';
+import { CategoriaGastoService } from 'app/core/services-api/categoria-gasto.service';
 import { FilterService } from 'app/modules/utils/filter.service';
 import { MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
-import { ResponseApiType } from 'app/core/models/response-api.model';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-gasto-list',
+  selector: 'app-categoria-gasto-list',
   imports: [Toast, TableModule, CommonModule, ButtonModule],
-  templateUrl: './gasto-list.component.html',
+  templateUrl: './categoria-gasto-list.component.html',
   providers: [MessageService]
 })
-export class GastoListComponent {
-
+export class CategoriaGastoListComponent {
+  
   @ViewChild('dt') dt!: Table;
 
-  gastos : Gasto[] = [];
+  categoriasG : CategoriaGasto[] = [];
   totalRecords = 0;
   
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
-  OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
+  OrderDefault: ApiSort[] = [{field:'id', order:'DESC'}];
 
   lastEvent : TableLazyLoadEvent|null = null;
   showFilters : boolean = false;
@@ -36,7 +36,7 @@ export class GastoListComponent {
   destroy$ = new Subject<void>();
 
   constructor(
-    private _gastoService: GastoService,
+    private _categoriaGastoService: CategoriaGastoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
   ){
@@ -53,20 +53,20 @@ export class GastoListComponent {
     this.destroy$.complete();
   }
   
-  getGastosData(event: TableLazyLoadEvent):void{
+  getCategoriasGastoData(event: TableLazyLoadEvent):void{
     this.lastEvent=event;
     this.loading = true;
     const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
-    this._gastoService.getDataGastos(ApiQuery)
+    this._categoriaGastoService.getDataCategoriasGasto(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res: ResponseApiType<Gasto>)=>{
-          this.gastos = res.result.data;
+        next: (res: ResponseApiType<CategoriaGasto>)=>{
+          this.categoriasG = res.result.data;
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          
         },
         error: (error)=> {
-          this.gastos=[];
+          this.categoriasG=[];
           this.totalRecords = 0;
           this.loading = false;
           this._messageService.add(
@@ -86,7 +86,7 @@ export class GastoListComponent {
       if (this.lastEvent!=null) {
         this.dt.filters={};
         this.lastEvent.filters={};
-        this.getGastosData(this.lastEvent);
+        this.getCategoriasGastoData(this.lastEvent);
       }
     }
   }
@@ -98,7 +98,7 @@ export class GastoListComponent {
 
   reloadTable():void{
     if (this.lastEvent!=null) {
-      this.getGastosData(this.lastEvent);
+      this.getCategoriasGastoData(this.lastEvent);
     }
   }
 
@@ -116,7 +116,6 @@ export class GastoListComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getGastosData(event); // dispara la carga manual
+    this.getCategoriasGastoData(event); // dispara la carga manual
   }
-
 }

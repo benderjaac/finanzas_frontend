@@ -72,6 +72,13 @@ export const routes: Routes = [
                             {path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},                            
                         ]
                     },
+                    {path: 'categoria', 
+                        children: [
+                            {path: 'gasto', children:[
+                                {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/gasto/categoria-gasto-list/categoria-gasto-list.component').then(m => m.CategoriaGastoListComponent)}
+                            ]}                            
+                        ]
+                    },
                     {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen.component').then(m => m.ResumenComponent)}
                 ]
             },                       

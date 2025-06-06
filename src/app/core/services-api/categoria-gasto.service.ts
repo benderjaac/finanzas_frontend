@@ -1,25 +1,24 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
-import { Gasto } from '../models/gasto.model';
+import { ApiQuery } from '../models/query.model';
 import { Observable } from 'rxjs';
 import { ResponseApiType } from '../models/response-api.model';
-import { ApiQuery } from '../models/query.model';
+import { CategoriaGasto } from '../models/categoria-gasto.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GastoService {
+export class CategoriaGastoService {
 
   private _httpClient = inject(HttpClient);
   private urlApi: string;
-    
-  constructor(
-  ) {
+
+  constructor() { 
     this.urlApi=environment.apiUrl;
   }
 
-  getDataGastos(query: ApiQuery):Observable<any>{
-    return this._httpClient.post<any>(this.urlApi+'/api/gastos/data', query);
-  }
+  getDataCategoriasGasto(query: ApiQuery):Observable<ResponseApiType<CategoriaGasto>>{
+      return this._httpClient.post<ResponseApiType<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto/data', query);
+    }
 }

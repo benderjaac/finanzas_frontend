@@ -23,7 +23,7 @@ export class UserService {
     return this._httpClient.post<ResponseApiType<User>>(this.urlApi+'/api/users/data', query);
   }
 
-  createUser(data:any):Observable<ResponseApiSimple<any>>{
-    return this._httpClient.post<ResponseApiType<User>>(this.urlApi+'/api/users', data);
+  createUser(data:any):Observable<ResponseApiSimple<User>>{
+    return this._httpClient.post<ResponseApiSimple<User>>(this.urlApi+'/api/users', data);
   }
 }
