@@ -12,10 +12,13 @@ import { Toast } from 'primeng/toast';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { Dialog } from 'primeng/dialog';
 import { GastoCreateComponent } from '../gasto-create/gasto-create.component';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './gasto-list.component.html',
   providers: [MessageService]
 })
@@ -36,6 +39,9 @@ export class GastoListComponent {
   loading = false;
 
   visibleAdd = false;
+
+  filtroFechaRango: Date[] = [];
+  filterFecharango=false;
 
   destroy$ = new Subject<void>();
 
@@ -107,6 +113,25 @@ export class GastoListComponent {
     this.dt.filter(input.value, field, tipo);
   } 
 
+  onFilterExactDate(date: Date, field: string): void {
+    this.dt.filter(date, field, 'equals');
+    this.filtroFechaRango=[];
+  }
+
+  onFilterDateRange(dates: any, field: string): void {
+    if (dates && dates.length === 2 && dates[0] && dates[1]) {
+      const [startDate, endDate] = dates;
+      this.dt.filter([startDate, endDate], field, 'between');
+    }
+  }
+
+  onFilterNumberInput(event: Event, field: string, tipo:string) {
+    const input = event.target as HTMLInputElement;
+    const number = Number(input.value);
+    const [desede, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
+    this.dt.filter([desede, hasta], field, tipo);
+  } 
+
   reloadTable():void{
     if (this.lastEvent!=null) {
       this.getGastosData(this.lastEvent);
@@ -117,6 +142,7 @@ export class GastoListComponent {
     this.dt.clear();
     this.dt.sortField = this.OrderDefault[0].field;
     this.dt.sortOrder = 1;
+    this.filtroFechaRango=[];
 
     const event = {
       first: 0,

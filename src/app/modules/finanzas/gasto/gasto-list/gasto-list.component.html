@@ -16,7 +16,8 @@
     (onLazyLoad)="getGastosData($event)"
     
     [loading]="loading"
-    [tableStyle]="{ 'min-width': '50rem' }">
+    [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
+    >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Gastos</span>
@@ -44,34 +45,67 @@
         </div>
     </ng-template>
     <ng-template pTemplate="header">
-        <!-- filtros -->
-         <tr *ngIf="showFilters">
-            <th>                
-            </th>
-            <th>
-                <input class="border-solid border-2 rounded-full"
-                pInputText
-                type="text"
-                (input)="onFilterInput($event, 'descri', 'contains')"
-                />
-            </th>
-            <th>                
-            </th>
-            <th>
-                <input class="border-solid border-2 rounded-full"
-                pInputText
-                type="text"
-                (input)="onFilterInput($event, 'categoria.nombre', 'contains')"
-                />
-            </th>
-            <th></th>
-        </tr>
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th pSortableColumn="categoria.nombre"><p-sortIcon field="categoria.nombre" /> Categoria</th>
             <th>Acciones</th>
+        </tr>
+        <!-- filtros -->
+         <tr *ngIf="showFilters">
+            <th> 
+                <div *ngIf="!filterFecharango" >
+                    <p-datepicker
+                        [showIcon]="true"
+                        [placeholder]="'Fecha exacta'"
+                        (onSelect)="onFilterExactDate($event, 'fecha')"
+                        dateFormat="yy-mm-dd"
+                        [readonlyInput]="true"
+                    ></p-datepicker>
+                    <br>
+                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
+                </div>  
+                
+                <div *ngIf="filterFecharango">
+                    <p-datepicker 
+                        [showIcon]="true"
+                        [placeholder]="'Rango de fecha'"
+                        [(ngModel)]="filtroFechaRango"
+                        (ngModelChange)="onFilterDateRange($event, 'fecha')"
+                        dateFormat="yy-mm-dd"
+                        [readonlyInput]="true"
+                        selectionMode="range"
+                    ></p-datepicker>
+                    <br>
+                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
+                </div>
+            </th>
+            <th>
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                [placeholder]="'Contiene...'"
+                type="text"
+                (input)="onFilterInput($event, 'descri', 'contains')"
+                />
+            </th>
+            <th> 
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                [placeholder]="'aprox..'"
+                type="number"
+                (input)="onFilterNumberInput($event, 'monto', 'between')"
+                />              
+            </th>
+            <th>
+                <input class="border-solid border-2 rounded-full"
+                pInputText
+                [placeholder]="'Contiene...'"
+                type="text"
+                (input)="onFilterInput($event, 'categoria.nombre', 'contains')"
+                />
+            </th>
+            <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-gasto>
