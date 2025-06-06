@@ -10,10 +10,12 @@ import { FilterService } from 'app/modules/utils/filter.service';
 import { MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { ResponseApiType } from 'app/core/models/response-api.model';
+import { Dialog } from 'primeng/dialog';
+import { GastoCreateComponent } from '../gasto-create/gasto-create.component';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [Toast, TableModule, CommonModule, ButtonModule],
+  imports: [GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './gasto-list.component.html',
   providers: [MessageService]
 })
@@ -32,6 +34,8 @@ export class GastoListComponent {
   showFilters : boolean = false;
 
   loading = false;
+
+  visibleAdd = false;
 
   destroy$ = new Subject<void>();
 
@@ -77,7 +81,14 @@ export class GastoListComponent {
   }
 
   addGasto():void{
+    this.visibleAdd=true;
+  }
 
+  closeDialog(update:boolean) {
+      this.visibleAdd = false;
+      if(update){
+        this.reloadTable();
+      }
   }
 
   showHiddeFilters(){
@@ -117,6 +128,15 @@ export class GastoListComponent {
     };
     this.showFilters=false;
     this.getGastosData(event); // dispara la carga manual
+  }
+
+  mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
+    this._messageService.add({
+      severity: detalle.tipo,
+      summary: detalle.tipo==='error'?'Error de registro':'Exito de registro',
+      detail: detalle.mensaje,
+      life: 3000
+    });
   }
 
 }

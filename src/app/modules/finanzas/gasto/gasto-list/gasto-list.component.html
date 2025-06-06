@@ -97,3 +97,18 @@
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog 
+    [(visible)]="visibleAdd" 
+    [modal]="true"
+    [draggable]="false"
+    styleClass=""
+    [style]="{ width: '40vw' }" 
+    [draggable]="false" 
+    [resizable]="false">
+    <app-gasto-create *ngIf="visibleAdd" 
+        (msjEvent)="mostrarMensaje($event)"
+        (cerrarDialog)="closeDialog($event)">
+
+    </app-gasto-create>
+</p-dialog>
