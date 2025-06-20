@@ -128,8 +128,8 @@ export class GastoListComponent {
   onFilterNumberInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     const number = Number(input.value);
-    const [desede, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
-    this.dt.filter([desede, hasta], field, tipo);
+    const [desde, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
+    this.dt.filter([desde, hasta], field, tipo);
   } 
 
   reloadTable():void{

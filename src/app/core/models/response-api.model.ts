@@ -1,3 +1,4 @@
+import { CategoriaGasto } from "./categoria-gasto.model"
 import { User } from "./user.model"
 
 export interface ResponseApi{
@@ -18,6 +19,12 @@ export interface ResponseApiSimple<T> extends ResponseApi{
     result:T    
 }
 
+export interface ResponseApiCat<T> extends ResponseApi{
+    result:{
+        data: T[],
+    }
+}
+
 export interface Pagination{
     currentPage: number,
     nextPage:number,
@@ -30,4 +37,9 @@ export interface Pagination{
 export interface ResponseAuth{
     user:User,
     token:string,    
+}
+
+export interface CatalogoMap {
+  categorias: ResponseApiCat<CategoriaGasto>;
+  // otros catálogos...
 }

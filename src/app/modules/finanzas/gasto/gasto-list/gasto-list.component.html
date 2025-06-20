@@ -54,7 +54,7 @@
         </tr>
         <!-- filtros -->
          <tr *ngIf="showFilters">
-            <th> 
+            <th class="min-w-50"> 
                 <div *ngIf="!filterFecharango" >
                     <p-datepicker
                         [showIcon]="true"
@@ -135,10 +135,9 @@
 <p-dialog 
     [(visible)]="visibleAdd" 
     [modal]="true"
-    [draggable]="false"
-    styleClass=""
-    [style]="{ width: '40vw' }" 
-    [draggable]="false" 
+    [draggable]="true"
+    styleClass="w-160 min-w-80 h-130"
+    contentStyleClass="dialog-content-scroll"
     [resizable]="false">
     <app-gasto-create *ngIf="visibleAdd" 
         (msjEvent)="mostrarMensaje($event)"
