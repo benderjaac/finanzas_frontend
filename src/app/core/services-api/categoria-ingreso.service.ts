@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { CategoriaIngreso } from '../models/categoria-ingreso.model';
-import { ResponseApiCat, ResponseApiType } from '../models/response-api.model';
+import { ResponseApiCat, ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import { Observable } from 'rxjs';
 import { ApiQuery } from '../models/query.model';
 
@@ -24,5 +24,9 @@ export class CategoriaIngresoService {
 
   getDataCategoriasIngresoCat():Observable<ResponseApiCat<CategoriaIngreso>>{
     return this._httpClient.get<ResponseApiCat<CategoriaIngreso>>(this.urlApi+'/api/categoria/ingreso/catalogo');
+  }
+
+  createCategoriaIngreso(data: Partial<CategoriaIngreso>):Observable<ResponseApiSimple<CategoriaIngreso>>{
+    return this._httpClient.post<ResponseApiSimple<CategoriaIngreso>>(this.urlApi+'/api/categoria/ingreso', data);
   }
 }
