@@ -19,11 +19,11 @@ export class GastoService {
     this.urlApi=environment.apiUrl;
   }
 
-  getDataGastos(query: ApiQuery):Observable<any>{
-    return this._httpClient.post<any>(this.urlApi+'/api/gastos/data', query);
+  getDataGastos(query: ApiQuery):Observable<ResponseApiType<Gasto>>{
+    return this._httpClient.post<ResponseApiType<Gasto>>(this.urlApi+'/api/gastos/data', query);
   }
 
-  createGasto(data:any):Observable<ResponseApiSimple<Gasto>>{
+  createGasto(data:Partial<Gasto>):Observable<ResponseApiSimple<Gasto>>{
     return this._httpClient.post<ResponseApiSimple<Gasto>>(this.urlApi+'/api/gastos', data);
   }
 }
