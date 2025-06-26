@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
 import { ApiQuery } from '../models/query.model';
 import { Observable } from 'rxjs';
-import { ResponseApiCat, ResponseApiType } from '../models/response-api.model';
+import { ResponseApiCat, ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import { CategoriaGasto } from '../models/categoria-gasto.model';
 
 @Injectable({
@@ -24,6 +24,10 @@ export class CategoriaGastoService {
 
   getDataCategoriasGastoCat():Observable<ResponseApiCat<CategoriaGasto>>{
     return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto/catalogo');
+  }
+
+  createCategoriaGasto(data: Partial<CategoriaGasto>):Observable<ResponseApiSimple<CategoriaGasto>>{
+    return this._httpClient.post<ResponseApiSimple<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto', data);
   }
 
 

@@ -7,14 +7,17 @@ import { CategoriaGastoService } from 'app/core/services-api/categoria-gasto.ser
 import { FilterService } from 'app/modules/utils/filter.service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { Dialog } from 'primeng/dialog';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
+import { CategoriaGastoCreateComponent } from '../categoria-gasto-create/categoria-gasto-create.component';
 
 @Component({
   selector: 'app-categoria-gasto-list',
-  imports: [Toast, TableModule, CommonModule, ButtonModule],
+  imports: [Toast, TableModule, CategoriaGastoCreateComponent, Dialog, CommonModule, ButtonModule],
   templateUrl: './categoria-gasto-list.component.html',
+  standalone: true,
   providers: [MessageService]
 })
 export class CategoriaGastoListComponent {
@@ -32,6 +35,8 @@ export class CategoriaGastoListComponent {
   showFilters : boolean = false;
 
   loading = false;
+
+  visibleAdd = false;
 
   destroy$ = new Subject<void>();
 
@@ -117,5 +122,25 @@ export class CategoriaGastoListComponent {
     };
     this.showFilters=false;
     this.getCategoriasGastoData(event); // dispara la carga manual
+  }
+
+  mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
+    this._messageService.add({
+      severity: detalle.tipo,
+      summary: detalle.tipo==='error'?'Error de registro':'Exito de registro',
+      detail: detalle.mensaje,
+      life: 3000
+    });
+  }
+
+  addCategoria():void{
+    this.visibleAdd=true;
+  }
+
+  closeDialog(update:boolean) {
+      this.visibleAdd = false;
+      if(update){
+        this.reloadTable();
+      }
   }
 }

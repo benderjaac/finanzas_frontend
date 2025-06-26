@@ -20,15 +20,15 @@
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Categorias de Gastos</span>
-            <!-- <button
+            <button
                 pButton
-                label="Agregar usuario" 
-                (click)="addUser()" 
-                icon="pi pi-user" 
+                label="Agregar categoria" 
+                (click)="addCategoria()" 
+                icon="pi pi-sitemap" 
                 class="bg-white w-40" 
                 severity="info" text>
                 
-            </button> -->
+            </button>
             <div>
                 <p-button icon="pi pi-eraser" 
                     class="mr-2"
@@ -93,17 +93,16 @@
     </ng-template>
 </p-table>
 
-<!-- <p-dialog 
-    [(visible)]="visibleAddUser" 
+<p-dialog 
+    [(visible)]="visibleAdd" 
     [modal]="true"
-    [draggable]="false"
-    styleClass=""
-    [style]="{ width: '40vw' }" 
-    [draggable]="false" 
+    [draggable]="true"
+    styleClass="w-160 min-w-80 h-130"
+    contentStyleClass="dialog-content-scroll"
     [resizable]="false">
-    <app-users-create *ngIf="visibleAddUser" 
+    <app-categoria-gasto-create *ngIf="visibleAdd" 
         (msjEvent)="mostrarMensaje($event)"
         (cerrarDialog)="closeDialog($event)">
 
-    </app-users-create>
-</p-dialog> -->
+    </app-categoria-gasto-create>
+</p-dialog>
