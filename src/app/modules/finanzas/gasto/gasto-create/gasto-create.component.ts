@@ -10,6 +10,7 @@ import { Select } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-gasto-create',
@@ -27,6 +28,8 @@ export class GastoCreateComponent {
 
   hoy = new Date();
 
+  destroy$ = new Subject<void>();
+
   constructor(
     private _gastoService: GastoService,
     private _fb: FormBuilder,
@@ -43,7 +46,8 @@ export class GastoCreateComponent {
       fecha: [this.hoy, Validators.required],
     });
 
-    this._catalogoStoreService.getCatalogo('categorias')
+    this._catalogoStoreService.getCatalogo('categorias_gastos')
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
           this.catCategorias = resp.result.data;
@@ -61,16 +65,18 @@ export class GastoCreateComponent {
       const values = this.registerForm.value;
       values.categoriaId=this.registerForm.get('categoriaId')?.value.id;
 
-      this._gastoService.createGasto(this.registerForm.value).subscribe({
-        
-        next: (res)=>{
-          this.msjEvent.emit({tipo:'success', mensaje:res.message});
-          this.cerrarDialog.emit(true);
-        },
-        error: (error)=>{
-          this.msjEvent.emit({tipo:'error', mensaje:error.error?.error || "Error desconocido"});
-        }
-      });
+      this._gastoService.createGasto(this.registerForm.value)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          
+          next: (res)=>{
+            this.msjEvent.emit({tipo:'success', mensaje:res.message});
+            this.cerrarDialog.emit(true);
+          },
+          error: (error)=>{
+            this.msjEvent.emit({tipo:'error', mensaje:error.error?.error || "Error desconocido"});
+          }
+        });
     }
   } 
 }

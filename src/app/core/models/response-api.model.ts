@@ -1,4 +1,5 @@
 import { CategoriaGasto } from "./categoria-gasto.model"
+import { CategoriaIngreso } from "./categoria-ingreso.model"
 import { User } from "./user.model"
 
 export interface ResponseApi{
@@ -40,6 +41,7 @@ export interface ResponseAuth{
 }
 
 export interface CatalogoMap {
-  categorias: ResponseApiCat<CategoriaGasto>;
+  categorias_gastos: ResponseApiCat<CategoriaGasto>;
+  categorias_ingresos: ResponseApiCat<CategoriaIngreso>;
   // otros catálogos...
 }

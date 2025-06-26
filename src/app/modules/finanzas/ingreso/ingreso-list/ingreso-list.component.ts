@@ -14,10 +14,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
+import { IngresoCreateComponent } from '../ingreso-create/ingreso-create.component';
 
 @Component({
   selector: 'app-ingreso-list',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './ingreso-list.component.html',
   providers: [MessageService]
 })
