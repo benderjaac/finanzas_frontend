@@ -1,6 +1,6 @@
 <p-toast />
 <p-table #dt
-    [value]="categoriasG" 
+    [value]="categoriasI" 
     [lazy]="true"
     
     [paginator]="true"
@@ -12,14 +12,14 @@
     
     filterMode="row"
     
-    (onLazyLoad)="getCategoriasGastoData($event)"
+    (onLazyLoad)="getCategoriasIngresoData($event)"
     
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem' }">
 
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
-            <span class="text-xl font-bold">Categorias de Gastos</span>
+            <span class="text-xl font-bold">Categorias de Ingresos</span>
             <!-- <button
                 pButton
                 label="Agregar usuario" 

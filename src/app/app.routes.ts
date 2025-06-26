@@ -76,7 +76,10 @@ export const routes: Routes = [
                         children: [
                             {path: 'gasto', children:[
                                 {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/gasto/categoria-gasto-list/categoria-gasto-list.component').then(m => m.CategoriaGastoListComponent)}
-                            ]}                            
+                            ]},
+                            {path: 'ingreso', children:[
+                                {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/ingreso/categoria-ingreso-list/categoria-ingreso-list.component').then(m => m.CategoriaIngresoListComponent)}
+                            ]},                            
                         ]
                     },
                     {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen.component').then(m => m.ResumenComponent)}
