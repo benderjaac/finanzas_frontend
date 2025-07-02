@@ -1,3 +1,4 @@
+import { Ahorro } from "./ahorro.model"
 import { CategoriaGasto } from "./categoria-gasto.model"
 import { CategoriaIngreso } from "./categoria-ingreso.model"
 import { User } from "./user.model"
@@ -43,5 +44,6 @@ export interface ResponseAuth{
 export interface CatalogoMap {
   categorias_gastos: ResponseApiCat<CategoriaGasto>;
   categorias_ingresos: ResponseApiCat<CategoriaIngreso>;
+  ahorros: ResponseApiCat<Ahorro>;
   // otros catálogos...
 }

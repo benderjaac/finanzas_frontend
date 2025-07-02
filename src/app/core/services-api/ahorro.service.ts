@@ -1,0 +1,28 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
+import { ResponseApiCat, ResponseApiSimple } from '../models/response-api.model';
+import { Ahorro } from '../models/ahorro.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AhorroService {
+
+  private _httpClient = inject(HttpClient);
+  private urlApi: string;
+
+  constructor() { 
+    this.urlApi=environment.apiUrl;
+  }
+
+  getDataAhorroCat():Observable<ResponseApiCat<Ahorro>>{
+    //cambiar a get
+    return this._httpClient.post<ResponseApiCat<Ahorro>>(this.urlApi+'/api/ahorros/data', {});
+  }
+  
+  createAhorro(data: Partial<Ahorro>):Observable<ResponseApiSimple<Ahorro>>{
+    return this._httpClient.post<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros', data);
+  }
+}

@@ -72,6 +72,13 @@ export const routes: Routes = [
                             {path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},                            
                         ]
                     },
+                    {path: 'ahorro', 
+                        children: [
+                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},                    
+                            //{path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},                            
+                            //{path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},                            
+                        ]
+                    },
                     {path: 'categoria', 
                         children: [
                             {path: 'gasto', children:[
