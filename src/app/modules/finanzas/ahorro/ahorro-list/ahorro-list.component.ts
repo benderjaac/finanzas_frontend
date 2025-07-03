@@ -1,6 +1,5 @@
 import { Component, signal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { Ahorro } from 'app/core/models/ahorro.model';
 import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
@@ -12,6 +11,7 @@ import { ProgressBar } from 'primeng/progressbar';
 import { ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { AhorroCreateComponent } from '../ahorro-create/ahorro-create.component';
+import { AhorroService } from 'app/core/services-api/ahorro.service';
 
 @Component({
   selector: 'app-ahorro-list',
@@ -31,7 +31,7 @@ export class AhorroListComponent {
   destroy$ = new Subject<void>();
 
   constructor(
-    private _catalogoStoreService: CatalogoStoreService,
+    private _ahorroService: AhorroService,
     private _messageService: MessageService,
   ){
 
@@ -46,8 +46,7 @@ export class AhorroListComponent {
   }
 
   obtenerData():void{
-    this._catalogoStoreService.clearCatalogo('ahorros');
-    this._catalogoStoreService.getCatalogo('ahorros')
+    this._ahorroService.getDataAhorroCat()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {

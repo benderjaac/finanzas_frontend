@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CatalogoMap } from 'app/core/models/response-api.model';
-import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { CategoriaGastoService } from 'app/core/services-api/categoria-gasto.service';
 import { CategoriaIngresoService } from 'app/core/services-api/categoria-ingreso.service';
 import { Observable, shareReplay } from 'rxjs';
@@ -15,7 +14,6 @@ export class CatalogoStoreService {
   constructor(
     private _categoriaGastoService: CategoriaGastoService,
     private _categoriaIngresoService: CategoriaIngresoService,
-    private _ahorroService: AhorroService,
   ) { }
 
   /**
@@ -40,13 +38,6 @@ export class CatalogoStoreService {
             shareReplay(1)
           ) as Observable<CatalogoMap[K]>;
         break;
-      case 'ahorros':
-          observable = this._ahorroService.getDataAhorroCat().pipe(
-            shareReplay(1)
-          ) as Observable<CatalogoMap[K]>;
-        break;
-      
-    
       default:
         throw new Error(`Catálogo no reconocido: ${nombreClave}`);
     }    

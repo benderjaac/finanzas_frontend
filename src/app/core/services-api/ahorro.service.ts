@@ -18,8 +18,7 @@ export class AhorroService {
   }
 
   getDataAhorroCat():Observable<ResponseApiCat<Ahorro>>{
-    //cambiar a get
-    return this._httpClient.post<ResponseApiCat<Ahorro>>(this.urlApi+'/api/ahorros/data', {});
+    return this._httpClient.get<ResponseApiCat<Ahorro>>(this.urlApi+'/api/ahorros/data');
   }
   
   createAhorro(data: Partial<Ahorro>):Observable<ResponseApiSimple<Ahorro>>{
