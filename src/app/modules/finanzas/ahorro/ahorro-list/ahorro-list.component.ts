@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { AhorroCreateComponent } from '../ahorro-create/ahorro-create.component';
 import { AhorroService } from 'app/core/services-api/ahorro.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ahorro-list',
@@ -33,6 +34,7 @@ export class AhorroListComponent {
   constructor(
     private _ahorroService: AhorroService,
     private _messageService: MessageService,
+    private router: Router
   ){
 
   }
@@ -81,6 +83,10 @@ export class AhorroListComponent {
       detail: detalle.mensaje,
       life: 3000
     });
+  }
+
+  detalleAhorro(idAhorro:number):void{
+    this.router.navigateByUrl('/finanzas/ahorro/list/'+idAhorro);
   }
 
   

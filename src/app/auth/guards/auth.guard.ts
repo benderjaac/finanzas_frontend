@@ -22,7 +22,17 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
   }
   //validacion de permisos
   if(state.url!='/404-not-found' && state.url!='/inicio' && state.url!='/sign-out'){
-    if(!_authService.permiso(state.url)){
+    
+    let url_menu = state.url;
+
+    const match = url_menu.match(/\/(\d+)$/);
+    if(match){
+      const id = match[1];
+      url_menu = url_menu.replace(`/${id}`, '');
+    }
+
+    if(!_authService.permiso(url_menu)){
+      console.error('Sin permisos para: ', url_menu);
       return router.parseUrl(`404-not-found`);
     }
   }

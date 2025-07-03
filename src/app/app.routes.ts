@@ -9,7 +9,7 @@ import { EmptyComponent } from './layout/empty/empty.component';
 export const routes: Routes = [
     {path:'', pathMatch : 'full', redirectTo: 'inicio'},
     {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'inicio'},
-        
+
     //ruta para iniciar session
     {
         path:'',
@@ -17,17 +17,17 @@ export const routes: Routes = [
         canActivateChild: [NoAuthGuard],
         component: EmptyComponent,
         children: [
-            {path: 'sign-in', loadComponent: () => import('app/auth/sign-in/sign-in.component').then(m => m.SignInComponent)},            
-            {path: 'register', loadComponent: () => import('app/auth/register/register.component').then(m => m.RegisterComponent)},            
-        ]         
-    },   
+            {path: 'sign-in', loadComponent: () => import('app/auth/sign-in/sign-in.component').then(m => m.SignInComponent)},
+            {path: 'register', loadComponent: () => import('app/auth/register/register.component').then(m => m.RegisterComponent)},
+        ]
+    },
 
     //ruta para cerrar session
     {
         path:'sign-out',
         canActivate: [AuthGuard],//Guard para verificar que este logueado
         canActivateChild: [AuthGuard],
-        component: SignOutComponent,        
+        component: SignOutComponent,
     },
 
     //ruta para usuarios logueados
@@ -35,65 +35,64 @@ export const routes: Routes = [
         path: '',
         canActivate: [AuthGuard],
         canActivateChild: [AuthGuard],
-        component: LayoutComponent,        
+        component: LayoutComponent,
         children: [
-            {path: 'inicio', loadComponent: () => import('app/modules/inicio/inicio.component').then(m => m.InicioComponent)}, 
-            {path:'admin', 
+            {path: 'inicio', loadComponent: () => import('app/modules/inicio/inicio.component').then(m => m.InicioComponent)},
+            {path:'admin',
                 children:[
-                    {path: 'users', 
+                    {path: 'users',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/admin/users/users-list/users-list.component').then(m => m.UsersListComponent)},                    
-                            {path: 'create', loadComponent: () => import('app/modules/admin/users/users-create/users-create.component').then(m => m.UsersCreateComponent)},                            
-                            {path: 'update', loadComponent: () => import('app/modules/admin/users/users-update/users-update.component').then(m => m.UsersUpdateComponent)},                            
+                            {path: 'list', loadComponent: () => import('app/modules/admin/users/users-list/users-list.component').then(m => m.UsersListComponent)},
+                            {path: 'create', loadComponent: () => import('app/modules/admin/users/users-create/users-create.component').then(m => m.UsersCreateComponent)},
+                            {path: 'update', loadComponent: () => import('app/modules/admin/users/users-update/users-update.component').then(m => m.UsersUpdateComponent)},
                         ]
                     },
-                    {path: 'perfil', 
+                    {path: 'perfil',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/admin/perfil/perfil-list/perfil-list.component').then(m => m.PerfilListComponent)},                    
-                            {path: 'create', loadComponent: () => import('app/modules/admin/perfil/perfil-create/perfil-create.component').then(m => m.PerfilCreateComponent)},                            
-                            {path: 'update', loadComponent: () => import('app/modules/admin/perfil/perfil-update/perfil-update.component').then(m => m.PerfilUpdateComponent)},                            
+                            {path: 'list', loadComponent: () => import('app/modules/admin/perfil/perfil-list/perfil-list.component').then(m => m.PerfilListComponent)},
+                            {path: 'create', loadComponent: () => import('app/modules/admin/perfil/perfil-create/perfil-create.component').then(m => m.PerfilCreateComponent)},
+                            {path: 'update', loadComponent: () => import('app/modules/admin/perfil/perfil-update/perfil-update.component').then(m => m.PerfilUpdateComponent)},
                         ]
                     },
                 ]
-            }, 
-            {path:'finanzas', 
+            },
+            {path:'finanzas',
                 children:[
-                    {path: 'gasto', 
+                    {path: 'gasto',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/gasto-list/gasto-list.component').then(m => m.GastoListComponent)},                    
-                            {path: 'create', loadComponent: () => import('app/modules/finanzas/gasto/gasto-create/gasto-create.component').then(m => m.GastoCreateComponent)},                            
-                            {path: 'update', loadComponent: () => import('app/modules/finanzas/gasto/gasto-update/gasto-update.component').then(m => m.GastoUpdateComponent)},                            
+                            {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/gasto-list/gasto-list.component').then(m => m.GastoListComponent)},
+                            {path: 'create', loadComponent: () => import('app/modules/finanzas/gasto/gasto-create/gasto-create.component').then(m => m.GastoCreateComponent)},
+                            {path: 'update', loadComponent: () => import('app/modules/finanzas/gasto/gasto-update/gasto-update.component').then(m => m.GastoUpdateComponent)},
                         ]
                     },
-                    {path: 'ingreso', 
+                    {path: 'ingreso',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-list/ingreso-list.component').then(m => m.IngresoListComponent)},                    
-                            {path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},                            
-                            {path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},                            
+                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-list/ingreso-list.component').then(m => m.IngresoListComponent)},
+                            {path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},
+                            {path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},
                         ]
                     },
-                    {path: 'ahorro', 
+                    {path: 'ahorro',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},                    
-                            //{path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},                            
-                            //{path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},                            
+                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},
+                            {path: 'list/:id', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},
                         ]
                     },
-                    {path: 'categoria', 
+                    {path: 'categoria',
                         children: [
                             {path: 'gasto', children:[
                                 {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/gasto/categoria-gasto-list/categoria-gasto-list.component').then(m => m.CategoriaGastoListComponent)}
                             ]},
                             {path: 'ingreso', children:[
                                 {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/ingreso/categoria-ingreso-list/categoria-ingreso-list.component').then(m => m.CategoriaIngresoListComponent)}
-                            ]},                            
+                            ]},
                         ]
                     },
                     {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen.component').then(m => m.ResumenComponent)}
                 ]
-            },                       
-            {path: '404-not-found', loadComponent: () => import('app/modules/not-found/not-found.component').then(m => m.NotFoundComponent)},            
-        ]  
+            },
+            {path: '404-not-found', loadComponent: () => import('app/modules/not-found/not-found.component').then(m => m.NotFoundComponent)},
+        ]
     },
 
     {path: '404-not-found', pathMatch: 'full', component: NotFoundComponent},
