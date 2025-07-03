@@ -21,6 +21,10 @@ export class AhorroService {
     return this._httpClient.get<ResponseApiCat<Ahorro>>(this.urlApi+'/api/ahorros/data');
   }
   
+  getById(id: number):Observable<ResponseApiSimple<Ahorro>>{
+    return this._httpClient.get<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros/'+id);
+  }
+
   createAhorro(data: Partial<Ahorro>):Observable<ResponseApiSimple<Ahorro>>{
     return this._httpClient.post<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros', data);
   }

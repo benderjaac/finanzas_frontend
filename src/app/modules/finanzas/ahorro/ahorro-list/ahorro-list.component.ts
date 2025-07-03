@@ -44,7 +44,8 @@ export class AhorroListComponent {
   }
 
   ngOnDestroy() {
-    
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   obtenerData():void{

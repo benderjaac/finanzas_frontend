@@ -75,7 +75,7 @@ export const routes: Routes = [
                     {path: 'ahorro',
                         children: [
                             {path: 'list', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},
-                            {path: 'list/:id', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},
+                            {path: 'list/:id', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-detalle/ahorro-detalle.component').then(m => m.AhorroDetalleComponent)},
                         ]
                     },
                     {path: 'categoria',
