@@ -11,6 +11,7 @@
             pInputText
             formControlName="descri"
             class="w-full"
+            appAutofocus
             />
             <small *ngIf="registerForm.get('descri')?.hasError('required') && registerForm.get('descri')?.touched" class="text-red-500">
             Ingrese nombre
@@ -24,8 +25,7 @@
             id="monto_meta"
             prefix="$ "
             formControlName="monto_meta"
-            class="w-full"
-            appAutofocus
+            class="w-full"            
             />
             <small *ngIf="registerForm.get('monto_meta')?.hasError('required') && registerForm.get('monto_meta')?.touched" class="text-red-500">
             Ingrese el monto meta

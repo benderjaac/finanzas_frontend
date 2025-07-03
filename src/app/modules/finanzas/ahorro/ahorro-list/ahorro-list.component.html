@@ -43,10 +43,13 @@
                                     
                                 </div>                                
                             </div>
-                            <div class="flex flex-col md:items-end gap-8">
-                                <span class="text-xl font-semibold text-surface-900 dark:text-surface-0">
-                                    Total a ahorrar: {{item.monto_meta | currency: 'MXN'
-                                }}</span>
+                            <div class="flex flex-col md:items-end">
+                                <p>
+                                    Ahorrado: 
+                                    <span class="text-xl text-green-800 font-semibold">
+                                        {{item.monto_actual | currency: 'MXN'}}
+                                    </span>
+                                </p>
                                 <div class="flex gap-2">
                                     <button
                                         pButton
@@ -70,6 +73,9 @@
                     </div>
                     <div class="px-6">
                         <p-progressbar [value]="item.porcentaje" />
+                        <p class="text-gray-700 text-end">
+                            Meta: {{item.monto_actual | currency: 'MXN'}}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -86,14 +92,15 @@
                                 <div>
                                     <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">Desde {{ item.fecha_inicio }}</span>
                                     <div class="text-md font-medium mt-1">{{ item.descri }}</div>
-                                    <span class="text-sm font-semibold text-surface-700">
-                                        Total a ahorrar: {{item.monto_meta | currency: 'MXN'
-                                    }}</span>
+                                    Ahorrado: 
+                                    <span class="text-md text-green-800 font-semibold">
+                                        {{item.monto_actual | currency: 'MXN'}}
+                                    </span>
                                 </div>
                                 
                             </div>
                             <div class="flex flex-col gap-6 mt-6">
-                                <span class="text-lg font-semibold">{{ item.monto_actual | currency: 'MXN' }}</span>
+                                <span class="text-sm text-gray-700">Meta: {{ item.monto_actual | currency: 'MXN' }}</span>
                                 <div class="text-green-800 font-bold">
                                     {{ item.porcentaje }} %
                                 </div>
