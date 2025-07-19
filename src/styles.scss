@@ -12,3 +12,16 @@
 .label-color {
   @apply text-gray-900;
 }
+
+.p-datatable,
+.p-datatable table,
+.p-datatable th,
+.p-datatable td {
+  @apply bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-100;
+}
+
+.p-datatable-header,
+.p-datatable-footer,
+.p-paginator {
+  @apply bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200;
+}
