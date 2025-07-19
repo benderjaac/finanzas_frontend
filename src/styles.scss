@@ -5,6 +5,7 @@
 @plugin "tailwindcss-primeui";
 @layer tailwind, primeng;
 
+//clases genericas
 .input-color {
   @apply bg-gray-50 text-gray-900;
 }

@@ -65,15 +65,15 @@ export class LayoutComponent {
 
   private enableDarkMode(): void {
     this.isDarkMode = true;
-    document.documentElement.classList.remove('light');
-    document.documentElement.classList.add('dark');
+    document.documentElement.classList.add('dark', 'p-dark');
+    document.documentElement.classList.remove('light', 'p-light');
     localStorage.setItem('theme', 'dark');
   }
 
   private disableDarkMode(): void {
     this.isDarkMode = false;
-    document.documentElement.classList.remove('dark');
-    document.documentElement.classList.add('light');
+    document.documentElement.classList.remove('dark', 'p-dark');
+    document.documentElement.classList.add('light', 'p-light');
     localStorage.setItem('theme', 'light');
   }
 }
