@@ -19,6 +19,8 @@ export class LayoutComponent {
   showSidebar = signal(false);
   isMobile = signal(window.innerWidth <= 768);
 
+  isDarkMode = false;
+
   constructor(
     public _authService: AuthService,
     private _router: Router
@@ -35,7 +37,13 @@ export class LayoutComponent {
     });
   }
 
-  ngOnInit():void{    
+  ngOnInit():void{  
+    const userPref = localStorage.getItem('theme');
+    if (userPref === 'dark' || (!userPref && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      this.enableDarkMode();
+    } else {
+      this.disableDarkMode();
+    }  
   }
   
   toggleSidebar() {
@@ -45,4 +53,27 @@ export class LayoutComponent {
   singOut():void{
     this._router.navigate(['/sign-out']);  
   }  
+
+  toggleTheme(): void {
+    this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      this.enableDarkMode();
+    } else {
+      this.disableDarkMode();
+    }
+  }
+
+  private enableDarkMode(): void {
+    this.isDarkMode = true;
+    document.documentElement.classList.remove('light');
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }
+
+  private disableDarkMode(): void {
+    this.isDarkMode = false;
+    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.add('light');
+    localStorage.setItem('theme', 'light');
+  }
 }

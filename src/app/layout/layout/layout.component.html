@@ -38,6 +38,14 @@
             <div class="flex gap-2">                
                 <button pButton [label]="_authService._user()!.username" icon="pi pi-user" class="bg-white w-40" outlined></button>
                 <button pButton label="Cerrar sesión" (click)="singOut()" icon="pi pi-sign-out" class="bg-white w-40" severity="danger" text></button>
+                <button pButton 
+                    (click)="toggleTheme()" 
+                    class="p-2 text-xl"
+                    tooltip="Cambiar tema"
+                    >
+                    <span *ngIf="!isDarkMode">🌙</span>
+                    <span *ngIf="isDarkMode">☀️</span>
+                </button>
             </div>			
             
 			
