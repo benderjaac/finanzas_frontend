@@ -14,6 +14,9 @@ import { Subject, takeUntil } from 'rxjs';
   imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
   templateUrl: './ahorro-create.component.html'  
 })
+/**
+ * Componente para crear un nuevo ahorro.
+ */
 export class AhorroCreateComponent {
   @Output() msjEvent = new EventEmitter<{tipo:string, mensaje:string}>();
   @Output() cerrarDialog = new EventEmitter<boolean>();
