@@ -1,59 +1,83 @@
-# Primeng
+# Sistema de Finanzas Personales - SPA - Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.5.
+FrontEnd para mi sistema personal de finanzas
 
-## Development server
+### Caracteristicas del sistema
 
-To start a local development server, run:
+Administracion de usuarios por medio de permisos y perfiles
+Login | Registro
+Adminstracion de Gastos e ingresos | Consultas, Altas, Actualizacion y Eliminacion
+Administracion de Ahorros | Consultas, Altas, Actualizacion y Eliminacion | Abonos por ahorros
+Administracion de categorias de gastos e ingresos
+Graficas comparativas
 
-```bash
-ng serve
+## Instalacion, prerequisitos
+
+### 1.- Instalar herramientas de desarrollo:
+
+1.1 node y npm
+
+https://nodejs.org/es/download
+
+1.2 Instalar angular/cli: En una terminal ejecutar 
+
+```
+npm install -g @angular/cli
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+1.3 Instalar git y configurar
 
-## Code scaffolding
+https://git-scm.com/downloads
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+1.4 Instalar editor VSCode
 
-```bash
-ng generate component component-name
+https://code.visualstudio.com/download
+
+### 2.- Descargar/clonar este repositorio en la ruta de su elección.
+
+### 3.- Instalar dependencias del proyecto.
+
+En una terminal, ubicarse en la carpeta del proyecto, o abrir el proyecto con VSCode y en la terminal ejecutar:
+
+```
+npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### 4.- Ejecutar en modo desarrollo
 
-```bash
-ng generate --help
+Para ejecutar el proyecto en modo desarrollo, y en el ambiente de desarrollo (peticion a back-dev)
+Ejecutar el comando: 
+
+```
+npn run start:dev
 ```
 
-## Building
+Tambien estan disponibles los ambientes:
+qa y prod
 
-To build the project run:
+### 5 Compilación
 
-```bash
-ng build
+Para compilar el proyecto para los distintos ambientes ejecutar los sifuientes comandos, segun sea el caso:
+
+```
+npn run build:dev
+npn run build:qa
+npn run build:prod
+
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+El compilado se almacenarán en el directorio del mismo proyecto `dist/primeng/browser`.
+Listo para subir a los servidores por FTP.
 
-## Running unit tests
+### Configuracion de ambientes
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+Para las configuraciones de las variables de entorno, acceder a la carpeta `src/environments`
 
-```bash
-ng test
-```
+### Tecnologías usadas
 
-## Running end-to-end tests
+* Angular version 19.2.0
+* Node.js 22.17.1
+* npm 10.9.2
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* primeng (https://primeng.org/)
+* TailwindCSS (https://tailwindcss.com/)
