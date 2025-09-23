@@ -39,11 +39,10 @@ export class LayoutComponent {
 
   ngOnInit():void{  
     const userPref = localStorage.getItem('theme');
-    if (userPref === 'dark' || (!userPref && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      this.enableDarkMode();
-    } else {
-      this.disableDarkMode();
-    }  
+    if (userPref === 'dark') {
+      this.isDarkMode=true;
+      document.documentElement.classList.add('p-dark');
+    }
   }
   
   toggleSidebar() {
@@ -55,25 +54,14 @@ export class LayoutComponent {
   }  
 
   toggleTheme(): void {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      this.enableDarkMode();
+    if (document.documentElement.classList.contains('p-dark')) {
+      document.documentElement.classList.remove('p-dark');
+      localStorage.setItem('theme', 'light');
+      this.isDarkMode=false;
     } else {
-      this.disableDarkMode();
+      document.documentElement.classList.add('p-dark');
+      localStorage.setItem('theme', 'dark');
+      this.isDarkMode=true;
     }
-  }
-
-  private enableDarkMode(): void {
-    this.isDarkMode = true;
-    document.documentElement.classList.add('dark', 'p-dark');
-    document.documentElement.classList.remove('light', 'p-light');
-    localStorage.setItem('theme', 'dark');
-  }
-
-  private disableDarkMode(): void {
-    this.isDarkMode = false;
-    document.documentElement.classList.remove('dark', 'p-dark');
-    document.documentElement.classList.add('light', 'p-light');
-    localStorage.setItem('theme', 'light');
-  }
+  }  
 }

@@ -8,16 +8,16 @@
             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                     <div>
-                        <div class="text-lg font-medium text-surface-900 dark:text-surface-0 mt-2">Ahorro: {{ ahorro.descri }}</div>
-                        <div class="font-medium text-secondary text-sm">Desde {{ ahorro.fecha_inicio }}</div>
-                        <div class="font-medium text-secondary text-sm">Falta por ahorrar {{ ahorro.monto_meta-ahorro.monto_actual | currency: 'MXN' }}</div>
+                        <div class="text-lg font-medium text-color mt-2">Ahorro: {{ ahorro.descri }}</div>
+                        <div class="font-medium text-muted-color text-sm">Desde {{ ahorro.fecha_inicio }}</div>
+                        <div class="font-medium text-muted-color text-sm">Falta por ahorrar {{ ahorro.monto_meta-ahorro.monto_actual | currency: 'MXN' }}</div>
                         
                     </div>                                
                 </div>
                 <div class="flex flex-col md:items-end">
                     <p>
                         Ahorrado: 
-                        <span class="text-xl text-green-800 font-semibold">
+                        <span class="text-xl text-primary font-semibold">
                             {{ahorro.monto_actual | currency: 'MXN'}}
                         </span>
                     </p>
@@ -44,7 +44,7 @@
         </div>
         <div class="px-6">
             <p-progressbar [value]="porcentaje"/>
-            <p class="text-gray-700 text-end">
+            <p class="text-muted-color text-end">
                 Meta: {{ahorro.monto_actual | currency: 'MXN'}}
             </p>
         </div>
@@ -107,7 +107,7 @@
                         [readonlyInput]="true"
                     ></p-datepicker>
                     <br>
-                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
+                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
                 </div>  
                 
                 <div *ngIf="filterFecharango">
@@ -121,7 +121,7 @@
                         selectionMode="range"
                     ></p-datepicker>
                     <br>
-                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
+                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
                 </div>
             </th>
             <th>
@@ -153,7 +153,7 @@
                     pButton
                     (click)="addAhorroDeposito()" 
                     icon="pi pi-pen-to-square" 
-                    class="bg-white" 
+                    class="" 
                     severity="success" text>
                 </button>
             </td>

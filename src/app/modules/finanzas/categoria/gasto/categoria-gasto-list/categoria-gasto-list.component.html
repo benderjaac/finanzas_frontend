@@ -25,7 +25,7 @@
                 label="Agregar categoria" 
                 (click)="addCategoria()" 
                 icon="pi pi-sitemap" 
-                class="bg-white w-40" 
+                class="w-40" 
                 severity="info" text>
                 
             </button>
@@ -76,7 +76,7 @@
         <tr>
             <td>{{ categoria.id }}</td>
             <td>
-                <div class="rounded-full px-2 text-white text-shadow-md text-shadow-black" [ngClass]="categoria.color">
+                <div class="rounded-full px-2 text-shadow-md " [ngClass]="categoria.color">
                     <i *ngIf="categoria.icon!=null" [class]="categoria.icon"></i>
                     {{ categoria.nombre }}
                 </div>                

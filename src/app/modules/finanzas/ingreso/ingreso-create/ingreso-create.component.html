@@ -1,10 +1,10 @@
 <!-- <div class="bg-sky-800 bg-emerald-800 bg-rose-500 bg-red-600 bg-lime-700 bg-cyan-500 bg-yellow-400 bg-green-500 bg-violet-500 bg-lime-700 bg-orange-600 bg-red-400 bg-orange-800 bg-slate-600 bg-fuchsia-800 bg-indigo-600 bg-teal-300 "></div> -->
-<h2 class="text-2xl font-semibold text-center text-gray-800 mb-22">Agregar ingreso nuevo</h2>
+<h2 class="text-2xl font-semibold text-center mb-22">Agregar ingreso nuevo</h2>
 <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="space-y-10">
     
     <div class="grid sm:grid-cols-2 gap-4">
         <div>
-            <label for="monto" class="block text-sm font-medium text-gray-700 mb-1">Monto:</label>
+            <label for="monto" class="block text-sm font-medium mb-1">Monto:</label>
             <p-inputnumber
             inputId="integeronly"
             id="monto"
@@ -19,7 +19,7 @@
         </div> 
 
         <div>
-            <label for="descri" class="block text-sm font-medium text-gray-700 mb-1">Descripcion</label>
+            <label for="descri" class="block text-sm font-medium mb-1">Descripcion</label>
             <input
             id="descri"
             type="text"
@@ -33,7 +33,7 @@
         </div> 
 
         <div class="mt-6">
-            <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Categoria:</label>
+            <label for="categoria" class="block text-sm font-medium mb-1">Categoria:</label>
             <p-select 
                 id="categoria"
                 [options]="catCategorias" 
@@ -53,7 +53,7 @@
                 <ng-template let-categoria #item>
                     <div class="flex items-center gap-2">
                         <div
-                            class="rounded-full px-2 text-white text-shadow-md text-shadow-black"
+                            class="rounded-full px-2 text-shadow-md"
                             [ngClass]="categoria.color">
                             <i *ngIf="categoria.icon!=null" [class]="categoria.icon"></i>
                             {{ categoria.nombre }}</div>
@@ -78,7 +78,7 @@
 
 
         <div  class="mt-6">
-            <label for="fecha" class="block text-sm font-medium text-gray-700 mb-1">Fecha</label>
+            <label for="fecha" class="block text-sm font-medium mb-1">Fecha</label>
             
             <p-datepicker
                 class="w-full"

@@ -26,7 +26,7 @@
                 label="Agregar ingreso" 
                 (click)="addIngreso()" 
                 icon="pi pi-cart-plus" 
-                class="bg-white w-40" 
+                class="w-40" 
                 severity="info" text>
                 
             </button>
@@ -64,7 +64,7 @@
                         [readonlyInput]="true"
                     ></p-datepicker>
                     <br>
-                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
+                    <span class="text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
                 </div>  
                 
                 <div *ngIf="filterFecharango">
@@ -78,7 +78,7 @@
                         selectionMode="range"
                     ></p-datepicker>
                     <br>
-                    <span class="text-gray-500 text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
+                    <span class="text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
                 </div>
             </th>
             <th>
@@ -114,7 +114,7 @@
             <td>{{ gasto.descri }}</td>            
             <td>{{ gasto.monto }}</td>
             <td>
-                <div class="rounded-full px-2 text-white text-shadow-md text-shadow-black" [ngClass]="gasto.categoriaColor">
+                <div class="rounded-full px-2 text-shadow-md" [ngClass]="gasto.categoriaColor">
                     <i *ngIf="gasto.categoriaIcon!=null" [class]="gasto.categoriaIcon"></i>
                     {{ gasto.categoriaNombre }}
                 </div>
@@ -124,7 +124,7 @@
                     pButton
                     (click)="addIngreso()" 
                     icon="pi pi-pen-to-square" 
-                    class="bg-white" 
+                    class="" 
                     severity="success" text>
                 </button>
             </td>

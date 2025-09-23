@@ -1,7 +1,7 @@
-<h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Crear usuario nuevo</h2>
+<h2 class="text-2xl font-semibold text-center mb-6">Crear usuario nuevo</h2>
 <form (ngSubmit)="onSubmit()" [formGroup]="registerForm" class="space-y-5">
     <div>
-        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Nombre de usuario</label>
+        <label for="username" class="block text-sm font-medium mb-1">Nombre de usuario</label>
         <input
         #usernameInput
         id="username"
@@ -17,7 +17,7 @@
 
 
     <div>
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
+        <label for="email" class="block text-sm font-medium mb-1">E-mail</label>
         <input
         id="email"
         type="email"
