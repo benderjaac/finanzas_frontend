@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { Gasto } from 'app/core/models/gasto.model';
 import { GastoService } from 'app/core/services-api/gasto.service';
 import { Subject, takeUntil } from 'rxjs';
@@ -15,10 +15,13 @@ import { GastoCreateComponent } from '../gasto-create/gasto-create.component';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
+import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Select } from 'primeng/select';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './gasto-list.component.html',
   providers: [MessageService]
 })
@@ -43,19 +46,34 @@ export class GastoListComponent {
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
+  catCategorias : CategoriaGasto[] = [];
+
+  clonedGastos: { [s: string]: Gasto } = {};
+
   destroy$ = new Subject<void>();
 
   constructor(
     private _gastoService: GastoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
+    private _catalogoStoreService: CatalogoStoreService,
+    private cdr: ChangeDetectorRef,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];    
   }
 
   ngOnInit():void{
-    
+    this._catalogoStoreService.getCatalogo('categorias_gastos')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp) => {
+          this.catCategorias = resp.result.data;
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
   }
 
   ngOnDestroy():void{
@@ -72,6 +90,7 @@ export class GastoListComponent {
       .subscribe({
         next: (res: ResponseApiType<Gasto>)=>{
           this.gastos = res.result.data;
+          this.gastos.map(g => g.editing = false);
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          
         },
@@ -163,6 +182,79 @@ export class GastoListComponent {
       detail: detalle.mensaje,
       life: 3000
     });
+  }
+
+  onRowEditInit(gasto: Gasto) {
+    this.cancelAllActiveEditions();
+    this.clonedGastos[gasto.id as unknown as string] = { ...gasto };
+    gasto.editing = true;
+  }
+
+  onRowEditSave(gasto: Gasto) {
+    console.log("gasto pre-update", gasto);
+    gasto.fecha= new Date(gasto.fecha).toISOString().split('T')[0];
+    
+    const values = {
+      monto: gasto.monto,
+      descri: gasto.descri,
+      categoriaId: gasto.categoria_id,
+      fecha: gasto.fecha,
+    };
+    
+    this._gastoService.updateGasto(gasto.id, values)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._messageService.add({ 
+            severity: 'success', 
+            summary: 'Gasto actualizado correctamente', 
+            detail: res.message 
+          });
+          gasto.editing = false;
+          delete this.clonedGastos[gasto.id as unknown as string];
+        },
+        error: (error) => {
+          this._messageService.add({ 
+            severity: 'error', 
+            summary: 'Error al actualizar el gasto', 
+            detail: error.error.error 
+          });
+        }
+      });
+
+    //delete this.clonedGastos[gasto.id as unknown as string];
+    //this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+      
+  }
+
+  onRowEditCancel(gasto: Gasto, index: number) {
+    if (this.clonedGastos[gasto.id as unknown as string]) {
+      this.gastos[index] = { ...this.clonedGastos[gasto.id as unknown as string] };
+      delete this.clonedGastos[gasto.id as unknown as string];
+    }
+    this.dt.cancelRowEdit(this.gastos[index]);
+    gasto.editing = false;
+  }
+
+  cancelAllActiveEditions(): void {
+    this.gastos.forEach((gasto, index) => {
+      if (gasto.editing) {
+        this.onRowEditCancel(gasto, index);        
+      }
+    });    
+    
+    this.cdr.detectChanges();
+  }
+
+  onCategoriaChange(event: any, gasto: Gasto) {
+    const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
+    
+    if (categoriaSeleccionada) {
+        gasto.categoria_id = categoriaSeleccionada.id;
+        gasto.categoriaNombre = categoriaSeleccionada.nombre;
+        gasto.categoriaIcon = categoriaSeleccionada.icon;
+        gasto.categoriaColor = categoriaSeleccionada.color;
+    }
   }
 
 }

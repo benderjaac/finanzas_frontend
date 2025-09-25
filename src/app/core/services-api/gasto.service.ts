@@ -26,4 +26,8 @@ export class GastoService {
   createGasto(data:Partial<Gasto>):Observable<ResponseApiSimple<Gasto>>{
     return this._httpClient.post<ResponseApiSimple<Gasto>>(this.urlApi+'/api/gastos', data);
   }
+
+  updateGasto(id:number, data:Partial<Gasto>):Observable<ResponseApiSimple<Gasto>>{
+    return this._httpClient.put<ResponseApiSimple<Gasto>>(this.urlApi+'/api/gastos/'+id, data);
+  }
 }
