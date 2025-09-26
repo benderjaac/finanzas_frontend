@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Ingreso } from 'app/core/models/ingreso.model';
 import { ApiSort } from 'app/core/models/query.model';
@@ -15,10 +15,13 @@ import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
 import { IngresoCreateComponent } from '../ingreso-create/ingreso-create.component';
+import { Select } from 'primeng/select';
+import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
+import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 
 @Component({
   selector: 'app-ingreso-list',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
   templateUrl: './ingreso-list.component.html',
   providers: [MessageService]
 })
@@ -42,19 +45,34 @@ export class IngresoListComponent {
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
+  catCategorias : CategoriaIngreso[] = [];
+  
+  clonedIngresos: { [s: string]: Ingreso } = {};
+
   destroy$ = new Subject<void>();
 
   constructor(
     private _ingresoService: IngresoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
+    private _catalogoStoreService: CatalogoStoreService,
+    private cdr: ChangeDetectorRef,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];    
   }
 
   ngOnInit():void{
-    
+    this._catalogoStoreService.getCatalogo('categorias_ingresos')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (resp) => {
+          this.catCategorias = resp.result.data;
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
   }
 
   ngOnDestroy():void{
@@ -71,6 +89,10 @@ export class IngresoListComponent {
       .subscribe({
         next: (res: ResponseApiType<Ingreso>)=>{
           this.ingresos = res.result.data;
+          this.ingresos.map(g => {
+            this.dt.cancelRowEdit(g);
+            g.editing = false
+          });
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          
         },
@@ -152,7 +174,7 @@ export class IngresoListComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getIngresosData(event); // dispara la carga manual
+    this.getIngresosData(event);
   }
 
   mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
@@ -162,5 +184,74 @@ export class IngresoListComponent {
       detail: detalle.mensaje,
       life: 3000
     });
+  }
+
+  onRowEditInit(ingreso: Ingreso) {
+    this.cancelAllActiveEditions();
+    this.clonedIngresos[ingreso.id as unknown as string] = { ...ingreso };
+    ingreso.editing = true;
+  }
+
+  onRowEditSave(ingreso: Ingreso) {
+    ingreso.fecha= new Date(ingreso.fecha).toISOString().split('T')[0];
+    
+    const values = {
+      monto: ingreso.monto,
+      descri: ingreso.descri,
+      categoriaId: ingreso.categoria_id,
+      fecha: ingreso.fecha,
+    };
+
+    this._ingresoService.updateIngreso(ingreso.id, values)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._messageService.add({ 
+            severity: 'success', 
+            summary: 'Gasto actualizado correctamente', 
+            detail: res.message 
+          });
+          ingreso.editing = false;
+          delete this.clonedIngresos[ingreso.id as unknown as string];
+        },
+        error: (error) => {
+          this._messageService.add({ 
+            severity: 'error', 
+            summary: 'Error al actualizar el ingreso', 
+            detail: error.error.error 
+          });
+        }
+      });   
+      
+  }
+
+  onRowEditCancel(ingreso: Ingreso, index: number) {
+    if (this.clonedIngresos[ingreso.id as unknown as string]) {
+      this.ingresos[index] = { ...this.clonedIngresos[ingreso.id as unknown as string] };
+      delete this.clonedIngresos[ingreso.id as unknown as string];
+    }
+    this.dt.cancelRowEdit(this.ingresos[index]);
+    ingreso.editing = false;
+  }
+
+  cancelAllActiveEditions(): void {
+    this.ingresos.forEach((ingreso, index) => {
+      if (ingreso.editing) {
+        this.onRowEditCancel(ingreso, index);        
+      }
+    });    
+    
+    this.cdr.detectChanges();
+  }
+
+  onCategoriaChange(event: any, ingreso: Ingreso) {
+    const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
+    
+    if (categoriaSeleccionada) {
+        ingreso.categoria_id = categoriaSeleccionada.id;
+        ingreso.categoriaNombre = categoriaSeleccionada.nombre;
+        ingreso.categoriaIcon = categoriaSeleccionada.icon;
+        ingreso.categoriaColor = categoriaSeleccionada.color;
+    }
   }
 }

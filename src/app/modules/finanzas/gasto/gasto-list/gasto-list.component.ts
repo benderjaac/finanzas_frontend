@@ -175,7 +175,7 @@ export class GastoListComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getGastosData(event); // dispara la carga manual
+    this.getGastosData(event);
   }
 
   mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
@@ -194,7 +194,6 @@ export class GastoListComponent {
   }
 
   onRowEditSave(gasto: Gasto) {
-    console.log("gasto pre-update", gasto);
     gasto.fecha= new Date(gasto.fecha).toISOString().split('T')[0];
     
     const values = {
@@ -223,10 +222,7 @@ export class GastoListComponent {
             detail: error.error.error 
           });
         }
-      });
-
-    //delete this.clonedGastos[gasto.id as unknown as string];
-    //this._messageService.add({ severity: 'success', summary: 'Success', detail: 'Product is updated' });
+      });   
       
   }
 

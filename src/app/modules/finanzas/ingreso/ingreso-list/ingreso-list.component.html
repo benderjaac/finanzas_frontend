@@ -17,6 +17,9 @@
     
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
+
+    dataKey="id" 
+    editMode="row"
     >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
@@ -82,7 +85,7 @@
                 </div>
             </th>
             <th>
-                <input class="border-solid border-2 rounded-full"
+                <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                 pInputText
                 [placeholder]="'Contiene...'"
                 type="text"
@@ -90,7 +93,7 @@
                 />
             </th>
             <th> 
-                <input class="border-solid border-2 rounded-full"
+                <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                 pInputText
                 [placeholder]="'aprox..'"
                 type="number"
@@ -98,7 +101,7 @@
                 />              
             </th>
             <th>
-                <input class="border-solid border-2 rounded-full"
+                <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                 pInputText
                 [placeholder]="'Contiene...'"
                 type="text"
@@ -108,25 +111,133 @@
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-gasto>
-        <tr>
-            <td>{{ gasto.fecha }}</td>
-            <td>{{ gasto.descri }}</td>            
-            <td>{{ gasto.monto }}</td>
-            <td>
-                <div class="rounded-full px-2 text-shadow-md" [ngClass]="gasto.categoriaColor">
-                    <i *ngIf="gasto.categoriaIcon!=null" [class]="gasto.categoriaIcon"></i>
-                    {{ gasto.categoriaNombre }}
-                </div>
+    <ng-template pTemplate="body" let-ingreso let-ri="rowIndex">
+        <tr [pEditableRow]="ingreso">
+            <td class="min-w-50">
+                <p-cellEditor>
+                    <ng-template #input>
+                        <p-datepicker
+                            class="w-full"
+                            id="fecha"
+                            [showIcon]="true"                            
+                            dateFormat="yy-mm-dd"
+                            [readonlyInput]="true"
+                            [(ngModel)]="ingreso.fecha"
+                        ></p-datepicker>
+                    </ng-template>
+                    <ng-template #output>
+                        {{ ingreso.fecha }}
+                    </ng-template>
+                </p-cellEditor>                
             </td>
             <td>
-                <button
-                    pButton
-                    (click)="addIngreso()" 
-                    icon="pi pi-pen-to-square" 
-                    class="" 
-                    severity="success" text>
-                </button>
+                <p-cellEditor>
+                    <ng-template #input>
+                        <input
+                            class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                            pInputText type="text" required
+                            [(ngModel)]="ingreso.descri" />
+                    </ng-template>
+                    <ng-template #output>
+                        {{ ingreso.descri }}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td>
+                <p-cellEditor>
+                    <ng-template #input>
+                        <input
+                            class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                            pInputText type="number" required
+                            [(ngModel)]="ingreso.monto" />
+                    </ng-template>
+                    <ng-template #output>
+                        {{ ingreso.monto }}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td class="min-w-60">
+                <p-cellEditor>
+                    <ng-template #input>
+                        <p-select 
+                            id="categoria"
+                            [(ngModel)]="ingreso.categoria_id"
+                            [options]="catCategorias"
+                            optionValue="id"
+                            optionLabel="nombre"                            
+                            [editable]="true" class="w-full"
+                            (onChange)="onCategoriaChange($event, ingreso)">
+
+                            <ng-template #selectedItem let-selectedOption>
+                                <div class="flex items-center gap-2" *ngIf="selectedOption">
+                                    <div>
+                                        <i *ngIf="selectedOption.icon!=null" [class]="selectedOption.icon"></i>
+                                        {{ selectedOption.nombre }}
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <ng-template let-categoria #item>
+                                <div class="flex items-center gap-2">
+                                    <div
+                                        class="rounded-full px-2 text-shadow-md"
+                                        [ngClass]="categoria.color">
+                                        <i *ngIf="categoria.icon!=null" [class]="categoria.icon"></i>
+                                        {{ categoria.nombre }}</div>
+                                </div>
+                            </ng-template>
+                            <ng-template #dropdownicon>
+                                <i class="pi pi-sitemap"></i>
+                            </ng-template>                            
+                        </p-select>
+                    </ng-template>
+                    <ng-template #output>
+                        <div class="rounded-full px-2 text-shadow-md " [ngClass]="ingreso.categoriaColor">
+                            <i *ngIf="ingreso.categoriaIcon!=null" [class]="ingreso.categoriaIcon"></i>
+                            {{ ingreso.categoriaNombre }}
+                        </div>
+                    </ng-template>
+                </p-cellEditor>                
+            </td>
+            <td>
+                <div class="flex items-center justify-center gap-2">
+                    <button
+                        *ngIf="!ingreso.editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pInitEditableRow
+                        (click)="onRowEditInit(ingreso)" 
+                        icon="pi pi-pen-to-square" 
+                        rounded 
+                        text
+                        severity="info">
+                    </button>
+                    <button
+                        *ngIf="ingreso.editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pSaveEditableRow
+                        icon="pi pi-check"
+                        (click)="onRowEditSave(ingreso)"
+                        text
+                        rounded
+                        severity="success"
+                    ></button>
+                    <button
+                        *ngIf="ingreso.editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pCancelEditableRow
+                        icon="pi pi-times"
+                        (click)="onRowEditCancel(ingreso, ri)"
+                        text
+                        rounded
+                        severity="secondary"
+                    ></button>
+                </div>                
             </td>
         </tr>
     </ng-template>
