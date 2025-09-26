@@ -90,7 +90,10 @@ export class GastoListComponent {
       .subscribe({
         next: (res: ResponseApiType<Gasto>)=>{
           this.gastos = res.result.data;
-          this.gastos.map(g => g.editing = false);
+          this.gastos.map(g => {
+            this.dt.cancelRowEdit(g);
+            g.editing = false
+          });
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          
         },

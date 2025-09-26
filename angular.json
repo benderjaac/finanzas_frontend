@@ -17,8 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "baseHref":"/finanzas/",
-            "outputPath": "dist/finanzas",
+            "baseHref":"/finanzas_new/",
+            "outputPath": "dist/finanzas_new",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
