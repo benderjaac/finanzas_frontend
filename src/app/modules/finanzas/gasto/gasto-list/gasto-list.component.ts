@@ -18,10 +18,11 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
 import { Select } from 'primeng/select';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
   templateUrl: './gasto-list.component.html',
   providers: [MessageService]
 })
@@ -31,7 +32,7 @@ export class GastoListComponent {
 
   gastos : Gasto[] = [];
   totalRecords = 0;
-  
+
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
   OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
@@ -60,7 +61,7 @@ export class GastoListComponent {
     private cdr: ChangeDetectorRef,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
-    this.rowsDefault = this.rowsPerPageOptions[0];    
+    this.rowsDefault = this.rowsPerPageOptions[0];
   }
 
   ngOnInit():void{
@@ -80,7 +81,7 @@ export class GastoListComponent {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   getGastosData(event: TableLazyLoadEvent):void{
     this.lastEvent=event;
     this.loading = true;
@@ -95,7 +96,7 @@ export class GastoListComponent {
             g.editing = false
           });
           this.totalRecords = res.result.pagination.totalItems;
-          this.loading = false;          
+          this.loading = false;
         },
         error: (error)=> {
           this.gastos=[];
@@ -133,7 +134,7 @@ export class GastoListComponent {
   onFilterInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
-  } 
+  }
 
   onFilterExactDate(date: Date, field: string): void {
     this.dt.filter(date, field, 'equals');
@@ -152,7 +153,7 @@ export class GastoListComponent {
     const number = Number(input.value);
     const [desde, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
     this.dt.filter([desde, hasta], field, tipo);
-  } 
+  }
 
   reloadTable():void{
     if (this.lastEvent!=null) {
@@ -195,35 +196,35 @@ export class GastoListComponent {
 
   onRowEditSave(gasto: Gasto) {
     gasto.fecha= new Date(gasto.fecha).toISOString().split('T')[0];
-    
+
     const values = {
       monto: gasto.monto,
       descri: gasto.descri,
       categoriaId: gasto.categoria_id,
       fecha: gasto.fecha,
     };
-    
+
     this._gastoService.updateGasto(gasto.id, values)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._messageService.add({ 
-            severity: 'success', 
-            summary: 'Gasto actualizado correctamente', 
-            detail: res.message 
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Gasto actualizado correctamente',
+            detail: res.message
           });
           gasto.editing = false;
           delete this.clonedGastos[gasto.id as unknown as string];
         },
         error: (error) => {
-          this._messageService.add({ 
-            severity: 'error', 
-            summary: 'Error al actualizar el gasto', 
-            detail: error.error.error 
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al actualizar el gasto',
+            detail: error.error.error
           });
         }
-      });   
-      
+      });
+
   }
 
   onRowEditCancel(gasto: Gasto, index: number) {
@@ -238,16 +239,16 @@ export class GastoListComponent {
   cancelAllActiveEditions(): void {
     this.gastos.forEach((gasto, index) => {
       if (gasto.editing) {
-        this.onRowEditCancel(gasto, index);        
+        this.onRowEditCancel(gasto, index);
       }
-    });    
-    
+    });
+
     this.cdr.detectChanges();
   }
 
   onCategoriaChange(event: any, gasto: Gasto) {
     const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
-    
+
     if (categoriaSeleccionada) {
         gasto.categoria_id = categoriaSeleccionada.id;
         gasto.categoriaNombre = categoriaSeleccionada.nombre;

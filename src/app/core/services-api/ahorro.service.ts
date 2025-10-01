@@ -13,19 +13,23 @@ export class AhorroService {
   private _httpClient = inject(HttpClient);
   private urlApi: string;
 
-  constructor() { 
+  constructor() {
     this.urlApi=environment.apiUrl;
   }
 
   getDataAhorroCat():Observable<ResponseApiCat<Ahorro>>{
     return this._httpClient.get<ResponseApiCat<Ahorro>>(this.urlApi+'/api/ahorros/data');
   }
-  
+
   getById(id: number):Observable<ResponseApiSimple<Ahorro>>{
     return this._httpClient.get<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros/'+id);
   }
 
   createAhorro(data: Partial<Ahorro>):Observable<ResponseApiSimple<Ahorro>>{
     return this._httpClient.post<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros', data);
+  }
+
+  editAhorro(id:number, data: Partial<Ahorro>):Observable<ResponseApiSimple<Ahorro>>{
+    return this._httpClient.put<ResponseApiSimple<Ahorro>>(this.urlApi+'/api/ahorros/'+id, data);
   }
 }

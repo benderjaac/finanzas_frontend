@@ -18,10 +18,11 @@ import { IngresoCreateComponent } from '../ingreso-create/ingreso-create.compone
 import { Select } from 'primeng/select';
 import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-ingreso-list',
-  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule],
+  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
   templateUrl: './ingreso-list.component.html',
   providers: [MessageService]
 })
@@ -30,7 +31,7 @@ export class IngresoListComponent {
 
   ingresos : Ingreso[] = [];
   totalRecords = 0;
-  
+
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
   OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
@@ -46,7 +47,7 @@ export class IngresoListComponent {
   filterFecharango=false;
 
   catCategorias : CategoriaIngreso[] = [];
-  
+
   clonedIngresos: { [s: string]: Ingreso } = {};
 
   destroy$ = new Subject<void>();
@@ -59,7 +60,7 @@ export class IngresoListComponent {
     private cdr: ChangeDetectorRef,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
-    this.rowsDefault = this.rowsPerPageOptions[0];    
+    this.rowsDefault = this.rowsPerPageOptions[0];
   }
 
   ngOnInit():void{
@@ -79,7 +80,7 @@ export class IngresoListComponent {
     this.destroy$.next();
     this.destroy$.complete();
   }
-  
+
   getIngresosData(event: TableLazyLoadEvent):void{
     this.lastEvent=event;
     this.loading = true;
@@ -94,7 +95,7 @@ export class IngresoListComponent {
             g.editing = false
           });
           this.totalRecords = res.result.pagination.totalItems;
-          this.loading = false;          
+          this.loading = false;
         },
         error: (error)=> {
           this.ingresos=[];
@@ -132,7 +133,7 @@ export class IngresoListComponent {
   onFilterInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
-  } 
+  }
 
   onFilterExactDate(date: Date, field: string): void {
     this.dt.filter(date, field, 'equals');
@@ -151,7 +152,7 @@ export class IngresoListComponent {
     const number = Number(input.value);
     const [desde, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
     this.dt.filter([desde, hasta], field, tipo);
-  } 
+  }
 
   reloadTable():void{
     if (this.lastEvent!=null) {
@@ -194,7 +195,7 @@ export class IngresoListComponent {
 
   onRowEditSave(ingreso: Ingreso) {
     ingreso.fecha= new Date(ingreso.fecha).toISOString().split('T')[0];
-    
+
     const values = {
       monto: ingreso.monto,
       descri: ingreso.descri,
@@ -206,23 +207,23 @@ export class IngresoListComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._messageService.add({ 
-            severity: 'success', 
-            summary: 'Gasto actualizado correctamente', 
-            detail: res.message 
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Gasto actualizado correctamente',
+            detail: res.message
           });
           ingreso.editing = false;
           delete this.clonedIngresos[ingreso.id as unknown as string];
         },
         error: (error) => {
-          this._messageService.add({ 
-            severity: 'error', 
-            summary: 'Error al actualizar el ingreso', 
-            detail: error.error.error 
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al actualizar el ingreso',
+            detail: error.error.error
           });
         }
-      });   
-      
+      });
+
   }
 
   onRowEditCancel(ingreso: Ingreso, index: number) {
@@ -237,16 +238,16 @@ export class IngresoListComponent {
   cancelAllActiveEditions(): void {
     this.ingresos.forEach((ingreso, index) => {
       if (ingreso.editing) {
-        this.onRowEditCancel(ingreso, index);        
+        this.onRowEditCancel(ingreso, index);
       }
-    });    
-    
+    });
+
     this.cdr.detectChanges();
   }
 
   onCategoriaChange(event: any, ingreso: Ingreso) {
     const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
-    
+
     if (categoriaSeleccionada) {
         ingreso.categoria_id = categoriaSeleccionada.id;
         ingreso.categoriaNombre = categoriaSeleccionada.nombre;

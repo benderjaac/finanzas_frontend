@@ -13,10 +13,13 @@ import { Dialog } from 'primeng/dialog';
 import { AhorroCreateComponent } from '../ahorro-create/ahorro-create.component';
 import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { Router } from '@angular/router';
+import {Ripple} from 'primeng/ripple';
+import {TableModule} from 'primeng/table';
+import {AhorroEditComponent} from '../ahorro-edit/ahorro-edit.component';
 
 @Component({
   selector: 'app-ahorro-list',
-  imports: [CommonModule, Toast, DataView, SelectButton, FormsModule, ProgressBar, ButtonModule, Dialog, AhorroCreateComponent],
+  imports: [CommonModule, Toast, DataView, SelectButton, FormsModule, ProgressBar, ButtonModule, Dialog, AhorroCreateComponent, Ripple, TableModule, AhorroEditComponent],
   templateUrl: './ahorro-list.component.html',
   providers: [MessageService]
 })
@@ -28,6 +31,8 @@ export class AhorroListComponent {
   ahorros = signal<Ahorro[]>([]);
 
   visibleAdd = false;
+  visibleEdit = false;
+  ahorroEdting: Ahorro | null = null;
 
   destroy$ = new Subject<void>();
 
@@ -63,15 +68,21 @@ export class AhorroListComponent {
         error: (error) => {
           console.error(error);
         }
-      });   
+      });
   }
 
   addAhorro():void{
     this.visibleAdd=true;
   }
 
-  closeDialog(update:boolean) {
+  closeDialog(update:boolean, form: string) {
+    if(form==='create'){
       this.visibleAdd = false;
+    }else if(form==='edit'){
+      this.visibleEdit = false;
+      this.ahorroEdting=null;
+    }
+
       if(update){
         this.obtenerData();
       }
@@ -90,5 +101,10 @@ export class AhorroListComponent {
     this.router.navigateByUrl('/finanzas/ahorro/list/'+idAhorro);
   }
 
-  
+  onEdit(ahorro: Ahorro): void {
+    this.visibleEdit=true;
+    this.ahorroEdting=ahorro;
+  }
+
+
 }
