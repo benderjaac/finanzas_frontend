@@ -193,7 +193,7 @@ export class IngresoListComponent {
     ingreso.editing = true;
   }
 
-  onRowEditSave(ingreso: Ingreso) {
+  onRowEditSave(ingreso: Ingreso, ri: number) {
     ingreso.fecha= new Date(ingreso.fecha).toISOString().split('T')[0];
 
     const values = {
@@ -221,6 +221,7 @@ export class IngresoListComponent {
             summary: 'Error al actualizar el ingreso',
             detail: error.error.error
           });
+          this.onRowEditCancel(ingreso, ri);
         }
       });
 

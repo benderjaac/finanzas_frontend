@@ -194,7 +194,7 @@ export class GastoListComponent {
     gasto.editing = true;
   }
 
-  onRowEditSave(gasto: Gasto) {
+  onRowEditSave(gasto: Gasto, ri: number) {
     gasto.fecha= new Date(gasto.fecha).toISOString().split('T')[0];
 
     const values = {
@@ -222,6 +222,7 @@ export class GastoListComponent {
             summary: 'Error al actualizar el gasto',
             detail: error.error.error
           });
+          this.onRowEditCancel(gasto, ri);
         }
       });
 

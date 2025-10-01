@@ -1,24 +1,24 @@
 <!-- <div class="bg-sky-800 bg-emerald-800 bg-rose-500 bg-red-600 bg-lime-700 bg-cyan-500 bg-yellow-400 bg-green-500 bg-violet-500 bg-lime-700 bg-orange-600 bg-red-400 bg-orange-800 bg-slate-600 bg-fuchsia-800 bg-indigo-600 bg-teal-300 "></div> -->
 <p-toast />
 <p-table #dt
-    [value]="ingresos" 
+    [value]="ingresos"
     [lazy]="true"
-    
+
     [paginator]="true"
     [rowsPerPageOptions]="rowsPerPageOptions"
     [rows]="rowsDefault"
     [totalRecords]="totalRecords"
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} ingresos"
-    
+
     filterMode="row"
-    
+
     (onLazyLoad)="getIngresosData($event)"
-    
+
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
 
-    dataKey="id" 
+    dataKey="id"
     editMode="row"
     >
     <ng-template pTemplate="caption">
@@ -26,38 +26,38 @@
             <span class="text-xl font-bold">Ingresos</span>
             <button
                 pButton
-                label="Agregar ingreso" 
-                (click)="addIngreso()" 
-                icon="pi pi-cart-plus" 
-                class="w-40" 
+                label="Agregar ingreso"
+                (click)="addIngreso()"
+                icon="pi pi-cart-plus"
+                class="w-40"
                 severity="info" text>
-                
+
             </button>
             <div>
-                <p-button icon="pi pi-eraser" 
+                <p-button icon="pi pi-eraser"
                     class="mr-2"
                     (click)="resetTable()" rounded raised />
-                <p-button icon="pi pi-filter-fill" 
+                <p-button icon="pi pi-filter-fill"
                     class="mr-2"
                     (click)="showHiddeFilters()" rounded raised />
-                <p-button icon="pi pi-refresh" 
+                <p-button icon="pi pi-refresh"
                     (click)="reloadTable()" rounded raised />
             </div>
-            
-            
+
+
         </div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
-            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
+            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th pSortableColumn="categoria.nombre"><p-sortIcon field="categoria.nombre" /> Categoria</th>
             <th>Acciones</th>
         </tr>
         <!-- filtros -->
          <tr *ngIf="showFilters">
-            <th class="min-w-50"> 
+            <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
                     <p-datepicker
                         [showIcon]="true"
@@ -67,11 +67,11 @@
                         [readonlyInput]="true"
                     ></p-datepicker>
                     <br>
-                    <span class="text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
-                </div>  
-                
+                    <span class="text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>
+                </div>
+
                 <div *ngIf="filterFecharango">
-                    <p-datepicker 
+                    <p-datepicker
                         [showIcon]="true"
                         [placeholder]="'Rango de fecha'"
                         [(ngModel)]="filtroFechaRango"
@@ -92,13 +92,13 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
-            <th> 
+            <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                 pInputText
                 [placeholder]="'aprox..'"
                 type="number"
                 (input)="onFilterNumberInput($event, 'monto', 'between')"
-                />              
+                />
             </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
@@ -119,7 +119,7 @@
                         <p-datepicker
                             class="w-full"
                             id="fecha"
-                            [showIcon]="true"                            
+                            [showIcon]="true"
                             dateFormat="yy-mm-dd"
                             [readonlyInput]="true"
                             [(ngModel)]="ingreso.fecha"
@@ -128,7 +128,7 @@
                     <ng-template #output>
                         {{ ingreso.fecha }}
                     </ng-template>
-                </p-cellEditor>                
+                </p-cellEditor>
             </td>
             <td>
                 <p-cellEditor>
@@ -159,12 +159,12 @@
             <td class="min-w-60">
                 <p-cellEditor>
                     <ng-template #input>
-                        <p-select 
+                        <p-select
                             id="categoria"
                             [(ngModel)]="ingreso.categoria_id"
                             [options]="catCategorias"
                             optionValue="id"
-                            optionLabel="nombre"                            
+                            optionLabel="nombre"
                             [editable]="true" class="w-full"
                             (onChange)="onCategoriaChange($event, ingreso)">
 
@@ -188,7 +188,7 @@
                             </ng-template>
                             <ng-template #dropdownicon>
                                 <i class="pi pi-sitemap"></i>
-                            </ng-template>                            
+                            </ng-template>
                         </p-select>
                     </ng-template>
                     <ng-template #output>
@@ -197,7 +197,7 @@
                             {{ ingreso.categoriaNombre }}
                         </div>
                     </ng-template>
-                </p-cellEditor>                
+                </p-cellEditor>
             </td>
             <td>
                 <div class="flex items-center justify-center gap-2">
@@ -207,9 +207,9 @@
                         pRipple
                         type="button"
                         pInitEditableRow
-                        (click)="onRowEditInit(ingreso)" 
-                        icon="pi pi-pen-to-square" 
-                        rounded 
+                        (click)="onRowEditInit(ingreso)"
+                        icon="pi pi-pen-to-square"
+                        rounded
                         text
                         severity="info">
                     </button>
@@ -220,7 +220,7 @@
                         type="button"
                         pSaveEditableRow
                         icon="pi pi-check"
-                        (click)="onRowEditSave(ingreso)"
+                        (click)="onRowEditSave(ingreso, ri)"
                         text
                         rounded
                         severity="success"
@@ -237,20 +237,20 @@
                         rounded
                         severity="secondary"
                     ></button>
-                </div>                
+                </div>
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<p-dialog 
-    [(visible)]="visibleAdd" 
+<p-dialog
+    [(visible)]="visibleAdd"
     [modal]="true"
     [draggable]="true"
     styleClass="w-160 min-w-80 h-130"
     contentStyleClass="dialog-content-scroll"
     [resizable]="false">
-    <app-ingreso-create *ngIf="visibleAdd" 
+    <app-ingreso-create *ngIf="visibleAdd"
         (msjEvent)="mostrarMensaje($event)"
         (cerrarDialog)="closeDialog($event)">
 
