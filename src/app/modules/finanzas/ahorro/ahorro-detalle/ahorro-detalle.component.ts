@@ -35,7 +35,7 @@ export class AhorroDetalleComponent {
 
   ahorroDepositos : AhorroDeposito[] = [];
   totalRecords = 0;
-  
+
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
   OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
@@ -59,7 +59,7 @@ export class AhorroDetalleComponent {
     private router: Router
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
-    this.rowsDefault = this.rowsPerPageOptions[0];    
+    this.rowsDefault = this.rowsPerPageOptions[0];
   }
 
   ngOnInit(){
@@ -81,13 +81,12 @@ export class AhorroDetalleComponent {
         next: (resp) => {
           this.ahorro = resp.result;
           this.porcentaje= Math.round((this.ahorro.monto_actual / this.ahorro.monto_meta) * 100)
-          this.getData(this.lastEvent);
         },
         error: (error) => {
           console.error(error);
           this.router.navigateByUrl('/finanzas/ahorro/list/');
         }
-      });  
+      });
   }
 
   getData(event: TableLazyLoadEvent|null):void{
@@ -100,7 +99,7 @@ export class AhorroDetalleComponent {
         next: (res: ResponseApiType<AhorroDeposito>)=>{
           this.ahorroDepositos = res.result.data;
           this.totalRecords = res.result.pagination.totalItems;
-          this.loading = false;          
+          this.loading = false;
         },
         error: (error)=> {
           this.ahorroDepositos=[];
@@ -110,12 +109,12 @@ export class AhorroDetalleComponent {
             { severity: 'error', summary: 'Error de consulta', detail: error.error.message, life: 3000 }
           );
         }
-      });  
+      });
   }
 
   addAhorroDeposito():void{
     this.visibleAdd=true;
-  }  
+  }
 
   showHiddeFilters(){
     this.showFilters=!this.showFilters;
@@ -131,7 +130,7 @@ export class AhorroDetalleComponent {
   onFilterInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
-  } 
+  }
 
   onFilterExactDate(date: Date, field: string): void {
     this.dt.filter(date, field, 'equals');
@@ -150,7 +149,7 @@ export class AhorroDetalleComponent {
     const number = Number(input.value);
     const [desde, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
     this.dt.filter([desde, hasta], field, tipo);
-  } 
+  }
 
   reloadTable():void{
     if (this.lastEvent!=null) {

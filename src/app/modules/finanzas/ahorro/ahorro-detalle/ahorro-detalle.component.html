@@ -2,21 +2,21 @@
 <div class="grid grid-cols-12 gap-4 grid-nogutter">
     <div class="col-span-12" *ngIf="ahorro">
         <div
-            class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"        
+            class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
         >
-            
+
             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                     <div>
                         <div class="text-lg font-medium text-color mt-2">Ahorro: {{ ahorro.descri }}</div>
                         <div class="font-medium text-muted-color text-sm">Desde {{ ahorro.fecha_inicio }}</div>
                         <div class="font-medium text-muted-color text-sm">Falta por ahorrar {{ ahorro.monto_meta-ahorro.monto_actual | currency: 'MXN' }}</div>
-                        
-                    </div>                                
+
+                    </div>
                 </div>
                 <div class="flex flex-col md:items-end">
                     <p>
-                        Ahorrado: 
+                        Ahorrado:
                         <span class="text-xl text-primary font-semibold">
                             {{ahorro.monto_actual | currency: 'MXN'}}
                         </span>
@@ -35,12 +35,12 @@
                             label="Retirar"
                             severity="warn"
                             class="flex-auto whitespace-nowrap"
-                        ></button>                    
-                        
+                        ></button>
+
                     </div>
-                    
-                </div>                            
-            </div>                        
+
+                </div>
+            </div>
         </div>
         <div class="px-6">
             <p-progressbar [value]="porcentaje"/>
@@ -53,51 +53,51 @@
 
 
 <p-table #dt
-    [value]="ahorroDepositos" 
+    [value]="ahorroDepositos"
     [lazy]="true"
-    
+
     [paginator]="true"
     [rowsPerPageOptions]="rowsPerPageOptions"
     [rows]="rowsDefault"
     [totalRecords]="totalRecords"
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} movimientos"
-    
+
     filterMode="row"
-    
+
     (onLazyLoad)="getData($event)"
-    
+
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
     >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Movimientos</span>
-            
+
             <div>
-                <p-button icon="pi pi-eraser" 
+                <p-button icon="pi pi-eraser"
                     class="mr-2"
                     (click)="resetTable()" rounded raised />
-                <p-button icon="pi pi-filter-fill" 
+                <p-button icon="pi pi-filter-fill"
                     class="mr-2"
                     (click)="showHiddeFilters()" rounded raised />
-                <p-button icon="pi pi-refresh" 
+                <p-button icon="pi pi-refresh"
                     (click)="reloadTable()" rounded raised />
             </div>
-            
-            
+
+
         </div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
-            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
+            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th>Acciones</th>
         </tr>
         <!-- filtros -->
          <tr *ngIf="showFilters">
-            <th class="min-w-50"> 
+            <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
                     <p-datepicker
                         [showIcon]="true"
@@ -107,11 +107,11 @@
                         [readonlyInput]="true"
                     ></p-datepicker>
                     <br>
-                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
-                </div>  
-                
+                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>
+                </div>
+
                 <div *ngIf="filterFecharango">
-                    <p-datepicker 
+                    <p-datepicker
                         [showIcon]="true"
                         [placeholder]="'Rango de fecha'"
                         [(ngModel)]="filtroFechaRango"
@@ -132,28 +132,28 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
-            <th> 
+            <th>
                 <input class="border-solid border-2 rounded-full"
                 pInputText
                 [placeholder]="'aprox..'"
                 type="number"
                 (input)="onFilterNumberInput($event, 'monto', 'between')"
-                />              
-            </th>           
+                />
+            </th>
             <th></th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-gasto>
         <tr>
             <td>{{ gasto.fecha }}</td>
-            <td>{{ gasto.descri }}</td>            
-            <td>{{ gasto.monto }}</td>            
+            <td>{{ gasto.descri }}</td>
+            <td>{{ gasto.monto }}</td>
             <td>
                 <button
                     pButton
-                    (click)="addAhorroDeposito()" 
-                    icon="pi pi-pen-to-square" 
-                    class="" 
+                    (click)="addAhorroDeposito()"
+                    icon="pi pi-pen-to-square"
+                    class=""
                     severity="success" text>
                 </button>
             </td>
