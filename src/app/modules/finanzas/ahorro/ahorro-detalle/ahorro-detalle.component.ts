@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ViewChild } from '@angular/core';
+import {ChangeDetectorRef, Component, signal, ViewChild} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AhorroDeposito } from 'app/core/models/ahorro-deposito.model';
@@ -17,10 +17,12 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
+import {Gasto} from '../../../../core/models/gasto.model';
+import {Ripple} from 'primeng/ripple';
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar],
+  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple],
   templateUrl: './ahorro-detalle.component.html',
   providers: [MessageService]
 })
@@ -50,13 +52,16 @@ export class AhorroDetalleComponent {
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
+  clonedAhorroDeposito: { [s: string]: AhorroDeposito } = {};
+
   constructor(
     private _ahorroService: AhorroService,
     private _ahorroDepositoService: AhorroDepositoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -172,6 +177,74 @@ export class AhorroDetalleComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getData(event); // dispara la carga manual
+    this.getData(event);
+  }
+
+  mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
+    this._messageService.add({
+      severity: detalle.tipo,
+      summary: detalle.tipo==='error'?'Error de registro':'Exito de registro',
+      detail: detalle.mensaje,
+      life: 3000
+    });
+  }
+
+  onRowEditInit(ahorroDeposito: AhorroDeposito) {
+    this.cancelAllActiveEditions();
+    this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string] = { ...ahorroDeposito };
+    ahorroDeposito.editing = true;
+  }
+
+  onRowEditSave(ahorroDeposito: AhorroDeposito, ri:any) {
+    ahorroDeposito.fecha= new Date(ahorroDeposito.fecha).toISOString().split('T')[0];
+    const values = {
+      monto: ahorroDeposito.monto,
+      descri: ahorroDeposito.descri,
+      fecha: ahorroDeposito.fecha,
+    };
+
+    this._ahorroDepositoService.update(this.idAhorro, values, ahorroDeposito.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Movimiento actualizado correctamente',
+            detail: res.message
+          });
+          ahorroDeposito.editing = false;
+          delete this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string];
+          this.obtenerDetalle();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al actualizar el movimiento',
+            detail: error.error.error
+          });
+          this.onRowEditCancel(ahorroDeposito, ri);
+        }
+      });
+
+  }
+
+  onRowEditCancel(ahorroDeposito: AhorroDeposito, index: number) {
+    console.log('onRowEditCancel');
+    if (this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string]) {
+      this.ahorroDepositos[index] = { ...this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string] };
+      delete this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string];
+    }
+    this.dt.cancelRowEdit(this.ahorroDepositos[index]);
+    ahorroDeposito.editing = false;
+  }
+
+  cancelAllActiveEditions(): void {
+    this.ahorroDepositos.forEach((ahorroDeposito, index) => {
+      if (ahorroDeposito.editing) {
+        this.onRowEditCancel(ahorroDeposito, index);
+      }
+    });
+
+    this.cdr.detectChanges();
   }
 }

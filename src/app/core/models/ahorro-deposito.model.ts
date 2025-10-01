@@ -2,5 +2,6 @@ export interface AhorroDeposito{
     id: number,
     fecha: string,
     descri: string,
-    monto: number,    
+    monto: number,
+    editing:boolean
 }

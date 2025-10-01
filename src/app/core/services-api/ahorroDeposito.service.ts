@@ -5,6 +5,7 @@ import { ApiQuery } from '../models/query.model';
 import { Observable } from 'rxjs';
 import { ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import { Ingreso } from '../models/ingreso.model';
+import {AhorroDeposito} from '../models/ahorro-deposito.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +14,21 @@ export class AhorroDepositoService {
 
   private _httpClient = inject(HttpClient);
   private urlApi: string;
-    
+
   constructor(
   ) {
     this.urlApi=environment.apiUrl;
   }
 
-  getData(idahorro:number, query: ApiQuery):Observable<ResponseApiType<Ingreso>>{
-    return this._httpClient.post<ResponseApiType<Ingreso>>(this.urlApi+'/api/ahorros/depositos/data/'+idahorro, query);
+  getData(idahorro:number, query: ApiQuery):Observable<ResponseApiType<AhorroDeposito>>{
+    return this._httpClient.post<ResponseApiType<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/data/'+idahorro, query);
   }
 
-  create(data:Partial<Ingreso>):Observable<ResponseApiSimple<Ingreso>>{
-    return this._httpClient.post<ResponseApiSimple<Ingreso>>(this.urlApi+'/api/ingresos', data);
+  create(data:Partial<AhorroDeposito>):Observable<ResponseApiSimple<AhorroDeposito>>{
+    return this._httpClient.post<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos', data);
+  }
+
+  update(idAhorro:number, data:Partial<Ingreso>, idDeposito:number):Observable<ResponseApiSimple<Ingreso>>{
+    return this._httpClient.put<ResponseApiSimple<Ingreso>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito, data);
   }
 }

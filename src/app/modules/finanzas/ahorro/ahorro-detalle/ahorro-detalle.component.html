@@ -69,6 +69,9 @@
 
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
+
+     dataKey="id"
+     editMode="row"
     >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
@@ -143,19 +146,91 @@
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-gasto>
-        <tr>
-            <td>{{ gasto.fecha }}</td>
-            <td>{{ gasto.descri }}</td>
-            <td>{{ gasto.monto }}</td>
+    <ng-template pTemplate="body" let-ahorroDeposito let-ri="rowIndex">
+        <tr [pEditableRow]="ahorroDeposito">
+            <td class="min-w-50">
+              <p-cellEditor>
+                <ng-template #input>
+                  <p-datepicker
+                    class="w-full"
+                    id="fecha"
+                    [showIcon]="true"
+                    dateFormat="yy-mm-dd"
+                    [readonlyInput]="true"
+                    [(ngModel)]="ahorroDeposito.fecha"
+                  ></p-datepicker>
+                </ng-template>
+                <ng-template #output>
+                  {{ ahorroDeposito.fecha }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
+              <p-cellEditor>
+                <ng-template #input>
+                  <input
+                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                    pInputText type="text" required
+                    [(ngModel)]="ahorroDeposito.descri" />
+                </ng-template>
+                <ng-template #output>
+                  {{ ahorroDeposito.descri }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template #input>
+                  <input
+                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                    pInputText type="number" required
+                    [(ngModel)]="ahorroDeposito.monto" />
+                </ng-template>
+                <ng-template #output>
+                  {{ ahorroDeposito.monto }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="flex items-center justify-center gap-2">
                 <button
-                    pButton
-                    (click)="addAhorroDeposito()"
-                    icon="pi pi-pen-to-square"
-                    class=""
-                    severity="success" text>
+                  *ngIf="!ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  (click)="onRowEditInit(ahorroDeposito)"
+                  icon="pi pi-pen-to-square"
+                  rounded
+                  text
+                  severity="info">
                 </button>
+                <button
+                  *ngIf="ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(ahorroDeposito, ri)"
+                  text
+                  rounded
+                  severity="success"
+                ></button>
+                <button
+                  *ngIf="ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(ahorroDeposito, ri)"
+                  text
+                  rounded
+                  severity="secondary"
+                ></button>
+              </div>
+
             </td>
         </tr>
     </ng-template>
