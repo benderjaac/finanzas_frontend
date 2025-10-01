@@ -12,7 +12,7 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-ahorro-create',
   imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
-  templateUrl: './ahorro-create.component.html'  
+  templateUrl: './ahorro-create.component.html'
 })
 /**
  * Componente para crear un nuevo ahorro.
@@ -30,18 +30,17 @@ export class AhorroCreateComponent {
   constructor(
     private _ahorroService: AhorroService,
     private _fb: FormBuilder
-  ){    
+  ){
   }
 
   ngOnInit(){
-    
+
     this.registerForm = this._fb.group({
       descri: ['', Validators.required],
       monto_meta: ['', Validators.required],
-      monto_actual: [0],      
       fecha_inicio: [this.hoy, Validators.required],
     });
-    
+
   }
 
   onSubmit() {
@@ -52,7 +51,7 @@ export class AhorroCreateComponent {
       this._ahorroService.createAhorro(this.registerForm.value)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          
+
           next: (res)=>{
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
@@ -62,5 +61,5 @@ export class AhorroCreateComponent {
           }
         });
     }
-  } 
+  }
 }

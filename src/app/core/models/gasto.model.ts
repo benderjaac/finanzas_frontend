@@ -4,5 +4,10 @@ export interface Gasto{
     descri: string,
     monto: number,
     idusuario: number,
-    contado: boolean
+    contado: boolean,
+    editing?: boolean,
+    categoriaColor: string,
+    categoriaIcon: string,
+    categoriaNombre: string,
+    categoria_id: number
 }

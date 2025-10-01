@@ -26,4 +26,8 @@ export class IngresoService {
   createIngreso(data:Partial<Ingreso>):Observable<ResponseApiSimple<Ingreso>>{
     return this._httpClient.post<ResponseApiSimple<Ingreso>>(this.urlApi+'/api/ingresos', data);
   }
+
+  updateIngreso(id:number, data:Partial<Ingreso>):Observable<ResponseApiSimple<Ingreso>>{
+    return this._httpClient.put<ResponseApiSimple<Ingreso>>(this.urlApi+'/api/ingresos/'+id, data);
+  }
 }
