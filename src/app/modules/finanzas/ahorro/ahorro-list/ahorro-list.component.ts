@@ -16,10 +16,11 @@ import { Router } from '@angular/router';
 import {Ripple} from 'primeng/ripple';
 import {TableModule} from 'primeng/table';
 import {AhorroEditComponent} from '../ahorro-edit/ahorro-edit.component';
+import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDeposito-create.component";
 
 @Component({
   selector: 'app-ahorro-list',
-  imports: [CommonModule, Toast, DataView, SelectButton, FormsModule, ProgressBar, ButtonModule, Dialog, AhorroCreateComponent, Ripple, TableModule, AhorroEditComponent],
+  imports: [CommonModule, Toast, DataView, SelectButton, FormsModule, ProgressBar, ButtonModule, Dialog, AhorroCreateComponent, Ripple, TableModule, AhorroEditComponent, AhorroDepositoCreateComponent],
   templateUrl: './ahorro-list.component.html',
   providers: [MessageService]
 })
@@ -32,6 +33,10 @@ export class AhorroListComponent {
 
   visibleAdd = false;
   visibleEdit = false;
+  visibleDeposito = false;
+  idAhorroSelected = 0;
+  tipoDeposito: 'deposito' | 'retiro' = 'deposito';
+
   ahorroEdting: Ahorro | null = null;
 
   destroy$ = new Subject<void>();
@@ -76,16 +81,25 @@ export class AhorroListComponent {
   }
 
   closeDialog(update:boolean, form: string) {
+    if(update){
+      this.obtenerData();
+    }
     if(form==='create'){
       this.visibleAdd = false;
-    }else if(form==='edit'){
+      return;
+    }
+    if(form==='edit'){
       this.visibleEdit = false;
       this.ahorroEdting=null;
+      return;
+    }
+    if(form==='deposito'){
+      this.visibleDeposito = false;
+      this.idAhorroSelected = 0;
+      return;
     }
 
-      if(update){
-        this.obtenerData();
-      }
+    
   }
 
   mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
@@ -106,5 +120,10 @@ export class AhorroListComponent {
     this.ahorroEdting=ahorro;
   }
 
+  openFormDeposito(ahorroId: number, tipo: 'deposito'|'retiro'): void {
+    this.visibleDeposito = true;
+    this.idAhorroSelected = ahorroId;
+    this.tipoDeposito = tipo;
+  }
 
 }

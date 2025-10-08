@@ -24,8 +24,8 @@ export class AhorroDepositoService {
     return this._httpClient.post<ResponseApiType<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/data/'+idahorro, query);
   }
 
-  create(data:Partial<AhorroDeposito>):Observable<ResponseApiSimple<AhorroDeposito>>{
-    return this._httpClient.post<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos', data);
+  create(idAhorro:number, data:Partial<AhorroDeposito>):Observable<ResponseApiSimple<AhorroDeposito>>{
+    return this._httpClient.post<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro, data);
   }
 
   update(idAhorro:number, data:Partial<Ingreso>, idDeposito:number):Observable<ResponseApiSimple<Ingreso>>{

@@ -19,10 +19,13 @@ import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
 import {Gasto} from '../../../../core/models/gasto.model';
 import {Ripple} from 'primeng/ripple';
+import { Dialog } from "primeng/dialog";
+import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
+import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDeposito-create.component";
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple],
+  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent],
   templateUrl: './ahorro-detalle.component.html',
   providers: [MessageService]
 })
@@ -47,7 +50,9 @@ export class AhorroDetalleComponent {
 
   loading = false;
 
-  visibleAdd = false;
+  visibleEdit = false;
+  visibleDeposito = false;
+  tipoDeposito: 'deposito' | 'retiro' = 'deposito';
 
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
@@ -115,10 +120,6 @@ export class AhorroDetalleComponent {
           );
         }
       });
-  }
-
-  addAhorroDeposito():void{
-    this.visibleAdd=true;
   }
 
   showHiddeFilters(){
@@ -246,5 +247,29 @@ export class AhorroDetalleComponent {
     });
 
     this.cdr.detectChanges();
+  }
+
+  onEdit(ahorro: Ahorro): void {
+    this.visibleEdit=true;
+  }
+
+  openFormDeposito(ahorroId: number, tipo: 'deposito'|'retiro'): void {
+    this.visibleDeposito = true;
+    this.tipoDeposito = tipo;
+  }
+
+  closeDialog(update:boolean, form: string) {
+    if(update){
+      this.obtenerDetalle();
+      this.reloadTable();      
+    }
+    if(form==='edit'){
+      this.visibleEdit = false;
+      return;
+    }
+    if(form==='deposito'){
+      this.visibleDeposito = false;
+      return;
+    }
   }
 }
