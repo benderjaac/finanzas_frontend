@@ -6,7 +6,7 @@ import { ApiSort } from 'app/core/models/query.model';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { IngresoService } from 'app/core/services-api/ingreso.service';
 import { FilterService } from 'app/modules/utils/filter.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { Dialog } from 'primeng/dialog';
@@ -19,12 +19,14 @@ import { Select } from 'primeng/select';
 import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import {Ripple} from 'primeng/ripple';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'app-ingreso-list',
-  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
+  imports: [ConfirmPopupModule, Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
   templateUrl: './ingreso-list.component.html',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class IngresoListComponent {
   @ViewChild('dt') dt!: Table;
@@ -58,6 +60,8 @@ export class IngresoListComponent {
     private _messageService: MessageService,
     private _catalogoStoreService: CatalogoStoreService,
     private cdr: ChangeDetectorRef,
+    private _balanceUsuarioService: BalanceUsuarioService,
+    private confirmationService: ConfirmationService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -207,9 +211,10 @@ export class IngresoListComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
           this._messageService.add({
             severity: 'success',
-            summary: 'Gasto actualizado correctamente',
+            summary: 'Ingreso actualizado correctamente',
             detail: res.message
           });
           ingreso.editing = false;
@@ -255,5 +260,51 @@ export class IngresoListComponent {
         ingreso.categoriaIcon = categoriaSeleccionada.icon;
         ingreso.categoriaColor = categoriaSeleccionada.color;
     }
+  }
+
+  onDelete(ingreso:Ingreso, event: Event):void{
+      this.confirmationService.close();
+      
+      setTimeout(() => {
+        this.confirmationService.confirm({
+            target: event.target as EventTarget,
+            message: '¿Estás seguro de eliminar: "' + ingreso.descri + '"?',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Eliminar',
+            rejectLabel: 'Cancelar',
+            acceptButtonStyleClass: 'p-button-sm p-button-danger',
+            rejectButtonStyleClass: 'p-button-sm p-button-text',
+            closeOnEscape: true,
+            accept: () => {
+                this.deleteIngreso(ingreso.id);
+            },
+            reject: () => {
+            }
+        });
+      }, 200); 
+      
+    }
+
+  deleteIngreso(id:number):void{
+    this._ingresoService.deleteIngreso(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Ingreso eliminado correctamente',
+            detail: res.message
+          });
+          this.reloadTable();   
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al eliminar el ingreso',
+            detail: error.error.error
+          });
+        }
+      });
   }
 }

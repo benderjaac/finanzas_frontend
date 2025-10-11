@@ -211,7 +211,21 @@
                         icon="pi pi-pen-to-square"
                         rounded
                         text
-                        severity="info">
+                        severity="info"
+                        pTooltip="Editar">
+                    </button>
+                    <p-confirmpopup #cp/>
+                    <button
+                        *ngIf="!gasto.editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        (click)="onDelete(gasto, $event)"
+                        icon="pi pi-trash"
+                        rounded
+                        text
+                        severity="warn"
+                        pTooltip="Eliminar">
                     </button>
                     <button
                         *ngIf="gasto.editing"
@@ -224,6 +238,7 @@
                         text
                         rounded
                         severity="success"
+                        pTooltip="Guardar"
                     ></button>
                     <button
                         *ngIf="gasto.editing"
@@ -236,6 +251,7 @@
                         text
                         rounded
                         severity="secondary"
+                        pTooltip="Cancelar"
                     ></button>
                 </div>
             </td>

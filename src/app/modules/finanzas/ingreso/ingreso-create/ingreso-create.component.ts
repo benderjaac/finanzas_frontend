@@ -11,6 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { Subject, takeUntil } from 'rxjs';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
   selector: 'app-ingreso-create',
@@ -34,6 +35,7 @@ export class IngresoCreateComponent {
     private _ingresoService: IngresoService,
     private _fb: FormBuilder,
     private _catalogoStoreService: CatalogoStoreService,
+    private _balanceUsuarioService: BalanceUsuarioService
   ){    
   }
 
@@ -69,6 +71,7 @@ export class IngresoCreateComponent {
         .pipe(takeUntil(this.destroy$))
         .subscribe({        
           next: (res)=>{
+            this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },

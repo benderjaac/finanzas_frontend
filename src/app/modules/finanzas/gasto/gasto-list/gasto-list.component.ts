@@ -7,7 +7,7 @@ import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ApiSort } from 'app/core/models/query.model';
 import { FilterService } from 'app/modules/utils/filter.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { Dialog } from 'primeng/dialog';
@@ -20,12 +20,14 @@ import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
 import { Select } from 'primeng/select';
 import {Ripple} from 'primeng/ripple';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
 
 @Component({
   selector: 'app-gasto-list',
-  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
+  imports: [ConfirmPopupModule , TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
   templateUrl: './gasto-list.component.html',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class GastoListComponent {
 
@@ -60,7 +62,8 @@ export class GastoListComponent {
     private _messageService: MessageService,
     private _catalogoStoreService: CatalogoStoreService,
     private cdr: ChangeDetectorRef,
-    private _balanceUsuarioService: BalanceUsuarioService
+    private _balanceUsuarioService: BalanceUsuarioService,
+    private confirmationService: ConfirmationService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -259,6 +262,52 @@ export class GastoListComponent {
         gasto.categoriaIcon = categoriaSeleccionada.icon;
         gasto.categoriaColor = categoriaSeleccionada.color;
     }
+  }
+  
+  onDelete(gasto:Gasto, event: Event):void{
+    this.confirmationService.close();
+    
+    setTimeout(() => {
+      this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: '¿Estás seguro de eliminar: "' + gasto.descri + '"?',
+          icon: 'pi pi-exclamation-triangle',
+          acceptLabel: 'Eliminar',
+          rejectLabel: 'Cancelar',
+          acceptButtonStyleClass: 'p-button-sm p-button-danger',
+          rejectButtonStyleClass: 'p-button-sm p-button-text',
+          closeOnEscape: true,
+          accept: () => {
+              this.deleteGasto(gasto.id);
+          },
+          reject: () => {
+          }
+      });
+    }, 200); 
+    
+  }
+
+  deleteGasto(id:number):void{
+    this._gastoService.deleteGasto(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Gasto eliminado correctamente',
+            detail: res.message
+          });
+          this.reloadTable();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al eliminar el gasto',
+            detail: error.error.error
+          });
+        }
+      });
   }
 
 }
