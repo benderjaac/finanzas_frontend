@@ -31,6 +31,7 @@ export class ResumenComponent {
       .subscribe({
         next: (response) => {
           this.balanceUsuario = response.result;
+          this._balanceUsuarioService.setDisponible(this.balanceUsuario.montoDisponible);
         },
         error: (error) => {
           console.error('Error al cargar los datos del balance de usuario:', error);

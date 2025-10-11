@@ -11,6 +11,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { Subject, takeUntil } from 'rxjs';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
   selector: 'app-gasto-create',
@@ -34,6 +35,7 @@ export class GastoCreateComponent {
     private _gastoService: GastoService,
     private _fb: FormBuilder,
     private _catalogoStoreService: CatalogoStoreService,
+    private _balanceUsuarioService: BalanceUsuarioService
   ){    
   }
 
@@ -70,6 +72,7 @@ export class GastoCreateComponent {
         .subscribe({
           
           next: (res)=>{
+            this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },

@@ -5,6 +5,7 @@ import { Gasto } from '../models/gasto.model';
 import { Observable } from 'rxjs';
 import { ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import { ApiQuery } from '../models/query.model';
+import { BalanceUsuario } from '../models/balance-usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,15 @@ export class GastoService {
     return this._httpClient.post<ResponseApiType<Gasto>>(this.urlApi+'/api/gastos/data', query);
   }
 
-  createGasto(data:Partial<Gasto>):Observable<ResponseApiSimple<Gasto>>{
-    return this._httpClient.post<ResponseApiSimple<Gasto>>(this.urlApi+'/api/gastos', data);
+  createGasto(data:Partial<Gasto>):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.post<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/gastos', data);
   }
 
-  updateGasto(id:number, data:Partial<Gasto>):Observable<ResponseApiSimple<Gasto>>{
-    return this._httpClient.put<ResponseApiSimple<Gasto>>(this.urlApi+'/api/gastos/'+id, data);
+  updateGasto(id:number, data:Partial<Gasto>):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.put<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/gastos/'+id, data);
+  }
+
+  deleteGasto(id:number):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.delete<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/gastos/'+id);
   }
 }

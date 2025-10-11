@@ -19,6 +19,7 @@ import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
 import { Select } from 'primeng/select';
 import {Ripple} from 'primeng/ripple';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
   selector: 'app-gasto-list',
@@ -59,6 +60,7 @@ export class GastoListComponent {
     private _messageService: MessageService,
     private _catalogoStoreService: CatalogoStoreService,
     private cdr: ChangeDetectorRef,
+    private _balanceUsuarioService: BalanceUsuarioService
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -208,6 +210,7 @@ export class GastoListComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
           this._messageService.add({
             severity: 'success',
             summary: 'Gasto actualizado correctamente',
