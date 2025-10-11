@@ -68,7 +68,6 @@ export const routes: Routes = [
                         children: [
                             {path: 'list', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-list/ingreso-list.component').then(m => m.IngresoListComponent)},
                             {path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},
-                            {path: 'update', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-update/ingreso-update.component').then(m => m.IngresoUpdateComponent)},
                         ]
                     },
                     {path: 'ahorro',
