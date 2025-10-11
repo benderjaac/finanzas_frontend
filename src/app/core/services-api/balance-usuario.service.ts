@@ -16,6 +16,12 @@ export class BalanceUsuarioService {
   private disponibleSubject = new BehaviorSubject<number>(0);
   disponible$ = this.disponibleSubject.asObservable();
 
+  private ahorroSubject = new BehaviorSubject<number>(0);
+  ahorro$ = this.ahorroSubject.asObservable();
+
+  private totalSubject = new BehaviorSubject<number>(0);
+  total$ = this.totalSubject.asObservable();
+
   constructor() {
     this.urlApi=environment.apiUrl;
   }
@@ -24,9 +30,13 @@ export class BalanceUsuarioService {
     this.disponibleSubject.next(valor);
   }
 
-  getDisponibleValue(): number {
-    return this.disponibleSubject.value;
-  }  
+  setAhorro(valor: number) {
+    this.ahorroSubject.next(valor);
+  }
+
+  setTotal(valor: number) {
+    this.totalSubject.next(valor);
+  }
   
   getDataBalanceUsuario():Observable<ResponseApiSimple<BalanceUsuario>>{
     return this._httpClient.get<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/balance/usuario');

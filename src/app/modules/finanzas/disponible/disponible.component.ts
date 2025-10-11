@@ -7,13 +7,25 @@ import { Subject } from 'rxjs';
   selector: 'app-disponible',
   imports: [CommonModule],
   template: `
-  <div class="flex mr-4 items-center p-3">
-    
-      <span class="font-semibold text-muted-color">Disponible: </span>
-      <span 
+  <div class="flex justify-between gap-4 pt-3">
+    <div>
+      <p 
       class="ml-2 font-bold"
-      [ngClass]="{'text-red-500': disponible() < 0, 'text-green-500': disponible() >= 0}">{{ disponible() | currency }}</span>
-    
+      [ngClass]="{'text-red-500': disponible() < 0, 'text-green-500': disponible() >= 0}">{{ disponible() | currency }}</p>
+      <span class="text-muted-color text-xs">Disponible </span>
+    </div>
+    <div>
+      <p 
+      class="ml-2 font-bold"
+      [ngClass]="{'text-red-500': ahorro() < 0, 'text-green-500': ahorro() >= 0}">{{ ahorro() | currency }}</p>
+      <span class="text-muted-color text-xs">Ahorro </span>
+    </div>
+    <div>
+      <p 
+      class="ml-2 font-bold"
+      [ngClass]="{'text-red-500': total() < 0, 'text-green-500': total() >= 0}">{{ total() | currency }}</p>
+      <span class="text-muted-color text-xs">Total </span>
+    </div>
   </div>
   `,
   standalone: true,
@@ -22,6 +34,8 @@ import { Subject } from 'rxjs';
 export class DisponibleComponent {
 
   disponible = signal<number>(0);
+  ahorro = signal<number>(0);
+  total = signal<number>(0);
 
   destroy$ = new Subject<void>();
 
@@ -35,7 +49,11 @@ export class DisponibleComponent {
     this._balanceUsuarioService.getDataBalanceUsuario().subscribe({
       next: (res) => {
         this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+        this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+        this._balanceUsuarioService.setTotal(res.result.balanceTotal);
         this.disponible.set(res.result.montoDisponible);
+        this.ahorro.set(res.result.montoAhorrado);
+        this.total.set(res.result.balanceTotal);
       },
       error: (error) => {
         console.error(error);
