@@ -62,7 +62,6 @@ export const routes: Routes = [
                         children: [
                             {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/gasto-list/gasto-list.component').then(m => m.GastoListComponent)},
                             {path: 'create', loadComponent: () => import('app/modules/finanzas/gasto/gasto-create/gasto-create.component').then(m => m.GastoCreateComponent)},
-                            {path: 'update', loadComponent: () => import('app/modules/finanzas/gasto/gasto-update/gasto-update.component').then(m => m.GastoUpdateComponent)},
                         ]
                     },
                     {path: 'ingreso',
