@@ -8,11 +8,12 @@ import { DrawerModule } from 'primeng/drawer';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuComponent } from '../menu/menu.component';
 import { DisponibleComponent } from 'app/modules/finanzas/disponible/disponible.component';
+import { Ripple } from "primeng/ripple";
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [DisponibleComponent, RouterOutlet, CommonModule, ButtonModule, DrawerModule, AvatarModule, PanelMenuModule, MenuComponent],
+  imports: [DisponibleComponent, RouterOutlet, CommonModule, ButtonModule, DrawerModule, AvatarModule, PanelMenuModule, MenuComponent, Ripple],
   templateUrl: './layout.component.html',
 })
 export class LayoutComponent {

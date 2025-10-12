@@ -17,7 +17,7 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
-import {Gasto} from '../../../../core/models/gasto.model';
+import {Movimiento} from '../../../../core/models/movimiento.model';
 import {Ripple} from 'primeng/ripple';
 import { Dialog } from "primeng/dialog";
 import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
@@ -261,7 +261,7 @@ export class AhorroDetalleComponent {
   closeDialog(update:boolean, form: string) {
     if(update){
       this.obtenerDetalle();
-      this.reloadTable();      
+      this.reloadTable();
     }
     if(form==='edit'){
       this.visibleEdit = false;

@@ -8,23 +8,23 @@ import { Subject } from 'rxjs';
   imports: [CommonModule],
   template: `
   <div class="flex justify-between gap-4 pt-3">
-    <div>
+    <div class="ml-2">
       <p 
-      class="ml-2 font-bold"
+      class="font-bold"
       [ngClass]="{'text-red-500': disponible() < 0, 'text-green-500': disponible() >= 0}">{{ disponible() | currency }}</p>
-      <span class="text-muted-color text-xs">Disponible </span>
+      <p class="text-muted-color text-xs">Disponible </p>
     </div>
-    <div>
+    <div class="ml-2">
       <p 
-      class="ml-2 font-bold"
+      class="font-bold"
       [ngClass]="{'text-red-500': ahorro() < 0, 'text-green-500': ahorro() >= 0}">{{ ahorro() | currency }}</p>
-      <span class="text-muted-color text-xs">Ahorro </span>
+      <p class="text-muted-color text-xs">Ahorro </p>
     </div>
-    <div>
+    <div class="ml-2">
       <p 
-      class="ml-2 font-bold"
+      class="font-bold"
       [ngClass]="{'text-red-500': total() < 0, 'text-green-500': total() >= 0}">{{ total() | currency }}</p>
-      <span class="text-muted-color text-xs">Total </span>
+      <p class="text-muted-color text-xs">Total </p>
     </div>
   </div>
   `,

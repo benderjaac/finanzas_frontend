@@ -60,7 +60,7 @@ export const routes: Routes = [
                 children:[
                     {path: 'gasto',
                         children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/gasto-list/gasto-list.component').then(m => m.GastoListComponent)},
+                            {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/movimiento-list/movimiento-list.component').then(m => m.MovimientoListComponent)},
                             {path: 'create', loadComponent: () => import('app/modules/finanzas/gasto/gasto-create/gasto-create.component').then(m => m.GastoCreateComponent)},
                         ]
                     },

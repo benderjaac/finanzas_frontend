@@ -1,7 +1,7 @@
 <!-- <div class="bg-sky-800 bg-emerald-800 bg-rose-500 bg-red-600 bg-lime-700 bg-cyan-500 bg-yellow-400 bg-green-500 bg-violet-500 bg-lime-700 bg-orange-600 bg-red-400 bg-orange-800 bg-slate-600 bg-fuchsia-800 bg-indigo-600 bg-teal-300 "></div> -->
 <p-toast />
 <p-table #dt
-    [value]="gastos"
+    [value]="movimientos"
     [lazy]="true"
 
     [paginator]="true"
@@ -13,7 +13,7 @@
 
     filterMode="row"
 
-    (onLazyLoad)="getGastosData($event)"
+    (onLazyLoad)="getDataItems($event)"
 
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
@@ -23,7 +23,7 @@
     >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
-            <span class="text-xl font-bold">Gastos</span>
+            <span class="text-xl font-bold">Movimientos</span>
             <button
                 pButton
                 label="Agregar gasto"
@@ -31,6 +31,15 @@
                 icon="pi pi-cart-plus"
                 class="w-40"
                 severity="info" text>
+
+            </button>
+            <button
+              pButton
+              label="Agregar ingreso"
+              (click)="addIngreso()"
+              icon="pi pi-cart-plus"
+              class="w-40"
+              severity="info" text>
 
             </button>
             <div>
@@ -51,6 +60,7 @@
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
+            <th pSortableColumn="tipo"><p-sortIcon field="tipo" /> Movimiento</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th pSortableColumn="categoria.nombre"><p-sortIcon field="categoria.nombre" /> Categoria</th>
             <th>Acciones</th>
@@ -92,6 +102,14 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
+           <th>
+             <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                    pInputText
+                    [placeholder]="'Contiene...'"
+                    type="text"
+                    (input)="onFilterInput($event, 'tipo', 'contains')"
+             />
+           </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                 pInputText
@@ -144,6 +162,9 @@
                 </p-cellEditor>
             </td>
             <td>
+              {{ gasto.tipo }}
+            </td>
+            <td>
                 <p-cellEditor>
                     <ng-template #input>
                         <input
@@ -152,7 +173,11 @@
                             [(ngModel)]="gasto.monto" />
                     </ng-template>
                     <ng-template #output>
+                      <span
+                        class="font-bold"
+                      [ngClass]="{ 'text-green-600': gasto.tipo === 'Ingreso','text-red-600': gasto.tipo === 'Gasto' }">
                         {{ gasto.monto }}
+                      </span>
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -260,15 +285,29 @@
 </p-table>
 
 <p-dialog
-    [(visible)]="visibleAdd"
+    [(visible)]="visibleAddGasto"
     [modal]="true"
     [draggable]="true"
     styleClass="w-160 min-w-80 h-130"
     contentStyleClass="dialog-content-scroll"
     [resizable]="false">
-    <app-gasto-create *ngIf="visibleAdd"
+    <app-gasto-create *ngIf="visibleAddGasto"
         (msjEvent)="mostrarMensaje($event)"
         (cerrarDialog)="closeDialog($event)">
 
     </app-gasto-create>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="visibleAddIngreso"
+  [modal]="true"
+  [draggable]="true"
+  styleClass="w-160 min-w-80 h-130"
+  contentStyleClass="dialog-content-scroll"
+  [resizable]="false">
+  <app-ingreso-create *ngIf="visibleAddIngreso"
+                      (msjEvent)="mostrarMensaje($event)"
+                      (cerrarDialog)="closeDialog($event)">
+
+  </app-ingreso-create>
 </p-dialog>
