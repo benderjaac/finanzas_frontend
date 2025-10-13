@@ -58,18 +58,7 @@ export const routes: Routes = [
             },
             {path:'finanzas',
                 children:[
-                    {path: 'gasto',
-                        children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/gasto/movimiento-list/movimiento-list.component').then(m => m.MovimientoListComponent)},
-                            {path: 'create', loadComponent: () => import('app/modules/finanzas/gasto/gasto-create/gasto-create.component').then(m => m.GastoCreateComponent)},
-                        ]
-                    },
-                    {path: 'ingreso',
-                        children: [
-                            {path: 'list', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-list/ingreso-list.component').then(m => m.IngresoListComponent)},
-                            {path: 'create', loadComponent: () => import('app/modules/finanzas/ingreso/ingreso-create/ingreso-create.component').then(m => m.IngresoCreateComponent)},
-                        ]
-                    },
+                    {path: 'movimientos', loadComponent: () => import('app/modules/finanzas/movimientos/movimiento-list/movimiento-list.component').then(m => m.MovimientoListComponent)},
                     {path: 'ahorro',
                         children: [
                             {path: 'list', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-list/ahorro-list.component').then(m => m.AhorroListComponent)},

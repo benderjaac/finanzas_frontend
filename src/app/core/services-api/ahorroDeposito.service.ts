@@ -4,7 +4,6 @@ import { environment } from 'environments/environment';
 import { ApiQuery } from '../models/query.model';
 import { Observable } from 'rxjs';
 import { ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
-import { Ingreso } from '../models/ingreso.model';
 import {AhorroDeposito} from '../models/ahorro-deposito.model';
 
 @Injectable({
@@ -28,7 +27,7 @@ export class AhorroDepositoService {
     return this._httpClient.post<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro, data);
   }
 
-  update(idAhorro:number, data:Partial<Ingreso>, idDeposito:number):Observable<ResponseApiSimple<Ingreso>>{
-    return this._httpClient.put<ResponseApiSimple<Ingreso>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito, data);
+  update(idAhorro:number, data:Partial<AhorroDeposito>, idDeposito:number):Observable<ResponseApiSimple<AhorroDeposito>>{
+    return this._httpClient.put<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito, data);
   }
 }

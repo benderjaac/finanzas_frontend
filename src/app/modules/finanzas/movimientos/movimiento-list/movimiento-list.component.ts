@@ -1,37 +1,40 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Ingreso } from 'app/core/models/ingreso.model';
+import { Movimiento } from 'app/core/models/movimiento.model';
+import { MovimientoService } from 'app/core/services-api/movimiento.service';
+import { Subject, takeUntil } from 'rxjs';
+import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
 import { ApiSort } from 'app/core/models/query.model';
-import { ResponseApiType } from 'app/core/models/response-api.model';
-import { IngresoService } from 'app/core/services-api/ingreso.service';
 import { FilterService } from 'app/modules/utils/filter.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { DatePickerModule } from 'primeng/datepicker';
-import { Dialog } from 'primeng/dialog';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
-import { Subject, takeUntil } from 'rxjs';
-import { IngresoCreateComponent } from '../ingreso-create/ingreso-create.component';
-import { Select } from 'primeng/select';
-import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
+import { ResponseApiType } from 'app/core/models/response-api.model';
+import { Dialog } from 'primeng/dialog';
+import { GastoCreateComponent } from '../gasto-create/gasto-create.component';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
+import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Select } from 'primeng/select';
 import {Ripple} from 'primeng/ripple';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import {IngresoCreateComponent} from '../ingreso-create/ingreso-create.component';
 
 @Component({
-  selector: 'app-ingreso-list',
-  imports: [ConfirmPopupModule, Select, InputNumberModule, FormsModule, DatePickerModule, IngresoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
-  templateUrl: './ingreso-list.component.html',
+  selector: 'app-movimiento-list',
+  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent],
+  templateUrl: './movimiento-list.component.html',
   providers: [ConfirmationService, MessageService]
 })
-export class IngresoListComponent {
+export class MovimientoListComponent {
+
   @ViewChild('dt') dt!: Table;
 
-  ingresos : Ingreso[] = [];
+  movimientos : Movimiento[] = [];
   totalRecords = 0;
 
   rowsPerPageOptions: number[] = [];
@@ -43,19 +46,20 @@ export class IngresoListComponent {
 
   loading = false;
 
-  visibleAdd = false;
+  visibleAddGasto = false;
+  visibleAddIngreso = false;
 
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
-  catCategorias : CategoriaIngreso[] = [];
+  catCategorias : CategoriaGasto[] = [];
 
-  clonedIngresos: { [s: string]: Ingreso } = {};
+  clonedItems: { [s: string]: Movimiento } = {};
 
   destroy$ = new Subject<void>();
 
   constructor(
-    private _ingresoService: IngresoService,
+    private _gastoService: MovimientoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
     private _catalogoStoreService: CatalogoStoreService,
@@ -68,7 +72,7 @@ export class IngresoListComponent {
   }
 
   ngOnInit():void{
-    this._catalogoStoreService.getCatalogo('categorias_ingresos')
+    this._catalogoStoreService.getCatalogo('categorias_gastos')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
@@ -85,16 +89,16 @@ export class IngresoListComponent {
     this.destroy$.complete();
   }
 
-  getIngresosData(event: TableLazyLoadEvent):void{
+  getDataItems(event: TableLazyLoadEvent):void{
     this.lastEvent=event;
     this.loading = true;
     const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
-    this._ingresoService.getDataIngresos(ApiQuery)
+    this._gastoService.getData(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res: ResponseApiType<Ingreso>)=>{
-          this.ingresos = res.result.data;
-          this.ingresos.map(g => {
+        next: (res: ResponseApiType<Movimiento>)=>{
+          this.movimientos = res.result.data;
+          this.movimientos.map(g => {
             this.dt.cancelRowEdit(g);
             g.editing = false
           });
@@ -102,7 +106,7 @@ export class IngresoListComponent {
           this.loading = false;
         },
         error: (error)=> {
-          this.ingresos=[];
+          this.movimientos=[];
           this.totalRecords = 0;
           this.loading = false;
           this._messageService.add(
@@ -112,12 +116,17 @@ export class IngresoListComponent {
       });
   }
 
+  addGasto():void{
+    this.visibleAddGasto=true;
+  }
+
   addIngreso():void{
-    this.visibleAdd=true;
+    this.visibleAddIngreso=true;
   }
 
   closeDialog(update:boolean) {
-      this.visibleAdd = false;
+    this.visibleAddGasto = false;
+    this.visibleAddIngreso = false;
       if(update){
         this.reloadTable();
       }
@@ -129,7 +138,7 @@ export class IngresoListComponent {
       if (this.lastEvent!=null) {
         this.dt.filters={};
         this.lastEvent.filters={};
-        this.getIngresosData(this.lastEvent);
+        this.getDataItems(this.lastEvent);
       }
     }
   }
@@ -160,7 +169,7 @@ export class IngresoListComponent {
 
   reloadTable():void{
     if (this.lastEvent!=null) {
-      this.getIngresosData(this.lastEvent);
+      this.getDataItems(this.lastEvent);
     }
   }
 
@@ -179,7 +188,7 @@ export class IngresoListComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getIngresosData(event);
+    this.getDataItems(event);
   }
 
   mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
@@ -191,120 +200,121 @@ export class IngresoListComponent {
     });
   }
 
-  onRowEditInit(ingreso: Ingreso) {
+  onRowEditInit(movimiento: Movimiento) {
     this.cancelAllActiveEditions();
-    this.clonedIngresos[ingreso.id as unknown as string] = { ...ingreso };
-    ingreso.editing = true;
+    this.clonedItems[movimiento.id as unknown as string] = { ...movimiento };
+    movimiento.editing = true;
   }
 
-  onRowEditSave(ingreso: Ingreso, ri: number) {
-    ingreso.fecha= new Date(ingreso.fecha).toISOString().split('T')[0];
+  onRowEditSave(movimiento: Movimiento, ri: number) {
+    movimiento.fecha= new Date(movimiento.fecha).toISOString().split('T')[0];
 
     const values = {
-      monto: ingreso.monto,
-      descri: ingreso.descri,
-      categoriaId: ingreso.categoria_id,
-      fecha: ingreso.fecha,
+      monto: movimiento.monto,
+      descri: movimiento.descri,
+      categoriaId: movimiento.categoria_id,
+      fecha: movimiento.fecha,
     };
 
-    this._ingresoService.updateIngreso(ingreso.id, values)
+    this._gastoService.update(movimiento.id, values)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
           this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
           this._messageService.add({
             severity: 'success',
-            summary: 'Ingreso actualizado correctamente',
+            summary: 'Movimiento actualizado correctamente',
             detail: res.message
           });
-          ingreso.editing = false;
-          delete this.clonedIngresos[ingreso.id as unknown as string];
+          movimiento.editing = false;
+          delete this.clonedItems[movimiento.id as unknown as string];
         },
         error: (error) => {
           this._messageService.add({
             severity: 'error',
-            summary: 'Error al actualizar el ingreso',
+            summary: 'Error al actualizar el movimiento',
             detail: error.error.error
           });
-          this.onRowEditCancel(ingreso, ri);
+          this.onRowEditCancel(movimiento, ri);
         }
       });
 
   }
 
-  onRowEditCancel(ingreso: Ingreso, index: number) {
-    if (this.clonedIngresos[ingreso.id as unknown as string]) {
-      this.ingresos[index] = { ...this.clonedIngresos[ingreso.id as unknown as string] };
-      delete this.clonedIngresos[ingreso.id as unknown as string];
+  onRowEditCancel(movimiento: Movimiento, index: number) {
+    if (this.clonedItems[movimiento.id as unknown as string]) {
+      this.movimientos[index] = { ...this.clonedItems[movimiento.id as unknown as string] };
+      delete this.clonedItems[movimiento.id as unknown as string];
     }
-    this.dt.cancelRowEdit(this.ingresos[index]);
-    ingreso.editing = false;
+    this.dt.cancelRowEdit(this.movimientos[index]);
+    movimiento.editing = false;
   }
 
   cancelAllActiveEditions(): void {
-    this.ingresos.forEach((ingreso, index) => {
-      if (ingreso.editing) {
-        this.onRowEditCancel(ingreso, index);
+    this.movimientos.forEach((movimiento, index) => {
+      if (movimiento.editing) {
+        this.onRowEditCancel(movimiento, index);
       }
     });
 
     this.cdr.detectChanges();
   }
 
-  onCategoriaChange(event: any, ingreso: Ingreso) {
+  onCategoriaChange(event: any, movimiento: Movimiento) {
     const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
 
     if (categoriaSeleccionada) {
-        ingreso.categoria_id = categoriaSeleccionada.id;
-        ingreso.categoriaNombre = categoriaSeleccionada.nombre;
-        ingreso.categoriaIcon = categoriaSeleccionada.icon;
-        ingreso.categoriaColor = categoriaSeleccionada.color;
+        movimiento.categoria_id = categoriaSeleccionada.id;
+        movimiento.categoriaNombre = categoriaSeleccionada.nombre;
+        movimiento.categoriaIcon = categoriaSeleccionada.icon;
+        movimiento.categoriaColor = categoriaSeleccionada.color;
     }
   }
 
-  onDelete(ingreso:Ingreso, event: Event):void{
-      this.confirmationService.close();
-      
-      setTimeout(() => {
-        this.confirmationService.confirm({
-            target: event.target as EventTarget,
-            message: '¿Estás seguro de eliminar: "' + ingreso.descri + '"?',
-            icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Eliminar',
-            rejectLabel: 'Cancelar',
-            acceptButtonStyleClass: 'p-button-sm p-button-danger',
-            rejectButtonStyleClass: 'p-button-sm p-button-text',
-            closeOnEscape: true,
-            accept: () => {
-                this.deleteIngreso(ingreso.id);
-            },
-            reject: () => {
-            }
-        });
-      }, 200); 
-      
-    }
+  onDelete(movimiento:Movimiento, event: Event):void{
+    this.confirmationService.close();
 
-  deleteIngreso(id:number):void{
-    this._ingresoService.deleteIngreso(id)
+    setTimeout(() => {
+      this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: '¿Estás seguro de eliminar: "' + movimiento.descri + '"?',
+          icon: 'pi pi-exclamation-triangle',
+          acceptLabel: 'Eliminar',
+          rejectLabel: 'Cancelar',
+          acceptButtonStyleClass: 'p-button-sm p-button-danger',
+          rejectButtonStyleClass: 'p-button-sm p-button-text',
+          closeOnEscape: true,
+          accept: () => {
+              this.deleteItem(movimiento.id);
+          },
+          reject: () => {
+          }
+      });
+    }, 200);
+
+  }
+
+  deleteItem(id:number):void{
+    this._gastoService.delete(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
           this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
           this._messageService.add({
             severity: 'success',
-            summary: 'Ingreso eliminado correctamente',
+            summary: 'Movimiento eliminado correctamente',
             detail: res.message
           });
-          this.reloadTable();   
+          this.reloadTable();
         },
         error: (error) => {
           this._messageService.add({
             severity: 'error',
-            summary: 'Error al eliminar el ingreso',
+            summary: 'Error al eliminar el movimiento',
             detail: error.error.error
           });
         }
       });
   }
+
 }
