@@ -1,11 +1,11 @@
-export interface Ingreso{
+export interface Movimiento {
     id: number,
     fecha: string,
     descri: string,
+    tipo: string,
     monto: number,
     idusuario: number,
-    contado: boolean,
-    editing: boolean,
+    editing?: boolean,
     categoriaColor: string,
     categoriaIcon: string,
     categoriaNombre: string,

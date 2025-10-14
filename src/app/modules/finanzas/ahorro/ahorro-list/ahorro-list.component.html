@@ -66,9 +66,10 @@
                                     <button
                                         pButton
                                         icon="pi pi-dollar"
-                                        label="Depositar"
+                                        label="Ahorrar"
                                         severity="success"
                                         class="flex-auto whitespace-nowrap"
+                                        (click)="openFormDeposito(item.id, 'deposito');"
                                     ></button>
                                     <button
                                         pButton
@@ -76,6 +77,7 @@
                                         label="Retirar"
                                         severity="warn"
                                         class="flex-auto whitespace-nowrap"
+                                        (click)="openFormDeposito(item.id, 'retiro');"
                                     ></button>
                                     <button
                                         pButton
@@ -131,6 +133,7 @@
                                         label="Ahorrar"
                                         severity="success"
                                         class="flex-auto whitespace-nowrap"
+                                        (click)="openFormDeposito(item.id, 'deposito');"
                                     ></button>
                                     <button
                                         pButton
@@ -138,6 +141,7 @@
                                         label="Retirar"
                                         severity="warn"
                                         class="flex-auto whitespace-nowrap"
+                                        (click)="openFormDeposito(item.id, 'retiro');"
                                     ></button>
                                     <button
                                         pButton
@@ -185,3 +189,19 @@
      (cerrarDialog)="closeDialog($event, 'edit')">
   </app-ahorro-edit>
 </p-dialog>
+
+<p-dialog
+  [(visible)]="visibleDeposito"
+  [modal]="true"
+  [draggable]="true"
+  styleClass="w-160 min-w-80 h-130"
+  contentStyleClass="dialog-content-scroll"
+  [resizable]="false">
+  <app-ahorro-deposito-create *ngIf="visibleDeposito"
+     [ahorroId]="idAhorroSelected"
+     [tipoDeposito]="tipoDeposito"
+     (msjEvent)="mostrarMensaje($event)"
+     (cerrarDialog)="closeDialog($event, 'deposito')">
+  </app-ahorro-deposito-create>
+</p-dialog>
+  

@@ -35,16 +35,22 @@
                 <p-button *ngIf="!showSidebar()" (click)="toggleSidebar()" icon="pi pi-bars" />
             </div>  
             
-            <div class="flex gap-2">                
-                <button pButton [label]="_authService._user()!.username" icon="pi pi-user" class="w-40" outlined></button>
+            <div class="flex gap-2 items-center"> 
+                <app-disponible></app-disponible>
+                <!-- <button pButton [label]="_authService._user()!.username" icon="pi pi-user" class="w-40" outlined></button> -->
                 <button pButton label="Cerrar sesión" (click)="singOut()" icon="pi pi-sign-out" class="w-40" severity="danger" text></button>
                 <button pButton 
+                    pRipple
                     (click)="toggleTheme()" 
-                    class="p-2 text-xl"
-                    tooltip="Cambiar tema"
+                    class="bg-transparent h-8 w-8 border-0"
+                    [ngClass]="{'hover:bg-gray-200': !isDarkMode, 'hover:bg-gray-700': isDarkMode}"
                     >
-                    <span *ngIf="!isDarkMode">🌙</span>
-                    <span *ngIf="isDarkMode">☀️</span>
+                    <span *ngIf="!isDarkMode">
+                        <i class="pi pi-sun" style="color: gray"></i>
+                    </span>
+                    <span *ngIf="isDarkMode">
+                        <i class="pi pi-moon" style="color: gray"></i>
+                    </span>
                 </button>
             </div>			
             

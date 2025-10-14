@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal, ViewChild } from '@angular/core';
+import {ChangeDetectorRef, Component, signal, ViewChild} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AhorroDeposito } from 'app/core/models/ahorro-deposito.model';
@@ -9,7 +9,7 @@ import { ResponseApiType } from 'app/core/models/response-api.model';
 import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { AhorroDepositoService } from 'app/core/services-api/ahorroDeposito.service';
 import { FilterService } from 'app/modules/utils/filter.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -17,12 +17,20 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
+import {Movimiento} from '../../../../core/models/movimiento.model';
+import {Ripple} from 'primeng/ripple';
+import { Dialog } from "primeng/dialog";
+import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
+import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDeposito-create.component";
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar],
+  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent],
   templateUrl: './ahorro-detalle.component.html',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class AhorroDetalleComponent {
   destroy$ = new Subject<void>();
@@ -35,7 +43,7 @@ export class AhorroDetalleComponent {
 
   ahorroDepositos : AhorroDeposito[] = [];
   totalRecords = 0;
-  
+
   rowsPerPageOptions: number[] = [];
   rowsDefault = 0;
   OrderDefault: ApiSort[] = [{field:'fecha', order:'DESC'}];
@@ -45,10 +53,14 @@ export class AhorroDetalleComponent {
 
   loading = false;
 
-  visibleAdd = false;
+  visibleEdit = false;
+  visibleDeposito = false;
+  tipoDeposito: 'deposito' | 'retiro' = 'deposito';
 
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
+
+  clonedAhorroDeposito: { [s: string]: AhorroDeposito } = {};
 
   constructor(
     private _ahorroService: AhorroService,
@@ -56,10 +68,13 @@ export class AhorroDetalleComponent {
     private _filterService: FilterService,
     private _messageService: MessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
+    private _balanceUsuarioService: BalanceUsuarioService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
-    this.rowsDefault = this.rowsPerPageOptions[0];    
+    this.rowsDefault = this.rowsPerPageOptions[0];
   }
 
   ngOnInit(){
@@ -81,13 +96,12 @@ export class AhorroDetalleComponent {
         next: (resp) => {
           this.ahorro = resp.result;
           this.porcentaje= Math.round((this.ahorro.monto_actual / this.ahorro.monto_meta) * 100)
-          this.getData(this.lastEvent);
         },
         error: (error) => {
           console.error(error);
           this.router.navigateByUrl('/finanzas/ahorro/list/');
         }
-      });  
+      });
   }
 
   getData(event: TableLazyLoadEvent|null):void{
@@ -100,7 +114,7 @@ export class AhorroDetalleComponent {
         next: (res: ResponseApiType<AhorroDeposito>)=>{
           this.ahorroDepositos = res.result.data;
           this.totalRecords = res.result.pagination.totalItems;
-          this.loading = false;          
+          this.loading = false;
         },
         error: (error)=> {
           this.ahorroDepositos=[];
@@ -110,12 +124,8 @@ export class AhorroDetalleComponent {
             { severity: 'error', summary: 'Error de consulta', detail: error.error.message, life: 3000 }
           );
         }
-      });  
+      });
   }
-
-  addAhorroDeposito():void{
-    this.visibleAdd=true;
-  }  
 
   showHiddeFilters(){
     this.showFilters=!this.showFilters;
@@ -131,7 +141,7 @@ export class AhorroDetalleComponent {
   onFilterInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
-  } 
+  }
 
   onFilterExactDate(date: Date, field: string): void {
     this.dt.filter(date, field, 'equals');
@@ -150,7 +160,7 @@ export class AhorroDetalleComponent {
     const number = Number(input.value);
     const [desde, hasta] = [Math.round(number-(number*0.15)), Math.round(number*1.15)];
     this.dt.filter([desde, hasta], field, tipo);
-  } 
+  }
 
   reloadTable():void{
     if (this.lastEvent!=null) {
@@ -173,6 +183,147 @@ export class AhorroDetalleComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getData(event); // dispara la carga manual
+    this.getData(event);
+  }
+
+  mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
+    this._messageService.add({
+      severity: detalle.tipo,
+      summary: detalle.tipo==='error'?'Error de registro':'Exito de registro',
+      detail: detalle.mensaje,
+      life: 3000
+    });
+  }
+
+  onRowEditInit(ahorroDeposito: AhorroDeposito) {
+    this.cancelAllActiveEditions();
+    this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string] = { ...ahorroDeposito };
+    ahorroDeposito.editing = true;
+  }
+
+  onRowEditSave(ahorroDeposito: AhorroDeposito, ri:any) {
+    ahorroDeposito.fecha= new Date(ahorroDeposito.fecha).toISOString().split('T')[0];
+    const values = {
+      monto: ahorroDeposito.monto,
+      descri: ahorroDeposito.descri,
+      fecha: ahorroDeposito.fecha,
+    };
+
+    this._ahorroDepositoService.update(this.idAhorro, values, ahorroDeposito.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Movimiento actualizado correctamente',
+            detail: res.message
+          });
+          ahorroDeposito.editing = false;
+          delete this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string];
+          this.obtenerDetalle();
+          this.reloadTable();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al actualizar el movimiento',
+            detail: error.error.error
+          });
+          this.onRowEditCancel(ahorroDeposito, ri);
+        }
+      });
+
+  }
+
+  onRowEditCancel(ahorroDeposito: AhorroDeposito, index: number) {
+    console.log('onRowEditCancel');
+    if (this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string]) {
+      this.ahorroDepositos[index] = { ...this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string] };
+      delete this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string];
+    }
+    this.dt.cancelRowEdit(this.ahorroDepositos[index]);
+    ahorroDeposito.editing = false;
+  }
+
+  cancelAllActiveEditions(): void {
+    this.ahorroDepositos.forEach((ahorroDeposito, index) => {
+      if (ahorroDeposito.editing) {
+        this.onRowEditCancel(ahorroDeposito, index);
+      }
+    });
+
+    this.cdr.detectChanges();
+  }
+
+  onEdit(ahorro: Ahorro): void {
+    this.visibleEdit=true;
+  }
+
+  openFormDeposito(ahorroId: number, tipo: 'deposito'|'retiro'): void {
+    this.visibleDeposito = true;
+    this.tipoDeposito = tipo;
+  }
+
+  closeDialog(update:boolean, form: string) {
+    if(update){
+      this.obtenerDetalle();
+      this.reloadTable();
+    }
+    if(form==='edit'){
+      this.visibleEdit = false;
+      return;
+    }
+    if(form==='deposito'){
+      this.visibleDeposito = false;
+      return;
+    }
+  }
+
+  onDelete(ahorroDeposito:AhorroDeposito, event: Event):void{
+    this.confirmationService.close();
+
+    setTimeout(() => {
+      this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: '¿Estás seguro de eliminar: "' + ahorroDeposito.descri + '"?',
+          icon: 'pi pi-exclamation-triangle',
+          acceptLabel: 'Eliminar',
+          rejectLabel: 'Cancelar',
+          acceptButtonStyleClass: 'p-button-sm p-button-danger',
+          rejectButtonStyleClass: 'p-button-sm p-button-text',
+          closeOnEscape: true,
+          accept: () => {
+              this.deleteItem(ahorroDeposito.id);
+          },
+          reject: () => {
+          }
+      });
+    }, 200);
+
+  }
+
+  deleteItem(id:number):void{
+    this._ahorroDepositoService.delete(this.idAhorro, id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Deposito eliminado correctamente',
+            detail: res.message
+          });
+          this.obtenerDetalle();
+          this.reloadTable();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al eliminar el deposito',
+            detail: error.error.error
+          });
+        }
+      });
   }
 }

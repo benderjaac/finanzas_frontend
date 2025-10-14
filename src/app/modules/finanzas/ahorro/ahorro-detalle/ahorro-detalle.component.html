@@ -2,21 +2,32 @@
 <div class="grid grid-cols-12 gap-4 grid-nogutter">
     <div class="col-span-12" *ngIf="ahorro">
         <div
-            class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"        
+            class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
         >
-            
+
             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                     <div>
-                        <div class="text-lg font-medium text-color mt-2">Ahorro: {{ ahorro.descri }}</div>
+                        <div class="text-lg font-medium text-color mt-2">
+                          <button
+                            pButton
+                            pRipple
+                            type="button"
+                            (click)="onEdit(ahorro)"
+                            icon="pi pi-pen-to-square"
+                            rounded
+                            text
+                            severity="info">
+                          </button>
+                          Ahorro: {{ ahorro.descri }}</div>
                         <div class="font-medium text-muted-color text-sm">Desde {{ ahorro.fecha_inicio }}</div>
                         <div class="font-medium text-muted-color text-sm">Falta por ahorrar {{ ahorro.monto_meta-ahorro.monto_actual | currency: 'MXN' }}</div>
-                        
-                    </div>                                
+
+                    </div>
                 </div>
                 <div class="flex flex-col md:items-end">
                     <p>
-                        Ahorrado: 
+                        Ahorrado:
                         <span class="text-xl text-primary font-semibold">
                             {{ahorro.monto_actual | currency: 'MXN'}}
                         </span>
@@ -28,6 +39,7 @@
                             label="Depositar"
                             severity="success"
                             class="flex-auto whitespace-nowrap"
+                            (click)="openFormDeposito(ahorro.id, 'deposito');"
                         ></button>
                         <button
                             pButton
@@ -35,17 +47,18 @@
                             label="Retirar"
                             severity="warn"
                             class="flex-auto whitespace-nowrap"
-                        ></button>                    
-                        
+                            (click)="openFormDeposito(ahorro.id, 'retiro');"
+                        ></button>
+
                     </div>
-                    
-                </div>                            
-            </div>                        
+
+                </div>
+            </div>
         </div>
         <div class="px-6">
             <p-progressbar [value]="porcentaje"/>
             <p class="text-muted-color text-end">
-                Meta: {{ahorro.monto_actual | currency: 'MXN'}}
+                Meta: {{ahorro.monto_meta | currency: 'MXN'}}
             </p>
         </div>
     </div>
@@ -53,51 +66,54 @@
 
 
 <p-table #dt
-    [value]="ahorroDepositos" 
+    [value]="ahorroDepositos"
     [lazy]="true"
-    
+
     [paginator]="true"
     [rowsPerPageOptions]="rowsPerPageOptions"
     [rows]="rowsDefault"
     [totalRecords]="totalRecords"
     [showCurrentPageReport]="true"
     currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} movimientos"
-    
+
     filterMode="row"
-    
+
     (onLazyLoad)="getData($event)"
-    
+
     [loading]="loading"
     [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
+
+     dataKey="id"
+     editMode="row"
     >
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Movimientos</span>
-            
+
             <div>
-                <p-button icon="pi pi-eraser" 
+                <p-button icon="pi pi-eraser"
                     class="mr-2"
                     (click)="resetTable()" rounded raised />
-                <p-button icon="pi pi-filter-fill" 
+                <p-button icon="pi pi-filter-fill"
                     class="mr-2"
                     (click)="showHiddeFilters()" rounded raised />
-                <p-button icon="pi pi-refresh" 
+                <p-button icon="pi pi-refresh"
                     (click)="reloadTable()" rounded raised />
             </div>
-            
-            
+
+
         </div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
-            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>            
+            <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th>Acciones</th>
         </tr>
         <!-- filtros -->
          <tr *ngIf="showFilters">
-            <th class="min-w-50"> 
+              <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
                     <p-datepicker
                         [showIcon]="true"
@@ -107,11 +123,11 @@
                         [readonlyInput]="true"
                     ></p-datepicker>
                     <br>
-                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>    
-                </div>  
-                
+                    <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>
+                </div>
+
                 <div *ngIf="filterFecharango">
-                    <p-datepicker 
+                    <p-datepicker
                         [showIcon]="true"
                         [placeholder]="'Rango de fecha'"
                         [(ngModel)]="filtroFechaRango"
@@ -132,31 +148,148 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
-            <th> 
+            <th>
                 <input class="border-solid border-2 rounded-full"
                 pInputText
                 [placeholder]="'aprox..'"
                 type="number"
                 (input)="onFilterNumberInput($event, 'monto', 'between')"
-                />              
-            </th>           
+                />
+            </th>
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-gasto>
-        <tr>
-            <td>{{ gasto.fecha }}</td>
-            <td>{{ gasto.descri }}</td>            
-            <td>{{ gasto.monto }}</td>            
+    <ng-template pTemplate="body" let-ahorroDeposito let-ri="rowIndex">
+        <tr [pEditableRow]="ahorroDeposito">
+            <td class="min-w-50">
+              <p-cellEditor>
+                <ng-template #input>
+                  <p-datepicker
+                    class="w-full"
+                    id="fecha"
+                    [showIcon]="true"
+                    dateFormat="yy-mm-dd"
+                    [readonlyInput]="true"
+                    [(ngModel)]="ahorroDeposito.fecha"
+                  ></p-datepicker>
+                </ng-template>
+                <ng-template #output>
+                  {{ ahorroDeposito.fecha }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
             <td>
+              <p-cellEditor>
+                <ng-template #input>
+                  <input
+                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                    pInputText type="text" required
+                    [(ngModel)]="ahorroDeposito.descri" />
+                </ng-template>
+                <ng-template #output>
+                  {{ ahorroDeposito.descri }}
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <p-cellEditor>
+                <ng-template #input>
+                  <input
+                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
+                    pInputText type="number" required
+                    [(ngModel)]="ahorroDeposito.monto" />
+                </ng-template>
+                <ng-template #output>
+                  <span class="font-bold" [ngClass]="{'text-red-500': ahorroDeposito.monto < 0, 'text-green-500': ahorroDeposito.monto > 0}">
+                      {{ ahorroDeposito.monto }}
+                  </span>                  
+                </ng-template>
+              </p-cellEditor>
+            </td>
+            <td>
+              <div class="flex items-center justify-center gap-2">
                 <button
-                    pButton
-                    (click)="addAhorroDeposito()" 
-                    icon="pi pi-pen-to-square" 
-                    class="" 
-                    severity="success" text>
+                  *ngIf="!ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pInitEditableRow
+                  (click)="onRowEditInit(ahorroDeposito)"
+                  icon="pi pi-pen-to-square"
+                  rounded
+                  text
+                  severity="info"
+                  pTooltip="Editar">
                 </button>
+                <p-confirmpopup #cp/>
+                <button
+                    *ngIf="!ahorroDeposito.editing"
+                    pButton
+                    pRipple
+                    type="button"
+                    (click)="onDelete(ahorroDeposito, $event)"
+                    icon="pi pi-trash"
+                    rounded
+                    text
+                    severity="warn"
+                    pTooltip="Eliminar">
+                </button>
+                <button
+                  *ngIf="ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pSaveEditableRow
+                  icon="pi pi-check"
+                  (click)="onRowEditSave(ahorroDeposito, ri)"
+                  text
+                  rounded
+                  severity="success"
+                ></button>
+                <button
+                  *ngIf="ahorroDeposito.editing"
+                  pButton
+                  pRipple
+                  type="button"
+                  pCancelEditableRow
+                  icon="pi pi-times"
+                  (click)="onRowEditCancel(ahorroDeposito, ri)"
+                  text
+                  rounded
+                  severity="secondary"
+                ></button>
+              </div>
+
             </td>
         </tr>
     </ng-template>
 </p-table>
+
+<p-dialog
+  [(visible)]="visibleEdit"
+  [modal]="true"
+  [draggable]="true"
+  styleClass="w-160 min-w-80 h-130"
+  contentStyleClass="dialog-content-scroll"
+  [resizable]="false">
+  <app-ahorro-edit *ngIf="visibleEdit"
+     [ahorroEdting]="ahorro"
+     (msjEvent)="mostrarMensaje($event)"
+     (cerrarDialog)="closeDialog($event, 'edit')">
+  </app-ahorro-edit>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="visibleDeposito"
+  [modal]="true"
+  [draggable]="true"
+  styleClass="w-160 min-w-80 h-130"
+  contentStyleClass="dialog-content-scroll"
+  [resizable]="false">
+  <app-ahorro-deposito-create *ngIf="visibleDeposito"
+     [ahorroId]="ahorro.id"
+     [tipoDeposito]="tipoDeposito"
+     (msjEvent)="mostrarMensaje($event)"
+     (cerrarDialog)="closeDialog($event, 'deposito')">
+  </app-ahorro-deposito-create>
+</p-dialog>

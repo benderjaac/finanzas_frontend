@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { Gasto } from 'app/core/models/gasto.model';
-import { GastoService } from 'app/core/services-api/gasto.service';
+import { Movimiento } from 'app/core/models/movimiento.model';
+import { MovimientoService } from 'app/core/services-api/movimiento.service';
 import { Subject, takeUntil } from 'rxjs';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { ApiSort } from 'app/core/models/query.model';
 import { FilterService } from 'app/modules/utils/filter.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { Dialog } from 'primeng/dialog';
@@ -19,18 +19,22 @@ import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
 import { Select } from 'primeng/select';
 import {Ripple} from 'primeng/ripple';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import {IngresoCreateComponent} from '../ingreso-create/ingreso-create.component';
 
 @Component({
-  selector: 'app-gasto-list',
-  imports: [Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple],
-  templateUrl: './gasto-list.component.html',
-  providers: [MessageService]
+  selector: 'app-movimiento-list',
+  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent],
+  templateUrl: './movimiento-list.component.html',
+  providers: [ConfirmationService, MessageService]
 })
-export class GastoListComponent {
+export class MovimientoListComponent {
 
   @ViewChild('dt') dt!: Table;
 
-  gastos : Gasto[] = [];
+  movimientos : Movimiento[] = [];
   totalRecords = 0;
 
   rowsPerPageOptions: number[] = [];
@@ -42,23 +46,26 @@ export class GastoListComponent {
 
   loading = false;
 
-  visibleAdd = false;
+  visibleAddGasto = false;
+  visibleAddIngreso = false;
 
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
   catCategorias : CategoriaGasto[] = [];
 
-  clonedGastos: { [s: string]: Gasto } = {};
+  clonedItems: { [s: string]: Movimiento } = {};
 
   destroy$ = new Subject<void>();
 
   constructor(
-    private _gastoService: GastoService,
+    private _gastoService: MovimientoService,
     private _filterService: FilterService,
     private _messageService: MessageService,
     private _catalogoStoreService: CatalogoStoreService,
     private cdr: ChangeDetectorRef,
+    private _balanceUsuarioService: BalanceUsuarioService,
+    private confirmationService: ConfirmationService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -82,16 +89,16 @@ export class GastoListComponent {
     this.destroy$.complete();
   }
 
-  getGastosData(event: TableLazyLoadEvent):void{
+  getDataItems(event: TableLazyLoadEvent):void{
     this.lastEvent=event;
     this.loading = true;
     const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
-    this._gastoService.getDataGastos(ApiQuery)
+    this._gastoService.getData(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res: ResponseApiType<Gasto>)=>{
-          this.gastos = res.result.data;
-          this.gastos.map(g => {
+        next: (res: ResponseApiType<Movimiento>)=>{
+          this.movimientos = res.result.data;
+          this.movimientos.map(g => {
             this.dt.cancelRowEdit(g);
             g.editing = false
           });
@@ -99,7 +106,7 @@ export class GastoListComponent {
           this.loading = false;
         },
         error: (error)=> {
-          this.gastos=[];
+          this.movimientos=[];
           this.totalRecords = 0;
           this.loading = false;
           this._messageService.add(
@@ -110,11 +117,16 @@ export class GastoListComponent {
   }
 
   addGasto():void{
-    this.visibleAdd=true;
+    this.visibleAddGasto=true;
+  }
+
+  addIngreso():void{
+    this.visibleAddIngreso=true;
   }
 
   closeDialog(update:boolean) {
-      this.visibleAdd = false;
+    this.visibleAddGasto = false;
+    this.visibleAddIngreso = false;
       if(update){
         this.reloadTable();
       }
@@ -126,7 +138,7 @@ export class GastoListComponent {
       if (this.lastEvent!=null) {
         this.dt.filters={};
         this.lastEvent.filters={};
-        this.getGastosData(this.lastEvent);
+        this.getDataItems(this.lastEvent);
       }
     }
   }
@@ -157,7 +169,7 @@ export class GastoListComponent {
 
   reloadTable():void{
     if (this.lastEvent!=null) {
-      this.getGastosData(this.lastEvent);
+      this.getDataItems(this.lastEvent);
     }
   }
 
@@ -176,7 +188,7 @@ export class GastoListComponent {
       globalFilter: null
     };
     this.showFilters=false;
-    this.getGastosData(event);
+    this.getDataItems(event);
   }
 
   mostrarMensaje(detalle: {tipo:string, mensaje:string}) {
@@ -188,73 +200,121 @@ export class GastoListComponent {
     });
   }
 
-  onRowEditInit(gasto: Gasto) {
+  onRowEditInit(movimiento: Movimiento) {
     this.cancelAllActiveEditions();
-    this.clonedGastos[gasto.id as unknown as string] = { ...gasto };
-    gasto.editing = true;
+    this.clonedItems[movimiento.id as unknown as string] = { ...movimiento };
+    movimiento.editing = true;
   }
 
-  onRowEditSave(gasto: Gasto) {
-    gasto.fecha= new Date(gasto.fecha).toISOString().split('T')[0];
+  onRowEditSave(movimiento: Movimiento, ri: number) {
+    movimiento.fecha= new Date(movimiento.fecha).toISOString().split('T')[0];
 
     const values = {
-      monto: gasto.monto,
-      descri: gasto.descri,
-      categoriaId: gasto.categoria_id,
-      fecha: gasto.fecha,
+      monto: movimiento.monto,
+      descri: movimiento.descri,
+      categoriaId: movimiento.categoria_id,
+      fecha: movimiento.fecha,
     };
 
-    this._gastoService.updateGasto(gasto.id, values)
+    this._gastoService.update(movimiento.id, values)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
           this._messageService.add({
             severity: 'success',
-            summary: 'Gasto actualizado correctamente',
+            summary: 'Movimiento actualizado correctamente',
             detail: res.message
           });
-          gasto.editing = false;
-          delete this.clonedGastos[gasto.id as unknown as string];
+          movimiento.editing = false;
+          delete this.clonedItems[movimiento.id as unknown as string];
         },
         error: (error) => {
           this._messageService.add({
             severity: 'error',
-            summary: 'Error al actualizar el gasto',
+            summary: 'Error al actualizar el movimiento',
             detail: error.error.error
           });
+          this.onRowEditCancel(movimiento, ri);
         }
       });
 
   }
 
-  onRowEditCancel(gasto: Gasto, index: number) {
-    if (this.clonedGastos[gasto.id as unknown as string]) {
-      this.gastos[index] = { ...this.clonedGastos[gasto.id as unknown as string] };
-      delete this.clonedGastos[gasto.id as unknown as string];
+  onRowEditCancel(movimiento: Movimiento, index: number) {
+    if (this.clonedItems[movimiento.id as unknown as string]) {
+      this.movimientos[index] = { ...this.clonedItems[movimiento.id as unknown as string] };
+      delete this.clonedItems[movimiento.id as unknown as string];
     }
-    this.dt.cancelRowEdit(this.gastos[index]);
-    gasto.editing = false;
+    this.dt.cancelRowEdit(this.movimientos[index]);
+    movimiento.editing = false;
   }
 
   cancelAllActiveEditions(): void {
-    this.gastos.forEach((gasto, index) => {
-      if (gasto.editing) {
-        this.onRowEditCancel(gasto, index);
+    this.movimientos.forEach((movimiento, index) => {
+      if (movimiento.editing) {
+        this.onRowEditCancel(movimiento, index);
       }
     });
 
     this.cdr.detectChanges();
   }
 
-  onCategoriaChange(event: any, gasto: Gasto) {
+  onCategoriaChange(event: any, movimiento: Movimiento) {
     const categoriaSeleccionada = this.catCategorias.find(cat => cat.id === event.value);
 
     if (categoriaSeleccionada) {
-        gasto.categoria_id = categoriaSeleccionada.id;
-        gasto.categoriaNombre = categoriaSeleccionada.nombre;
-        gasto.categoriaIcon = categoriaSeleccionada.icon;
-        gasto.categoriaColor = categoriaSeleccionada.color;
+        movimiento.categoria_id = categoriaSeleccionada.id;
+        movimiento.categoriaNombre = categoriaSeleccionada.nombre;
+        movimiento.categoriaIcon = categoriaSeleccionada.icon;
+        movimiento.categoriaColor = categoriaSeleccionada.color;
     }
+  }
+
+  onDelete(movimiento:Movimiento, event: Event):void{
+    this.confirmationService.close();
+
+    setTimeout(() => {
+      this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: '¿Estás seguro de eliminar: "' + movimiento.descri + '"?',
+          icon: 'pi pi-exclamation-triangle',
+          acceptLabel: 'Eliminar',
+          rejectLabel: 'Cancelar',
+          acceptButtonStyleClass: 'p-button-sm p-button-danger',
+          rejectButtonStyleClass: 'p-button-sm p-button-text',
+          closeOnEscape: true,
+          accept: () => {
+              this.deleteItem(movimiento.id);
+          },
+          reject: () => {
+          }
+      });
+    }, 200);
+
+  }
+
+  deleteItem(id:number):void{
+    this._gastoService.delete(id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Movimiento eliminado correctamente',
+            detail: res.message
+          });
+          this.reloadTable();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al eliminar el movimiento',
+            detail: error.error.error
+          });
+        }
+      });
   }
 
 }

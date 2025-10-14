@@ -1,52 +1,55 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
-import { IngresoService } from 'app/core/services-api/ingreso.service';
-import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
+import { MovimientoService } from 'app/core/services-api/movimiento.service';
 import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
+import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Select } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
-import { InputTextModule } from 'primeng/inputtext';
-import { Select } from 'primeng/select';
-import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
+import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { Subject, takeUntil } from 'rxjs';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
-  selector: 'app-ingreso-create',
+  selector: 'app-gasto-create',
   imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
   standalone: true,
-  templateUrl: './ingreso-create.component.html',
+  templateUrl: './gasto-create.component.html',
 })
-export class IngresoCreateComponent {
+export class GastoCreateComponent {
   @Output() msjEvent = new EventEmitter<{tipo:string, mensaje:string}>();
   @Output() cerrarDialog = new EventEmitter<boolean>();
 
   registerForm!: FormGroup;
 
-  catCategorias : CategoriaIngreso[] = [];
+  catCategorias : CategoriaGasto[] = [];
 
   hoy = new Date();
 
   destroy$ = new Subject<void>();
 
   constructor(
-    private _ingresoService: IngresoService,
+    private _movimientosService: MovimientoService,
     private _fb: FormBuilder,
     private _catalogoStoreService: CatalogoStoreService,
-  ){    
+    private _balanceUsuarioService: BalanceUsuarioService
+  ){
   }
 
   ngOnInit(){
-    
+
     this.registerForm = this._fb.group({
-      monto: ['', Validators.required],
+      tipo: ['Gasto', Validators.required],
+      monto: ['', [Validators.required, Validators.min(0.01)]],
       descri: ['', Validators.required],
       categoriaId: ['',Validators.required],
       fecha: [this.hoy, Validators.required],
     });
 
-    this._catalogoStoreService.getCatalogo('categorias_ingresos')
+    this._catalogoStoreService.getCatalogo('categorias_gastos')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
@@ -57,18 +60,21 @@ export class IngresoCreateComponent {
         }
       });
 
-    
+
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
       const values = this.registerForm.value;
       values.categoriaId=this.registerForm.get('categoriaId')?.value.id;
+      values.monto=values.monto*-1;
 
-      this._ingresoService.createIngreso(this.registerForm.value)
+      this._movimientosService.create(values)
         .pipe(takeUntil(this.destroy$))
-        .subscribe({        
+        .subscribe({
+
           next: (res)=>{
+            this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },
@@ -77,5 +83,5 @@ export class IngresoCreateComponent {
           }
         });
     }
-  } 
+  }
 }
