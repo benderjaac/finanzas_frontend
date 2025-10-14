@@ -43,7 +43,7 @@ export class GastoCreateComponent {
 
     this.registerForm = this._fb.group({
       tipo: ['Gasto', Validators.required],
-      monto: ['', [Validators.required, Validators.min(0.01)]],
+      monto: ['', Validators.required],
       descri: ['', Validators.required],
       categoriaId: ['',Validators.required],
       fecha: [this.hoy, Validators.required],

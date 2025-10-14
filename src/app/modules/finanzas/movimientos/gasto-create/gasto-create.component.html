@@ -6,16 +6,18 @@
         <div>
             <label for="monto" class="block text-sm font-medium mb-1">Monto:</label>
             <p-inputnumber
-            inputId="integeronly"
             id="monto"
             prefix="$ "
             formControlName="monto"
             class="w-full"
             appAutofocus
+            [min]="0.01"
+            locale="en-US"
+            [maxFractionDigits]="2"
             />
             <small *ngIf="registerForm.get('monto')?.hasError('required') && registerForm.get('monto')?.touched" class="text-red-500">
-            Cuanto gastastes pues?
-            </small>
+                Cuanto gastastes pues?
+            </small>            
         </div> 
 
         <div>

@@ -12,7 +12,6 @@ import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { Subject, takeUntil } from 'rxjs';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 import { ResponseApiSimple } from 'app/core/models/response-api.model';
-import { BalanceUsuario } from 'app/core/models/balance-usuario.model';
 import { MovimientoService } from 'app/core/services-api/movimiento.service';
 
 @Component({
@@ -45,7 +44,7 @@ export class IngresoCreateComponent {
     
     this.registerForm = this._fb.group({
       tipo: ['Ingreso', Validators.required],
-      monto: ['', [Validators.required, Validators.min(0.01)]],
+      monto: ['', Validators.required],
       descri: ['', Validators.required],
       categoriaId: ['',Validators.required],
       fecha: [this.hoy, Validators.required],
