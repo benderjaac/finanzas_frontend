@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoriaIngresoService } from 'app/core/services-api/categoria-ingreso.service';
+import { CategoriaGastoService } from 'app/core/services-api/categoria-gasto.service';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'app-categoria-ingreso-create',
+  selector: 'app-categoria-create',
   imports: [AutofocusDirective, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
-  templateUrl: './categoria-ingreso-create.component.html',
+  templateUrl: './categoria-create.component.html',
 })
-export class CategoriaIngresoCreateComponent {
+export class CategoriaCreateComponent {
   @Output() msjEvent = new EventEmitter<{tipo:string, mensaje:string}>();
   @Output() cerrarDialog = new EventEmitter<boolean>();
 
@@ -21,7 +21,7 @@ export class CategoriaIngresoCreateComponent {
   destroy$ = new Subject<void>();
 
   constructor(
-    private _categoriaIngresoService: CategoriaIngresoService,
+    private _categoriaGastoService: CategoriaGastoService,
     private _fb: FormBuilder
   ){    
   }
@@ -42,7 +42,7 @@ export class CategoriaIngresoCreateComponent {
       const values = this.registerForm.value;
       values.categoriaId=this.registerForm.get('categoriaId')?.value.id;
 
-      this._categoriaIngresoService.createCategoriaIngreso(this.registerForm.value)
+      this._categoriaGastoService.createCategoria(this.registerForm.value)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           

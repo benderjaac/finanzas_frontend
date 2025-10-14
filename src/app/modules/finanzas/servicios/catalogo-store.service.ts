@@ -29,7 +29,7 @@ export class CatalogoStoreService {
 
     switch (nombreClave) {
       case 'categorias_gastos':
-          observable = this._categoriaGastoService.getDataCategoriasGastoCat().pipe(
+          observable = this._categoriaGastoService.getDataCategoriasCat().pipe(
             shareReplay(1)
           ) as Observable<CatalogoMap[K]>;
         break;

@@ -18,16 +18,16 @@ export class CategoriaGastoService {
     this.urlApi=environment.apiUrl;
   }
 
-  getDataCategoriasGasto(query: ApiQuery):Observable<ResponseApiType<CategoriaGasto>>{
-    return this._httpClient.post<ResponseApiType<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto/data', query);
+  getDataCategorias(query: ApiQuery):Observable<ResponseApiType<CategoriaGasto>>{
+    return this._httpClient.post<ResponseApiType<CategoriaGasto>>(this.urlApi+'/api/categoria/data', query);
   }
 
-  getDataCategoriasGastoCat():Observable<ResponseApiCat<CategoriaGasto>>{
-    return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto/catalogo');
+  getDataCategoriasCat():Observable<ResponseApiCat<CategoriaGasto>>{
+    return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/catalogo');
   }
 
-  createCategoriaGasto(data: Partial<CategoriaGasto>):Observable<ResponseApiSimple<CategoriaGasto>>{
-    return this._httpClient.post<ResponseApiSimple<CategoriaGasto>>(this.urlApi+'/api/categoria/gasto', data);
+  createCategoria(data: Partial<CategoriaGasto>):Observable<ResponseApiSimple<CategoriaGasto>>{
+    return this._httpClient.post<ResponseApiSimple<CategoriaGasto>>(this.urlApi+'/api/categoria', data);
   }
 
 

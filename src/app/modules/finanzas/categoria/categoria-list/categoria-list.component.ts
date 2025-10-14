@@ -11,16 +11,17 @@ import { Dialog } from 'primeng/dialog';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
-import { CategoriaGastoCreateComponent } from '../categoria-gasto-create/categoria-gasto-create.component';
+import { CategoriaCreateComponent } from '../categoria-create/categoria-create.component';
+import { Select } from "primeng/select";
 
 @Component({
-  selector: 'app-categoria-gasto-list',
-  imports: [Toast, TableModule, CategoriaGastoCreateComponent, Dialog, CommonModule, ButtonModule],
-  templateUrl: './categoria-gasto-list.component.html',
+  selector: 'app-categoria-list',
+  imports: [Toast, TableModule, CategoriaCreateComponent, Dialog, CommonModule, ButtonModule, Select],
+  templateUrl: './categoria-list.component.html',
   standalone: true,
   providers: [MessageService]
 })
-export class CategoriaGastoListComponent {
+export class CategoriaListComponent {
   
   @ViewChild('dt') dt!: Table;
 
@@ -62,7 +63,7 @@ export class CategoriaGastoListComponent {
     this.lastEvent=event;
     this.loading = true;
     const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
-    this._categoriaGastoService.getDataCategoriasGasto(ApiQuery)
+    this._categoriaGastoService.getDataCategorias(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res: ResponseApiType<CategoriaGasto>)=>{
@@ -142,5 +143,9 @@ export class CategoriaGastoListComponent {
       if(update){
         this.reloadTable();
       }
+  }
+
+  onFilterSelect(event: any, field: string, tipo:string) {
+    this.dt.filter(event, field, tipo);
   }
 }

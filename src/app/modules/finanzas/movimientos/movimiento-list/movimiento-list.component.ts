@@ -23,10 +23,11 @@ import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.ser
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import {IngresoCreateComponent} from '../ingreso-create/ingreso-create.component';
+import { DataView } from "primeng/dataview";
 
 @Component({
   selector: 'app-movimiento-list',
-  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent],
+  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent, DataView],
   templateUrl: './movimiento-list.component.html',
   providers: [ConfirmationService, MessageService]
 })
@@ -146,6 +147,10 @@ export class MovimientoListComponent {
   onFilterInput(event: Event, field: string, tipo:string) {
     const input = event.target as HTMLInputElement;
     this.dt.filter(input.value, field, tipo);
+  }
+
+  onFilterSelect(event: any, field: string, tipo:string) {
+    this.dt.filter(event, field, tipo);
   }
 
   onFilterExactDate(date: Date, field: string): void {

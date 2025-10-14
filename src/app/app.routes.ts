@@ -65,16 +65,7 @@ export const routes: Routes = [
                             {path: 'list/:id', loadComponent: () => import('app/modules/finanzas/ahorro/ahorro-detalle/ahorro-detalle.component').then(m => m.AhorroDetalleComponent)},
                         ]
                     },
-                    {path: 'categoria',
-                        children: [
-                            {path: 'gasto', children:[
-                                {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/gasto/categoria-gasto-list/categoria-gasto-list.component').then(m => m.CategoriaGastoListComponent)}
-                            ]},
-                            {path: 'ingreso', children:[
-                                {path: 'list', loadComponent: () => import('app/modules/finanzas/categoria/ingreso/categoria-ingreso-list/categoria-ingreso-list.component').then(m => m.CategoriaIngresoListComponent)}
-                            ]},
-                        ]
-                    },
+                    {path: 'categoria', loadComponent: () => import('app/modules/finanzas/categoria/categoria-list/categoria-list.component').then(m => m.CategoriaListComponent)},
                     {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen.component').then(m => m.ResumenComponent)}
                 ]
             },

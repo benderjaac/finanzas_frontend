@@ -22,7 +22,7 @@ export class FilterService {
           const matchMode = filter.matchMode;
 
           if (filterValue !== null && filterValue !== undefined && filterValue !== '') {
-            const type =
+            let type =
               filterValue instanceof Date ? 'date' :
               (typeof filterValue === 'boolean' ? 'boolean' :
               (typeof filterValue === 'number' ? 'number' : 'string'));
@@ -65,6 +65,7 @@ export class FilterService {
                   break;
                 case 'equals':
                   operator = '=';
+                  type = 'boolean';
                   break;
               }
 
