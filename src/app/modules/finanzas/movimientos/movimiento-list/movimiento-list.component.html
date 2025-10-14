@@ -129,8 +129,8 @@
             <th></th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-gasto let-ri="rowIndex">
-        <tr [pEditableRow]="gasto">
+    <ng-template pTemplate="body" let-movimiento let-ri="rowIndex">
+        <tr [pEditableRow]="movimiento">
             <td class="min-w-50">
                 <p-cellEditor>
                     <ng-template #input>
@@ -140,11 +140,11 @@
                             [showIcon]="true"
                             dateFormat="yy-mm-dd"
                             [readonlyInput]="true"
-                            [(ngModel)]="gasto.fecha"
+                            [(ngModel)]="movimiento.fecha"
                         ></p-datepicker>
                     </ng-template>
                     <ng-template #output>
-                        {{ gasto.fecha }}
+                        {{ movimiento.fecha }}
                     </ng-template>
                 </p-cellEditor>
             </td>
@@ -154,29 +154,47 @@
                         <input
                             class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
                             pInputText type="text" required
-                            [(ngModel)]="gasto.descri" />
+                            [(ngModel)]="movimiento.descri" />
                     </ng-template>
                     <ng-template #output>
-                        {{ gasto.descri }}
+                        {{ movimiento.descri }}
                     </ng-template>
                 </p-cellEditor>
             </td>
             <td>
-              {{ gasto.tipo }}
+                <span
+                [ngClass]="{ 'text-green-600': movimiento.tipo === 'Ingreso','text-red-600': movimiento.tipo === 'Gasto' }">
+                    {{ movimiento.tipo }}
+              </span>
             </td>
             <td>
                 <p-cellEditor>
                     <ng-template #input>
-                        <input
-                            class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
-                            pInputText type="number" required
-                            [(ngModel)]="gasto.monto" />
+                        <p-inputnumber *ngIf="movimiento.tipo === 'Ingreso'"
+                            id="monto"
+                            prefix="$ "
+                            [(ngModel)]="movimiento.monto"
+                            class="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                            appAutofocus
+                            [min]="0.01"
+                            locale="en-US"
+                            [maxFractionDigits]="2"
+                            />
+                            <p-inputnumber *ngIf="movimiento.tipo === 'Gasto'"
+                                id="monto"
+                                prefix="$ "
+                                [(ngModel)]="movimiento.monto"
+                                class="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                                [max]="-0.01"
+                                locale="en-US"
+                                [maxFractionDigits]="2"
+                            />
                     </ng-template>
                     <ng-template #output>
                       <span
                         class="font-bold"
-                      [ngClass]="{ 'text-green-600': gasto.tipo === 'Ingreso','text-red-600': gasto.tipo === 'Gasto' }">
-                        {{ gasto.monto }}
+                      [ngClass]="{ 'text-green-600': movimiento.tipo === 'Ingreso','text-red-600': movimiento.tipo === 'Gasto' }">
+                        {{ movimiento.monto }}
                       </span>
                     </ng-template>
                 </p-cellEditor>
@@ -186,12 +204,12 @@
                     <ng-template #input>
                         <p-select
                             id="categoria"
-                            [(ngModel)]="gasto.categoria_id"
+                            [(ngModel)]="movimiento.categoria_id"
                             [options]="catCategorias"
                             optionValue="id"
                             optionLabel="nombre"
                             [editable]="true" class="w-full"
-                            (onChange)="onCategoriaChange($event, gasto)">
+                            (onChange)="onCategoriaChange($event, movimiento)">
 
                             <ng-template #selectedItem let-selectedOption>
                                 <div class="flex items-center gap-2" *ngIf="selectedOption">
@@ -217,9 +235,9 @@
                         </p-select>
                     </ng-template>
                     <ng-template #output>
-                        <div class="rounded-full px-2 text-shadow-md " [ngClass]="gasto.categoriaColor">
-                            <i *ngIf="gasto.categoriaIcon!=null" [class]="gasto.categoriaIcon"></i>
-                            {{ gasto.categoriaNombre }}
+                        <div class="rounded-full px-2 text-shadow-md " [ngClass]="movimiento.categoriaColor">
+                            <i *ngIf="movimiento.categoriaIcon!=null" [class]="movimiento.categoriaIcon"></i>
+                            {{ movimiento.categoriaNombre }}
                         </div>
                     </ng-template>
                 </p-cellEditor>
@@ -227,12 +245,12 @@
             <td>
                 <div class="flex items-center justify-center gap-2">
                     <button
-                        *ngIf="!gasto.editing"
+                        *ngIf="!movimiento.editing"
                         pButton
                         pRipple
                         type="button"
                         pInitEditableRow
-                        (click)="onRowEditInit(gasto)"
+                        (click)="onRowEditInit(movimiento)"
                         icon="pi pi-pen-to-square"
                         rounded
                         text
@@ -241,11 +259,11 @@
                     </button>
                     <p-confirmpopup #cp/>
                     <button
-                        *ngIf="!gasto.editing"
+                        *ngIf="!movimiento.editing"
                         pButton
                         pRipple
                         type="button"
-                        (click)="onDelete(gasto, $event)"
+                        (click)="onDelete(movimiento, $event)"
                         icon="pi pi-trash"
                         rounded
                         text
@@ -253,26 +271,26 @@
                         pTooltip="Eliminar">
                     </button>
                     <button
-                        *ngIf="gasto.editing"
+                        *ngIf="movimiento.editing"
                         pButton
                         pRipple
                         type="button"
                         pSaveEditableRow
                         icon="pi pi-check"
-                        (click)="onRowEditSave(gasto, ri)"
+                        (click)="onRowEditSave(movimiento, ri)"
                         text
                         rounded
                         severity="success"
                         pTooltip="Guardar"
                     ></button>
                     <button
-                        *ngIf="gasto.editing"
+                        *ngIf="movimiento.editing"
                         pButton
                         pRipple
                         type="button"
                         pCancelEditableRow
                         icon="pi pi-times"
-                        (click)="onRowEditCancel(gasto, ri)"
+                        (click)="onRowEditCancel(movimiento, ri)"
                         text
                         rounded
                         severity="secondary"
