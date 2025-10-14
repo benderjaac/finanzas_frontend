@@ -9,7 +9,7 @@ import { ResponseApiType } from 'app/core/models/response-api.model';
 import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { AhorroDepositoService } from 'app/core/services-api/ahorroDeposito.service';
 import { FilterService } from 'app/modules/utils/filter.service';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -22,12 +22,15 @@ import {Ripple} from 'primeng/ripple';
 import { Dialog } from "primeng/dialog";
 import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
 import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDeposito-create.component";
+import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent],
+  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent],
   templateUrl: './ahorro-detalle.component.html',
-  providers: [MessageService]
+  providers: [ConfirmationService, MessageService]
 })
 export class AhorroDetalleComponent {
   destroy$ = new Subject<void>();
@@ -67,6 +70,8 @@ export class AhorroDetalleComponent {
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
+    private confirmationService: ConfirmationService,
+    private _balanceUsuarioService: BalanceUsuarioService,
   ){
     this.rowsPerPageOptions = [10, 20, 50, 100]
     this.rowsDefault = this.rowsPerPageOptions[0];
@@ -208,6 +213,7 @@ export class AhorroDetalleComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
+          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
           this._messageService.add({
             severity: 'success',
             summary: 'Movimiento actualizado correctamente',
@@ -216,6 +222,7 @@ export class AhorroDetalleComponent {
           ahorroDeposito.editing = false;
           delete this.clonedAhorroDeposito[ahorroDeposito.id as unknown as string];
           this.obtenerDetalle();
+          this.reloadTable();
         },
         error: (error) => {
           this._messageService.add({
@@ -271,5 +278,52 @@ export class AhorroDetalleComponent {
       this.visibleDeposito = false;
       return;
     }
+  }
+
+  onDelete(ahorroDeposito:AhorroDeposito, event: Event):void{
+    this.confirmationService.close();
+
+    setTimeout(() => {
+      this.confirmationService.confirm({
+          target: event.target as EventTarget,
+          message: '¿Estás seguro de eliminar: "' + ahorroDeposito.descri + '"?',
+          icon: 'pi pi-exclamation-triangle',
+          acceptLabel: 'Eliminar',
+          rejectLabel: 'Cancelar',
+          acceptButtonStyleClass: 'p-button-sm p-button-danger',
+          rejectButtonStyleClass: 'p-button-sm p-button-text',
+          closeOnEscape: true,
+          accept: () => {
+              this.deleteItem(ahorroDeposito.id);
+          },
+          reject: () => {
+          }
+      });
+    }, 200);
+
+  }
+
+  deleteItem(id:number):void{
+    this._ahorroDepositoService.delete(this.idAhorro, id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+          this._messageService.add({
+            severity: 'success',
+            summary: 'Deposito eliminado correctamente',
+            detail: res.message
+          });
+          this.obtenerDetalle();
+          this.reloadTable();
+        },
+        error: (error) => {
+          this._messageService.add({
+            severity: 'error',
+            summary: 'Error al eliminar el deposito',
+            detail: error.error.error
+          });
+        }
+      });
   }
 }

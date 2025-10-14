@@ -63,6 +63,10 @@ export class DisponibleComponent {
     this._balanceUsuarioService.disponible$.subscribe(valor => {
       this.disponible.set(valor);
     });
+
+    this._balanceUsuarioService.ahorro$.subscribe(valor => {
+      this.ahorro.set(valor);
+    });
   }
 
   ngOnDestroy(): void {

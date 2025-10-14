@@ -218,7 +218,21 @@
                   icon="pi pi-pen-to-square"
                   rounded
                   text
-                  severity="info">
+                  severity="info"
+                  pTooltip="Editar">
+                </button>
+                <p-confirmpopup #cp/>
+                <button
+                    *ngIf="!ahorroDeposito.editing"
+                    pButton
+                    pRipple
+                    type="button"
+                    (click)="onDelete(ahorroDeposito, $event)"
+                    icon="pi pi-trash"
+                    rounded
+                    text
+                    severity="warn"
+                    pTooltip="Eliminar">
                 </button>
                 <button
                   *ngIf="ahorroDeposito.editing"

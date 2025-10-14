@@ -5,6 +5,7 @@ import { ApiQuery } from '../models/query.model';
 import { Observable } from 'rxjs';
 import { ResponseApiSimple, ResponseApiType } from '../models/response-api.model';
 import {AhorroDeposito} from '../models/ahorro-deposito.model';
+import { BalanceUsuario } from '../models/balance-usuario.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +24,15 @@ export class AhorroDepositoService {
     return this._httpClient.post<ResponseApiType<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/data/'+idahorro, query);
   }
 
-  create(idAhorro:number, data:Partial<AhorroDeposito>):Observable<ResponseApiSimple<AhorroDeposito>>{
-    return this._httpClient.post<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro, data);
+  create(idAhorro:number, data:Partial<AhorroDeposito>):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.post<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro, data);
   }
 
-  update(idAhorro:number, data:Partial<AhorroDeposito>, idDeposito:number):Observable<ResponseApiSimple<AhorroDeposito>>{
-    return this._httpClient.put<ResponseApiSimple<AhorroDeposito>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito, data);
+  update(idAhorro:number, data:Partial<AhorroDeposito>, idDeposito:number):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.put<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito, data);
+  }
+
+  delete(idAhorro:number, idDeposito:number):Observable<ResponseApiSimple<BalanceUsuario>>{
+    return this._httpClient.delete<ResponseApiSimple<BalanceUsuario>>(this.urlApi+'/api/ahorros/depositos/'+idAhorro+'/'+idDeposito);
   }
 }
