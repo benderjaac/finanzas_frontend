@@ -108,6 +108,7 @@
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
+            <th pSortableColumn="tipo"><p-sortIcon field="tipo" /> Operación</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th>Acciones</th>
         </tr>
@@ -148,6 +149,19 @@
                 (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
+            <th>
+              <p-select 
+                  class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2 w-full"
+                  [options]="[
+                      { label: 'Todos', value: '' },
+                      { label: 'Deposito', value: 'Deposito' },
+                      { label: 'Retiro', value: 'Retiro' }
+                  ]"
+                  placeholder="Operacón"
+                  (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
+                  styleClass="w-full"
+              ></p-select>            
+             </th>
             <th>
                 <input class="border-solid border-2 rounded-full"
                 pInputText
@@ -192,19 +206,44 @@
               </p-cellEditor>
             </td>
             <td>
+              <span
+                [ngClass]="{ 
+                    'text-green-600': ahorroDeposito.tipo === 'Deposito',
+                    'text-red-600': ahorroDeposito.tipo === 'Retiro' }">
+                    {{ ahorroDeposito.tipo }}
+              </span>
+            </td>
+            <td>
               <p-cellEditor>
-                <ng-template #input>
-                  <input
-                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
-                    pInputText type="number" required
-                    [(ngModel)]="ahorroDeposito.monto" />
-                </ng-template>
-                <ng-template #output>
-                  <span class="font-bold" [ngClass]="{'text-red-500': ahorroDeposito.monto < 0, 'text-green-500': ahorroDeposito.monto > 0}">
+                  <ng-template #input>
+                    <p-inputnumber *ngIf="ahorroDeposito.tipo === 'Deposito'"
+                        id="monto"
+                        prefix="$ "
+                        [(ngModel)]="ahorroDeposito.monto"
+                        class="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                        appAutofocus
+                        [min]="0.01"
+                        locale="en-US"
+                        [maxFractionDigits]="2"
+                        />
+                        <p-inputnumber *ngIf="ahorroDeposito.tipo === 'Retiro'"
+                            id="monto"
+                            prefix="$ "
+                            [(ngModel)]="ahorroDeposito.monto"
+                            class="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                            [max]="-0.01"
+                            locale="en-US"
+                            [maxFractionDigits]="2"
+                        />
+                  </ng-template>
+                  <ng-template #output>
+                    <span
+                      class="font-bold"
+                    [ngClass]="{ 'text-green-600': ahorroDeposito.tipo === 'Deposito','text-red-600': ahorroDeposito.tipo === 'Retiro' }">
                       {{ ahorroDeposito.monto }}
-                  </span>                  
-                </ng-template>
-              </p-cellEditor>
+                    </span>
+                  </ng-template>
+                </p-cellEditor>
             </td>
             <td>
               <div class="flex items-center justify-center gap-2">

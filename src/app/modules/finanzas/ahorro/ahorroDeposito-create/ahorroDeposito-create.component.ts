@@ -41,19 +41,20 @@ export class AhorroDepositoCreateComponent {
 
   ngOnInit(){
 
-    this.registerForm = this._fb.group({
-      descri: ['', Validators.required],
-      monto: ['', Validators.required],
-      fecha: [this.hoy, Validators.required],
-    });
-
     if(this.tipoDeposito=='deposito'){
-      this.labelGuardar="Ahorrar";
+      this.labelGuardar="Depositar";
       this.colorSeverity = 'success';
     }else{
       this.labelGuardar="Retirar";
       this.colorSeverity = 'warn';
     }
+
+    this.registerForm = this._fb.group({
+      descri: ['', Validators.required],
+      monto: ['', Validators.required],
+      tipo: [this.tipoDeposito.charAt(0).toUpperCase() + this.tipoDeposito.slice(1), Validators.required],
+      fecha: [this.hoy, Validators.required],
+    });
 
   }
 

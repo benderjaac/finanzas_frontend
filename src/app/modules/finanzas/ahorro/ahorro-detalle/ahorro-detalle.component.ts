@@ -24,10 +24,11 @@ import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDe
 import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { Select } from "primeng/select";
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent],
+  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent, Select],
   templateUrl: './ahorro-detalle.component.html',
   providers: [ConfirmationService, MessageService]
 })
@@ -324,5 +325,9 @@ export class AhorroDetalleComponent {
           });
         }
       });
+  }
+
+  onFilterSelect(event: any, field: string, tipo:string) {
+    this.dt.filter(event, field, tipo);
   }
 }

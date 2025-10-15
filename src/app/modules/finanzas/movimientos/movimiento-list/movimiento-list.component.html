@@ -60,7 +60,7 @@
         <tr>
             <th pSortableColumn="fecha"><p-sortIcon field="fecha" /> Fecha</th>
             <th pSortableColumn="descri"><p-sortIcon field="descri" /> Descripción</th>
-            <th pSortableColumn="tipo"><p-sortIcon field="tipo" /> Movimiento</th>
+            <th pSortableColumn="tipo"><p-sortIcon field="tipo" /> Operación</th>
             <th pSortableColumn="monto"><p-sortIcon field="monto" /> Monto</th>
             <th pSortableColumn="categoria.nombre"><p-sortIcon field="categoria.nombre" /> Categoria</th>
             <th>Acciones</th>
@@ -108,11 +108,9 @@
                 [options]="[
                     { label: 'Todos', value: '' },
                     { label: 'Ingreso', value: 'Ingreso' },
-                    { label: 'Gasto', value: 'Gasto' },
-                    { label: 'Disponible de ahorro', value: 'Disponible de ahorro' },
-                    { label: 'Enviado a ahorro', value: 'Enviado a ahorro' }
+                    { label: 'Gasto', value: 'Gasto' }
                 ]"
-                placeholder="Movimiento"
+                placeholder="Operacón"
                 (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
                 styleClass="w-full"
             ></p-select>            
@@ -171,8 +169,8 @@
             <td>
                 <span
                 [ngClass]="{ 
-                    'text-green-600': (movimiento.tipo === 'Ingreso' || movimiento.tipo === 'Disponible de ahorro'),
-                    'text-red-600': (movimiento.tipo === 'Gasto' || movimiento.tipo === 'Enviado a ahorro') }">
+                    'text-green-600': movimiento.tipo === 'Ingreso',
+                    'text-red-600': movimiento.tipo === 'Gasto' }">
                     {{ movimiento.tipo }}
               </span>
             </td>
