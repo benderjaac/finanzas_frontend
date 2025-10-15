@@ -323,4 +323,8 @@ export class MovimientoListComponent {
       });
   }
 
+  filterByTipo(catCategorias: Categoria[], tipo:string):Categoria[]{
+    return catCategorias.filter(cat => cat.tipo === tipo)
+  }
+
 }

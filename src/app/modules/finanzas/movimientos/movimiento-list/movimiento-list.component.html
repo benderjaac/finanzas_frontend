@@ -214,7 +214,7 @@
                         <p-select
                             id="categoria"
                             [(ngModel)]="movimiento.categoria_id"
-                            [options]="catCategorias"
+                            [options]="filterByTipo(catCategorias, movimiento.tipo)"
                             optionValue="id"
                             optionLabel="nombre"
                             [editable]="true" class="w-full"
