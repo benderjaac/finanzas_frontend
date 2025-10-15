@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Categoria } from 'app/core/models/categoria.model';
 import { ApiSort } from 'app/core/models/query.model';
 import { ResponseApiType } from 'app/core/models/response-api.model';
 import { CategoriaGastoService } from 'app/core/services-api/categoria-gasto.service';
@@ -25,7 +25,7 @@ export class CategoriaListComponent {
   
   @ViewChild('dt') dt!: Table;
 
-  categoriasG : CategoriaGasto[] = [];
+  categoriasG : Categoria[] = [];
   totalRecords = 0;
   
   rowsPerPageOptions: number[] = [];
@@ -66,7 +66,7 @@ export class CategoriaListComponent {
     this._categoriaGastoService.getDataCategorias(ApiQuery)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (res: ResponseApiType<CategoriaGasto>)=>{
+        next: (res: ResponseApiType<Categoria>)=>{
           this.categoriasG = res.result.data;
           this.totalRecords = res.result.pagination.totalItems;
           this.loading = false;          

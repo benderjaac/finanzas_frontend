@@ -5,7 +5,7 @@ import { MovimientoService } from 'app/core/services-api/movimiento.service';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
-import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Categoria } from 'app/core/models/categoria.model';
 import { Select } from 'primeng/select';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
@@ -25,7 +25,7 @@ export class GastoCreateComponent {
 
   registerForm!: FormGroup;
 
-  catCategorias : CategoriaGasto[] = [];
+  catCategorias : Categoria[] = [];
 
   hoy = new Date();
 

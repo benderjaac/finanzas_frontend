@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CategoriaIngreso } from 'app/core/models/categoria-ingreso.model';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
@@ -11,8 +10,8 @@ import { Select } from 'primeng/select';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 import { Subject, takeUntil } from 'rxjs';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
-import { ResponseApiSimple } from 'app/core/models/response-api.model';
 import { MovimientoService } from 'app/core/services-api/movimiento.service';
+import { Categoria } from 'app/core/models/categoria.model';
 
 @Component({
   selector: 'app-ingreso-create',
@@ -26,7 +25,7 @@ export class IngresoCreateComponent {
 
   registerForm!: FormGroup;
 
-  catCategorias : CategoriaIngreso[] = [];
+  catCategorias : Categoria[] = [];
 
   hoy = new Date();
 

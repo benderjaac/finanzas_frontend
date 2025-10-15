@@ -16,7 +16,7 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { FormsModule } from '@angular/forms';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
-import { CategoriaGasto } from 'app/core/models/categoria-gasto.model';
+import { Categoria } from 'app/core/models/categoria.model';
 import { Select } from 'primeng/select';
 import {Ripple} from 'primeng/ripple';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
@@ -53,7 +53,7 @@ export class MovimientoListComponent {
   filtroFechaRango: Date[] = [];
   filterFecharango=false;
 
-  catCategorias : CategoriaGasto[] = [];
+  catCategorias : Categoria[] = [];
 
   clonedItems: { [s: string]: Movimiento } = {};
 
