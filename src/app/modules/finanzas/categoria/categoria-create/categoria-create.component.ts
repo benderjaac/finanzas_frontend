@@ -6,10 +6,12 @@ import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subject, takeUntil } from 'rxjs';
+import { Select } from 'primeng/select';
+import { CatalogoStoreService } from '../../servicios/catalogo-store.service';
 
 @Component({
   selector: 'app-categoria-create',
-  imports: [AutofocusDirective, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
+  imports: [Select, AutofocusDirective, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
   templateUrl: './categoria-create.component.html',
 })
 export class CategoriaCreateComponent {
@@ -22,7 +24,8 @@ export class CategoriaCreateComponent {
 
   constructor(
     private _categoriaGastoService: CategoriaGastoService,
-    private _fb: FormBuilder
+    private _fb: FormBuilder,
+    private _catalogoStoreService:CatalogoStoreService
   ){    
   }
 
@@ -31,6 +34,7 @@ export class CategoriaCreateComponent {
     this.registerForm = this._fb.group({
       nombre: ['', Validators.required],
       descri: [''],
+      tipo: ['', Validators.required],
       color: [''],
       icon: [''],
     });
@@ -47,6 +51,12 @@ export class CategoriaCreateComponent {
         .subscribe({
           
           next: (res)=>{
+            this._catalogoStoreService.clearCatalogo('categorias');
+            if(this.registerForm.get('tipo')?.value=='Ingreso'){
+              this._catalogoStoreService.clearCatalogo('categorias_ingresos');
+            }else{
+              this._catalogoStoreService.clearCatalogo('categorias_gastos');
+            }
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },
