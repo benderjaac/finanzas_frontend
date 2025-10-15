@@ -42,8 +42,9 @@ export interface ResponseAuth{
 }
 
 export interface CatalogoMap {
+  categorias: ResponseApiCat<CategoriaGasto>;
   categorias_gastos: ResponseApiCat<CategoriaGasto>;
-  categorias_ingresos: ResponseApiCat<CategoriaIngreso>;
+  categorias_ingresos: ResponseApiCat<CategoriaGasto>;
   ahorros: ResponseApiCat<Ahorro>;
   // otros catálogos...
 }

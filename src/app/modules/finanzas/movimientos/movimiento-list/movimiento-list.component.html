@@ -26,20 +26,20 @@
             <span class="text-xl font-bold">Movimientos</span>
             <button
                 pButton
-                label="Agregar gasto"
+                label="Nuevo gasto"
                 (click)="addGasto()"
                 icon="pi pi-cart-plus"
                 class="w-40"
-                severity="info" text>
+                severity="warn" text>
 
             </button>
             <button
               pButton
-              label="Agregar ingreso"
+              label="Nuevo ingreso"
               (click)="addIngreso()"
-              icon="pi pi-cart-plus"
+              icon="pi pi-check"
               class="w-40"
-              severity="info" text>
+              severity="success" text>
 
             </button>
             <div>
@@ -321,20 +321,18 @@
     <app-gasto-create *ngIf="visibleAddGasto"
         (msjEvent)="mostrarMensaje($event)"
         (cerrarDialog)="closeDialog($event)">
-
     </app-gasto-create>
 </p-dialog>
 
 <p-dialog
-  [(visible)]="visibleAddIngreso"
-  [modal]="true"
-  [draggable]="true"
-  styleClass="w-160 min-w-80 h-130"
-  contentStyleClass="dialog-content-scroll"
-  [resizable]="false">
-  <app-ingreso-create *ngIf="visibleAddIngreso"
-                      (msjEvent)="mostrarMensaje($event)"
-                      (cerrarDialog)="closeDialog($event)">
-
-  </app-ingreso-create>
+    [(visible)]="visibleAddIngreso"
+    [modal]="true"
+    [draggable]="true"
+    styleClass="w-160 min-w-80 h-130"
+    contentStyleClass="dialog-content-scroll"
+    [resizable]="false">
+    <app-ingreso-create *ngIf="visibleAddIngreso"
+        (msjEvent)="mostrarMensaje($event)"
+        (cerrarDialog)="closeDialog($event)">
+    </app-ingreso-create>
 </p-dialog>

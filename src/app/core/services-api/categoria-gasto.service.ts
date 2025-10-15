@@ -26,6 +26,14 @@ export class CategoriaGastoService {
     return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/catalogo');
   }
 
+  getDataCategoriasGastosCat():Observable<ResponseApiCat<CategoriaGasto>>{
+    return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/catalogo/gastos');
+  }
+
+  getDataCategoriasIngresosCat():Observable<ResponseApiCat<CategoriaGasto>>{
+    return this._httpClient.get<ResponseApiCat<CategoriaGasto>>(this.urlApi+'/api/categoria/catalogo/ingresos');
+  }
+
   createCategoria(data: Partial<CategoriaGasto>):Observable<ResponseApiSimple<CategoriaGasto>>{
     return this._httpClient.post<ResponseApiSimple<CategoriaGasto>>(this.urlApi+'/api/categoria', data);
   }

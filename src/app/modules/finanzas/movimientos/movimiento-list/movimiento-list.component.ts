@@ -73,7 +73,7 @@ export class MovimientoListComponent {
   }
 
   ngOnInit():void{
-    this._catalogoStoreService.getCatalogo('categorias_gastos')
+    this._catalogoStoreService.getCatalogo('categorias')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (resp) => {
