@@ -55,9 +55,10 @@
         <button
             pButton
             type="submit"
-            label="Guardar"
+            [label]="labelGuardar"
             class="w-full"
             [disabled]="registerForm.invalid"
+            [severity]="colorSeverity"
         ></button>
     </div>
     

@@ -251,7 +251,7 @@
             <td>
                 <div class="flex items-center justify-center gap-2">
                     <button
-                        *ngIf="!movimiento.editing"
+                        *ngIf="!movimiento.editing && movimiento.categoria_id!=108"
                         pButton
                         pRipple
                         type="button"
@@ -265,7 +265,7 @@
                     </button>
                     <p-confirmpopup #cp/>
                     <button
-                        *ngIf="!movimiento.editing"
+                        *ngIf="!movimiento.editing && movimiento.categoria_id!=108"
                         pButton
                         pRipple
                         type="button"

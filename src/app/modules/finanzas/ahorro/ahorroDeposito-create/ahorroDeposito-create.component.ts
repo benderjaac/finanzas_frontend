@@ -9,6 +9,8 @@ import { DatePickerModule } from 'primeng/datepicker';
 import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subject, takeUntil } from 'rxjs';
+// Local alias to match PrimeNG Button severities
+type ButtonSeverity = 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'danger' | 'contrast';
 
 @Component({
   selector: 'app-ahorro-deposito-create',
@@ -25,6 +27,8 @@ export class AhorroDepositoCreateComponent {
   registerForm!: FormGroup;
 
   hoy = new Date();
+  labelGuardar="Guardar";
+  colorSeverity: ButtonSeverity = 'info';
 
   destroy$ = new Subject<void>();
 
@@ -42,6 +46,14 @@ export class AhorroDepositoCreateComponent {
       monto: ['', Validators.required],
       fecha: [this.hoy, Validators.required],
     });
+
+    if(this.tipoDeposito=='deposito'){
+      this.labelGuardar="Ahorrar";
+      this.colorSeverity = 'success';
+    }else{
+      this.labelGuardar="Retirar";
+      this.colorSeverity = 'warn';
+    }
 
   }
 
