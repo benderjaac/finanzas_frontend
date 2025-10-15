@@ -54,11 +54,9 @@
                 </ng-template>
                 <ng-template let-categoria #item>
                     <div class="flex items-center gap-2">
-                        <div
-                            class="rounded-full px-2 text-shadow-md"
-                            [ngClass]="categoria.color">
-                            <i *ngIf="categoria.icon!=null" [class]="categoria.icon"></i>
-                            {{ categoria.nombre }}</div>
+                        <app-categoria-label
+                            [categoria]="categoria"
+                        /> 
                     </div>
                 </ng-template>
                 <ng-template #dropdownicon>

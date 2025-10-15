@@ -24,10 +24,11 @@ import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import {IngresoCreateComponent} from '../ingreso-create/ingreso-create.component';
 import { DataView } from "primeng/dataview";
+import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-label.component";
 
 @Component({
   selector: 'app-movimiento-list',
-  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent, DataView],
+  imports: [ConfirmPopupModule, TooltipModule, Select, InputNumberModule, FormsModule, DatePickerModule, GastoCreateComponent, Dialog, Toast, TableModule, CommonModule, ButtonModule, Ripple, IngresoCreateComponent, DataView, CategoriaLabelComponent],
   templateUrl: './movimiento-list.component.html',
   providers: [ConfirmationService, MessageService]
 })

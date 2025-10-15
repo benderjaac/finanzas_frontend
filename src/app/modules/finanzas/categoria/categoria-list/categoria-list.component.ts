@@ -13,10 +13,11 @@ import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
 import { CategoriaCreateComponent } from '../categoria-create/categoria-create.component';
 import { Select } from "primeng/select";
+import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-label.component";
 
 @Component({
   selector: 'app-categoria-list',
-  imports: [Toast, TableModule, CategoriaCreateComponent, Dialog, CommonModule, ButtonModule, Select],
+  imports: [Toast, TableModule, CategoriaCreateComponent, Dialog, CommonModule, ButtonModule, Select, CategoriaLabelComponent],
   templateUrl: './categoria-list.component.html',
   standalone: true,
   providers: [MessageService]

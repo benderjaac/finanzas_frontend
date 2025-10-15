@@ -12,10 +12,11 @@ import { InputNumber } from 'primeng/inputnumber';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { Subject, takeUntil } from 'rxjs';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
+import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-label.component";
 
 @Component({
   selector: 'app-gasto-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule, CategoriaLabelComponent],
   standalone: true,
   templateUrl: './gasto-create.component.html',
 })

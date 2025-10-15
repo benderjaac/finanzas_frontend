@@ -12,10 +12,11 @@ import { Subject, takeUntil } from 'rxjs';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 import { MovimientoService } from 'app/core/services-api/movimiento.service';
 import { Categoria } from 'app/core/models/categoria.model';
+import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-label.component";
 
 @Component({
   selector: 'app-ingreso-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule, CategoriaLabelComponent],
   standalone: true,
   templateUrl: './ingreso-create.component.html',
 })

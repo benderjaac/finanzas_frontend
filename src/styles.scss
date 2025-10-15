@@ -4,25 +4,3 @@
 @use "primeicons/primeicons.css";
 @plugin "tailwindcss-primeui";
 @layer tailwind, primeng;
-
-//clases genericas
-/*.input-color {
-  @apply bg-gray-50 text-gray-900;
-}
-
-.label-color {
-  @apply text-gray-900;
-}
-
-.p-datatable,
-.p-datatable table,
-.p-datatable th,
-.p-datatable td {
-  @apply bg-gray-100 text-gray-600;
-}
-
-.p-datatable-header,
-.p-datatable-footer,
-.p-paginator {
-  @apply bg-gray-200 text-gray-800;
-}*/
