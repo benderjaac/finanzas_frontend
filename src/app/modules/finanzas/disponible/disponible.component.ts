@@ -48,9 +48,7 @@ export class DisponibleComponent {
 
     this._balanceUsuarioService.getDataBalanceUsuario().subscribe({
       next: (res) => {
-        this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
-        this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
-        this._balanceUsuarioService.setTotal(res.result.balanceTotal);
+        this._balanceUsuarioService.setBalance(res.result);
         this.disponible.set(res.result.montoDisponible);
         this.ahorro.set(res.result.montoAhorrado);
         this.total.set(res.result.balanceTotal);
@@ -66,6 +64,10 @@ export class DisponibleComponent {
 
     this._balanceUsuarioService.ahorro$.subscribe(valor => {
       this.ahorro.set(valor);
+    });
+
+    this._balanceUsuarioService.total$.subscribe(valor => {
+      this.total.set(valor);
     });
   }
 

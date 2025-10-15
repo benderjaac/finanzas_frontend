@@ -225,7 +225,7 @@ export class MovimientoListComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+          this._balanceUsuarioService.setBalance(res.result);
           this._messageService.add({
             severity: 'success',
             summary: 'Movimiento actualizado correctamente',
@@ -304,7 +304,7 @@ export class MovimientoListComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+          this._balanceUsuarioService.setBalance(res.result);
           this._messageService.add({
             severity: 'success',
             summary: 'Movimiento eliminado correctamente',

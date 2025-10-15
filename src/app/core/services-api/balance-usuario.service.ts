@@ -25,17 +25,11 @@ export class BalanceUsuarioService {
   constructor() {
     this.urlApi=environment.apiUrl;
   }
-
-  setDisponible(valor: number) {
-    this.disponibleSubject.next(valor);
-  }
-
-  setAhorro(valor: number) {
-    this.ahorroSubject.next(valor);
-  }
-
-  setTotal(valor: number) {
-    this.totalSubject.next(valor);
+ 
+  setBalance(balance: BalanceUsuario):void{
+    this.disponibleSubject.next(balance.montoDisponible);
+    this.ahorroSubject.next(balance.montoAhorrado);
+    this.totalSubject.next(balance.balanceTotal);
   }
   
   getDataBalanceUsuario():Observable<ResponseApiSimple<BalanceUsuario>>{

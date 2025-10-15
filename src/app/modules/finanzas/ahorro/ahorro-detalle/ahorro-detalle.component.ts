@@ -17,7 +17,6 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
-import {Movimiento} from '../../../../core/models/movimiento.model';
 import {Ripple} from 'primeng/ripple';
 import { Dialog } from "primeng/dialog";
 import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
@@ -213,7 +212,7 @@ export class AhorroDetalleComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+          this._balanceUsuarioService.setBalance(res.result);
           this._messageService.add({
             severity: 'success',
             summary: 'Movimiento actualizado correctamente',
@@ -308,7 +307,7 @@ export class AhorroDetalleComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (res) => {
-          this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+          this._balanceUsuarioService.setBalance(res.result);
           this._messageService.add({
             severity: 'success',
             summary: 'Deposito eliminado correctamente',

@@ -73,7 +73,7 @@ export class IngresoCreateComponent {
         .pipe(takeUntil(this.destroy$))
         .subscribe({        
           next: (res)=>{
-            this._balanceUsuarioService.setDisponible(res.result.montoDisponible);
+            this._balanceUsuarioService.setBalance(res.result);
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },

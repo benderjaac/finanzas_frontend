@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { AhorroDepositoService } from 'app/core/services-api/ahorroDeposito.service';
 import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
@@ -58,7 +57,7 @@ export class AhorroDepositoCreateComponent {
         .subscribe({
 
           next: (res)=>{
-            this._balanceUsuarioService.setAhorro(res.result.montoAhorrado);
+            this._balanceUsuarioService.setBalance(res.result);
             this.msjEvent.emit({tipo:'success', mensaje:res.message});
             this.cerrarDialog.emit(true);
           },

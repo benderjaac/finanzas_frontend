@@ -7,7 +7,6 @@ import { Subject, takeUntil } from 'rxjs';
   selector: 'app-resumen',
   imports: [],
   templateUrl: './resumen.component.html',
-  styleUrl: './resumen.component.scss'
 })
 export class ResumenComponent {
 
@@ -31,7 +30,7 @@ export class ResumenComponent {
       .subscribe({
         next: (response) => {
           this.balanceUsuario = response.result;
-          this._balanceUsuarioService.setDisponible(this.balanceUsuario.montoDisponible);
+          this._balanceUsuarioService.setBalance(this.balanceUsuario);
         },
         error: (error) => {
           console.error('Error al cargar los datos del balance de usuario:', error);
