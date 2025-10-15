@@ -36,7 +36,7 @@ export class GastoCreateComponent {
     private _movimientosService: MovimientoService,
     private _fb: FormBuilder,
     private _catalogoStoreService: CatalogoStoreService,
-    private _balanceUsuarioService: BalanceUsuarioService
+    private _balanceUsuarioService: BalanceUsuarioService,
   ){
   }
 
@@ -50,6 +50,10 @@ export class GastoCreateComponent {
       fecha: [this.hoy, Validators.required],
     });
 
+    this.getCatalogo();
+  }
+
+  getCatalogo():void{
     this._catalogoStoreService.getCatalogo('categorias_gastos')
       .pipe(takeUntil(this.destroy$))
       .subscribe({
@@ -60,8 +64,6 @@ export class GastoCreateComponent {
           console.error(error);
         }
       });
-
-
   }
 
   onSubmit() {
