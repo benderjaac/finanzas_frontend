@@ -216,6 +216,7 @@ export class MovimientoListComponent {
 
     const values = {
       monto: movimiento.monto,
+      tipo: movimiento.tipo,
       descri: movimiento.descri,
       categoriaId: movimiento.categoria_id,
       fecha: movimiento.fecha,
