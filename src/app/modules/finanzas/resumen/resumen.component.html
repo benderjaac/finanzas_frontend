@@ -35,6 +35,15 @@
     </div>
   </div>
 </div>
+<div class="grid grid-cols-4 gap-4 mt-6">
+  <div class="col-span-6 rounded shadow p-4">
+    <!-- Contenido del elemento principal (3/4) -->
+    <h2 class="font-bold text-xl tracking-tight text-blue-500 mb-1">Gastos acumulado por mes</h2>
+    <div class="card">
+      <p-chart type="line" [data]="DataGastosAcumulados" [options]="OptionsGastosAcumulados" />
+    </div>
+  </div>
+</div>
 
 
 
