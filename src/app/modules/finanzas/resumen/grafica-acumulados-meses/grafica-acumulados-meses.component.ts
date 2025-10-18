@@ -1,28 +1,20 @@
 import {ChangeDetectorRef, Component, inject, PLATFORM_ID} from '@angular/core';
-import { BalanceUsuario } from 'app/core/models/balance-usuario.model';
-import { BalanceUsuarioService } from 'app/core/services-api/balance-usuario.service';
-import { Subject, takeUntil } from 'rxjs';
-import { ChartModule } from 'primeng/chart';
-import {CurrencyPipe, DatePipe, isPlatformBrowser} from '@angular/common';
-import { EstadisticasService } from 'app/core/services-api/estadisticas.service';
-import { TotalMeses } from 'app/core/models/estadisticas.model';
-import { DateFormatsService } from '../servicios/DateFormats.service';
-import { Movimiento } from 'app/core/models/movimiento.model';
+import {Movimiento} from '../../../../core/models/movimiento.model';
+import {Subject, takeUntil} from 'rxjs';
+import {EstadisticasService} from '../../../../core/services-api/estadisticas.service';
+import {DateFormatsService} from '../../servicios/DateFormats.service';
+import {isPlatformBrowser} from '@angular/common';
+import {UIChart} from 'primeng/chart';
 
 @Component({
-  selector: 'app-resumen',
-  imports: [ChartModule, CurrencyPipe, DatePipe],
+  selector: 'app-grafica-acumulados-meses',
+  imports: [
+    UIChart
+  ],
   standalone: true,
-  templateUrl: './resumen.component.html',
+  templateUrl: './grafica-acumulados-meses.component.html',
 })
-export class ResumenComponent {
-
-  balanceUsuario: BalanceUsuario;
-
-  DataTotalMesesAPI:TotalMeses[]=[];
-  DataTotalMeses:any=undefined;
-  OptionsTotalMeses:any=undefined;
-
+export class GraficaAcumuladosMesesComponent {
   DataGastosAcumuladosAPI:Movimiento[]=[];
   DataGastosAcumulados:any=undefined;
   OptionsGastosAcumulados:any=undefined;
@@ -32,29 +24,14 @@ export class ResumenComponent {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private _balanceUsuarioService: BalanceUsuarioService,
     private cd: ChangeDetectorRef,
     private _estadisticasService: EstadisticasService,
     private _dateFormatsService:DateFormatsService
   ) {
-    this.balanceUsuario = undefined!;
-   }
+  }
 
-  ngOnInit(): void {
-    this.cargarDataBalanceUsuario();
-
-    this._estadisticasService.getTotalMeses().pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.DataTotalMesesAPI = response.result.data;
-          this.initChartTotalesMes();
-        },
-        error: (error) => {
-          console.error('Error al cargar los datos del total por meses:', error);
-        }
-      });    
-
-      this._estadisticasService.getGastosAcumulados().pipe(takeUntil(this.destroy$))
+  ngOnInit():void{
+    this._estadisticasService.getGastosAcumulados().pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           this.DataGastosAcumuladosAPI = response.result.data;
@@ -63,90 +40,7 @@ export class ResumenComponent {
         error: (error) => {
           console.error('Error al cargar los datos del total por meses:', error);
         }
-      });  
-  }
-
-  cargarDataBalanceUsuario(): void {
-    this._balanceUsuarioService.getDataBalanceUsuario()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.balanceUsuario = response.result;
-          this._balanceUsuarioService.setBalance(this.balanceUsuario);
-        },
-        error: (error) => {
-          console.error('Error al cargar los datos del balance de usuario:', error);
-        }
       });
-  }
-  initChartTotalesMes() {
-    if (isPlatformBrowser(this.platformId)) {
-      const documentStyle = getComputedStyle(document.documentElement);
-      const textColor = documentStyle.getPropertyValue('--p-text-color');
-      const textColorSecondary = documentStyle.getPropertyValue('--p-text-muted-color');
-      const surfaceBorder = documentStyle.getPropertyValue('--p-content-border-color');
-
-      const labels = this.DataTotalMesesAPI.map(item => 
-        this._dateFormatsService.formatoMesAnio(item.mes));
-      const ingresos = this.DataTotalMesesAPI.map(item => item.totalIngresos);
-      const gastos = this.DataTotalMesesAPI.map(item => item.totalGastos*-1);
-
-      this.DataTotalMeses = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'Ingresos',
-            data: ingresos,
-            fill: true,
-            backgroundColor: [
-              'rgba(9, 105, 22, 0.2)'
-            ],
-            borderColor: ['rgb(5, 46, 12)'],
-            borderWidth: 1,
-          },
-          {
-            label: 'Gastos',
-            data: gastos,
-            fill: true,
-            backgroundColor: [
-              'rgba(223, 94, 20, 0.2)'
-            ],
-            borderColor: ['rgb(235, 49, 16)'],
-            borderWidth: 1,
-          },
-        ],
-      };
-
-      this.OptionsTotalMeses = {
-        plugins: {
-          legend: {
-            labels: {
-              color: textColor,
-            },
-          },
-        },
-        scales: {
-          x: {
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-            },
-          },
-          y: {
-            beginAtZero: true,
-            ticks: {
-              color: textColorSecondary,
-            },
-            grid: {
-              color: surfaceBorder,
-            },
-          },
-        },
-      };
-      this.cd.markForCheck()
-    }
   }
 
   initChartGastosAcumulados() {
@@ -169,10 +63,10 @@ export class ResumenComponent {
       const preanterior = preanteriorMes ? this.obtenerAcumuladoPorMes(preanteriorMes) : Array(31).fill(0);
       const anterior = anteriorMes ? this.obtenerAcumuladoPorMes(anteriorMes) : Array(31).fill(0);
       const actual = actualMes ? this.obtenerAcumuladoPorMes(actualMes) : Array(31).fill(0);
-      
+
       this.DataGastosAcumuladosAPI
-      
-      
+
+
       this.DataGastosAcumulados = {
         labels: labels,
         datasets: [
@@ -243,21 +137,21 @@ export class ResumenComponent {
 
   obtenerAcumuladoPorMes(mes: string): number[] {
     const arr = Array(31).fill(0);
-  
+
     // Filtrar datos del mes
     const movimientosMes = this.DataGastosAcumuladosAPI.filter(d => d.fecha.startsWith(mes));
-  
+
     // Sumar día por día
     for (const mov of movimientosMes) {
       const dia = parseInt(mov.fecha.slice(8, 10)); // '2025-07-01' → 1
       arr[dia - 1] += mov.monto; // Sumar monto del día
     }
-  
+
     // Convertir a acumulado progresivo
     for (let i = 1; i < arr.length; i++) {
       arr[i] += arr[i - 1];
     }
-  
+
     return arr;
   }
 

@@ -66,7 +66,7 @@ export const routes: Routes = [
                         ]
                     },
                     {path: 'categoria', loadComponent: () => import('app/modules/finanzas/categoria/categoria-list/categoria-list.component').then(m => m.CategoriaListComponent)},
-                    {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen.component').then(m => m.ResumenComponent)}
+                    {path:'resumen', loadComponent: () => import('app/modules/finanzas/resumen/resumen/resumen.component').then(m => m.ResumenComponent)}
                 ]
             },
             {path: '404-not-found', loadComponent: () => import('app/modules/not-found/not-found.component').then(m => m.NotFoundComponent)},
