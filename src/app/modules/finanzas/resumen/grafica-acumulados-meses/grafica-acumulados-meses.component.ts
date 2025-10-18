@@ -1,8 +1,7 @@
-import {ChangeDetectorRef, Component, inject, PLATFORM_ID} from '@angular/core';
+import {ChangeDetectorRef, Component, effect, inject, PLATFORM_ID} from '@angular/core';
 import {Movimiento} from '../../../../core/models/movimiento.model';
 import {Subject, takeUntil} from 'rxjs';
 import {EstadisticasService} from '../../../../core/services-api/estadisticas.service';
-import {DateFormatsService} from '../../servicios/DateFormats.service';
 import {isPlatformBrowser} from '@angular/common';
 import {UIChart} from 'primeng/chart';
 
@@ -26,7 +25,6 @@ export class GraficaAcumuladosMesesComponent {
   constructor(
     private cd: ChangeDetectorRef,
     private _estadisticasService: EstadisticasService,
-    private _dateFormatsService:DateFormatsService
   ) {
   }
 
@@ -41,6 +39,11 @@ export class GraficaAcumuladosMesesComponent {
           console.error('Error al cargar los datos del total por meses:', error);
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   initChartGastosAcumulados() {
