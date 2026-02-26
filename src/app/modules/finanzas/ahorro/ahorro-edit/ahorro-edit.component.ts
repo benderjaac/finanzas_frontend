@@ -8,23 +8,11 @@ import {ButtonDirective, ButtonModule} from 'primeng/button';
 import {DatePicker, DatePickerModule} from 'primeng/datepicker';
 import {InputNumber} from 'primeng/inputnumber';
 import {InputText, InputTextModule} from 'primeng/inputtext';
-import {CommonModule, NgIf} from '@angular/common';
+
 
 @Component({
   selector: 'app-ahorro-edit',
-  imports: [DatePickerModule,
-    InputTextModule,
-    ButtonModule,
-    CommonModule,
-    AutofocusDirective,
-    ButtonDirective,
-    DatePicker,
-    FormsModule,
-    InputNumber,
-    InputText,
-    NgIf,
-    ReactiveFormsModule
-  ],
+  imports: [DatePickerModule, InputTextModule, ButtonModule, AutofocusDirective, ButtonDirective, DatePicker, FormsModule, InputNumber, InputText, ReactiveFormsModule],
   templateUrl: './ahorro-edit.component.html',
 })
 export class AhorroEditComponent {

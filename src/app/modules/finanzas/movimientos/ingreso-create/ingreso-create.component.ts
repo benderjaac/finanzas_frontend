@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
@@ -16,7 +16,7 @@ import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-
 
 @Component({
   selector: 'app-ingreso-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule, CategoriaLabelComponent],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CategoriaLabelComponent],
   standalone: true,
   templateUrl: './ingreso-create.component.html',
 })

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AhorroDepositoService } from 'app/core/services-api/ahorroDeposito.service';
@@ -14,7 +14,7 @@ type ButtonSeverity = 'secondary' | 'success' | 'info' | 'warn' | 'help' | 'dang
 
 @Component({
   selector: 'app-ahorro-deposito-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule],
   templateUrl: './ahorroDeposito-create.component.html'
 })
 export class AhorroDepositoCreateComponent {

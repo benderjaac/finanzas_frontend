@@ -12,52 +12,58 @@
         formControlName="descri"
         class="w-full"
         appAutofocus
-      />
-      <small *ngIf="editingForm.get('descri')?.hasError('required') && editingForm.get('descri')?.touched" class="text-red-500">
-        Ingrese nombre
-      </small>
-    </div>
+        />
+        @if (editingForm.get('descri')?.hasError('required') && editingForm.get('descri')?.touched) {
+          <small class="text-red-500">
+            Ingrese nombre
+          </small>
+        }
+      </div>
 
-    <div>
-      <label for="monto_meta" class="block text-sm font-medium text-color mb-1">Monto meta:</label>
-      <p-inputnumber
-        inputId="integeronly"
-        id="monto_meta"
-        prefix="$ "
-        formControlName="monto_meta"
-        class="w-full"
-      />
-      <small *ngIf="editingForm.get('monto_meta')?.hasError('required') && editingForm.get('monto_meta')?.touched" class="text-red-500">
-        Ingrese el monto meta
-      </small>
-    </div>
+      <div>
+        <label for="monto_meta" class="block text-sm font-medium text-color mb-1">Monto meta:</label>
+        <p-inputnumber
+          inputId="integeronly"
+          id="monto_meta"
+          prefix="$ "
+          formControlName="monto_meta"
+          class="w-full"
+          />
+          @if (editingForm.get('monto_meta')?.hasError('required') && editingForm.get('monto_meta')?.touched) {
+            <small class="text-red-500">
+              Ingrese el monto meta
+            </small>
+          }
+        </div>
 
-    <div  class="mt-6">
-      <label for="fecha_inicio" class="block text-sm font-medium text-color mb-1">Fecha de inicio</label>
+        <div  class="mt-6">
+          <label for="fecha_inicio" class="block text-sm font-medium text-color mb-1">Fecha de inicio</label>
 
-      <p-datepicker
-        class="w-full"
-        id="fecha_inicio"
-        [showIcon]="true"
-        formControlName="fecha_inicio"
-        dateFormat="yy-mm-dd"
-        [readonlyInput]="true"
-      ></p-datepicker>
-      <small *ngIf="editingForm.get('fecha_inicio')?.hasError('required') && editingForm.get('fecha_inicio')?.touched" class="text-red-500">
-        Ingrese fecha de inicio
-      </small>
+          <p-datepicker
+            class="w-full"
+            id="fecha_inicio"
+            [showIcon]="true"
+            formControlName="fecha_inicio"
+            dateFormat="yy-mm-dd"
+            [readonlyInput]="true"
+          ></p-datepicker>
+          @if (editingForm.get('fecha_inicio')?.hasError('required') && editingForm.get('fecha_inicio')?.touched) {
+            <small class="text-red-500">
+              Ingrese fecha de inicio
+            </small>
+          }
 
-    </div>
-  </div>
+        </div>
+      </div>
 
-  <div>
-    <button
-      pButton
-      type="submit"
-      label="Guardar"
-      class="w-full"
-      [disabled]="editingForm.invalid"
-    ></button>
-  </div>
+      <div>
+        <button
+          pButton
+          type="submit"
+          label="Guardar"
+          class="w-full"
+          [disabled]="editingForm.invalid"
+        ></button>
+      </div>
 
-</form>
+    </form>

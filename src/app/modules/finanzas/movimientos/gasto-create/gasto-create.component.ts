@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MovimientoService } from 'app/core/services-api/movimiento.service';
@@ -16,7 +16,7 @@ import { CategoriaLabelComponent } from "../../shared/categoria-label/categoria-
 
 @Component({
   selector: 'app-gasto-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule, CategoriaLabelComponent],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, Select, ReactiveFormsModule, InputTextModule, ButtonModule, CategoriaLabelComponent],
   standalone: true,
   templateUrl: './gasto-create.component.html',
 })

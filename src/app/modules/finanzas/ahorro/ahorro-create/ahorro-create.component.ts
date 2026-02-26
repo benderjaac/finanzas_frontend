@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AhorroService } from 'app/core/services-api/ahorro.service';
@@ -11,7 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ahorro-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule, CommonModule],
+  imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule],
   templateUrl: './ahorro-create.component.html'
 })
 /**

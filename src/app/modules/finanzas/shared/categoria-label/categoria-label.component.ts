@@ -10,8 +10,10 @@ import { Movimiento } from 'app/core/models/movimiento.model';
   <div
     class="rounded-md px-2 text-shadow-md"
     [ngClass]="_categoria()?.color">
-    <i *ngIf="_categoria()?.icon!=null" [class]="_categoria()?.icon"></i>
-    {{ _categoria()?.nombre }}</div>
+    @if (_categoria()?.icon!=null) {
+      <i [class]="_categoria()?.icon"></i>
+    }
+  {{ _categoria()?.nombre }}</div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
