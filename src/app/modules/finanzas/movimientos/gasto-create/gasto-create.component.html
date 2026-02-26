@@ -46,7 +46,9 @@
             formControlName="categoriaId"
             optionLabel="nombre"
             placeholder="Seleccione categoria"
-            [editable]="true" class="w-full">
+            [editable]="true" class="w-full"
+            appendTo="body"
+          >
 
             <ng-template #selectedItem let-selectedOption>
               @if (selectedOption) {

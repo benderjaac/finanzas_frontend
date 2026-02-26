@@ -43,6 +43,7 @@
                 ]"
             placeholder="Seleccione tipo"
             class="w-full"
+            appendTo="body"
           ></p-select>
           @if (registerForm.get('tipo')?.hasError('required') && registerForm.get('tipo')?.touched) {
             <small class="text-red-500">
@@ -114,6 +115,7 @@
             class="w-full"
             [filter]="true"
             showClear="true"
+            appendTo="body"
             >
             <ng-template let-option pTemplate="item">
               <i class="pi {{option.value}} mr-2"></i>

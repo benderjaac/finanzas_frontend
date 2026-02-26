@@ -150,7 +150,7 @@
                 />
             </th>
             <th>
-              <p-select 
+              <p-select
                   class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2 w-full"
                   [options]="[
                       { label: 'Todos', value: '' },
@@ -159,8 +159,8 @@
                   ]"
                   placeholder="Operacón"
                   (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
-                  styleClass="w-full"
-              ></p-select>            
+                  appendTo="body"
+              ></p-select>
              </th>
             <th>
                 <input class="border-solid border-2 rounded-full"
@@ -207,7 +207,7 @@
             </td>
             <td>
               <span
-                [ngClass]="{ 
+                [ngClass]="{
                     'text-green-600': ahorroDeposito.tipo === 'Deposito',
                     'text-red-600': ahorroDeposito.tipo === 'Retiro' }">
                     {{ ahorroDeposito.tipo }}

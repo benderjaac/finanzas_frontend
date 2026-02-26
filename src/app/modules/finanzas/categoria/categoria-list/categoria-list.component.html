@@ -62,11 +62,11 @@
                     [options]="[
                         { label: 'Todos', value: '' },
                         { label: 'Ingreso', value: 'Ingreso' },
-                        { label: 'Gasto', value: 'Gasto' }                        
+                        { label: 'Gasto', value: 'Gasto' }
                     ]"
                     placeholder="Movimiento"
                     (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
-                    styleClass="w-full"
+                    appendTo="body"
                   ></p-select>
                 </th>
                 <th>
@@ -87,7 +87,7 @@
                     ]"
                       placeholder="Estado"
                       (onChange)="onFilterSelect($event.value, 'visible', 'equals')"
-                      styleClass="w-full"
+                      appendTo="body"
                     ></p-select>
                   </th>
                 </tr>

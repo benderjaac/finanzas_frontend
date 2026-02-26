@@ -103,7 +103,7 @@
                 />
             </th>
            <th>
-            <p-select 
+            <p-select
                 class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2 w-full"
                 [options]="[
                     { label: 'Todos', value: '' },
@@ -112,8 +112,8 @@
                 ]"
                 placeholder="Operacón"
                 (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
-                styleClass="w-full"
-            ></p-select>            
+                appendTo="body"
+            ></p-select>
            </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
@@ -168,7 +168,7 @@
             </td>
             <td>
                 <span
-                [ngClass]="{ 
+                [ngClass]="{
                     'text-green-600': movimiento.tipo === 'Ingreso',
                     'text-red-600': movimiento.tipo === 'Gasto' }">
                     {{ movimiento.tipo }}
@@ -216,7 +216,9 @@
                             optionValue="id"
                             optionLabel="nombre"
                             [editable]="true" class="w-full"
-                            (onChange)="onCategoriaChange($event, movimiento)">
+                            (onChange)="onCategoriaChange($event, movimiento)"
+                            appendTo="body"
+                        >
 
                             <ng-template #selectedItem let-selectedOption>
                                 <div class="flex items-center gap-2" *ngIf="selectedOption">
@@ -231,7 +233,7 @@
                                 <div class="flex items-center gap-2">
                                     <app-categoria-label
                                         [categoria]="categoria"
-                                    />                                    
+                                    />
                                 </div>
                             </ng-template>
                             <ng-template #dropdownicon>
@@ -242,7 +244,7 @@
                     <ng-template #output>
                         <app-categoria-label
                             [movimiento]="movimiento"
-                        />                          
+                        />
                     </ng-template>
                 </p-cellEditor>
             </td>
