@@ -69,20 +69,20 @@
          <tr *ngIf="showFilters">
             <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
-                    <p-datepicker
+                    <p-datePicker
                         [showIcon]="true"
                         [placeholder]="'Fecha exacta'"
                         (onSelect)="onFilterExactDate($event, 'fecha')"
                         dateFormat="yy-mm-dd"
                         [readonlyInput]="true"
                         appendTo="body"
-                    ></p-datepicker>
+                    ></p-datePicker>
                     <br>
                     <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>
                 </div>
 
                 <div *ngIf="filterFecharango">
-                    <p-datepicker
+                    <p-datePicker
                         [showIcon]="true"
                         [placeholder]="'Rango de fecha'"
                         [(ngModel)]="filtroFechaRango"
@@ -91,7 +91,7 @@
                         [readonlyInput]="true"
                         selectionMode="range"
                         appendTo="body"
-                    ></p-datepicker>
+                    ></p-datePicker>
                     <br>
                     <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
                 </div>
@@ -141,7 +141,7 @@
             <td class="min-w-50">
                 <p-cellEditor>
                     <ng-template #input>
-                        <p-datepicker
+                        <p-datePicker
                             class="w-full"
                             id="fecha"
                             [showIcon]="true"
@@ -149,7 +149,7 @@
                             [readonlyInput]="true"
                             [(ngModel)]="movimiento.fecha"
                             appendTo="body"
-                        ></p-datepicker>
+                        ></p-datePicker>
                     </ng-template>
                     <ng-template #output>
                         {{ movimiento.fecha }}

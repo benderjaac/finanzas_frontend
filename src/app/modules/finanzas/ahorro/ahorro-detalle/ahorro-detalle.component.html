@@ -116,7 +116,7 @@
          <tr *ngIf="showFilters">
               <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
-                    <p-datepicker
+                    <p-datePicker
                         [showIcon]="true"
                         [placeholder]="'Fecha exacta'"
                         (onSelect)="onFilterExactDate($event, 'fecha')"
@@ -129,7 +129,7 @@
                 </div>
 
                 <div *ngIf="filterFecharango">
-                    <p-datepicker
+                    <p-datePicker
                         [showIcon]="true"
                         [placeholder]="'Rango de fecha'"
                         [(ngModel)]="filtroFechaRango"
@@ -138,7 +138,7 @@
                         [readonlyInput]="true"
                         selectionMode="range"
                         appendTo="body"
-                    ></p-datepicker>
+                    ></p-datePicker>
                     <br>
                     <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
                 </div>
@@ -180,7 +180,7 @@
             <td class="min-w-50">
               <p-cellEditor>
                 <ng-template #input>
-                  <p-datepicker
+                    <p-datePicker
                     class="w-full"
                     id="fecha"
                     [showIcon]="true"
