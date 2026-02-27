@@ -122,6 +122,7 @@
                         (onSelect)="onFilterExactDate($event, 'fecha')"
                         dateFormat="yy-mm-dd"
                         [readonlyInput]="true"
+                        appendTo="body"
                     ></p-datepicker>
                     <br>
                     <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=true">Por rango</span>
@@ -136,6 +137,7 @@
                         dateFormat="yy-mm-dd"
                         [readonlyInput]="true"
                         selectionMode="range"
+                        appendTo="body"
                     ></p-datepicker>
                     <br>
                     <span class="text-muted-color text-sm cursor-pointer" (click)="filterFecharango=false">fecha exacta</span>
@@ -185,6 +187,7 @@
                     dateFormat="yy-mm-dd"
                     [readonlyInput]="true"
                     [(ngModel)]="ahorroDeposito.fecha"
+                    appendTo="body"
                   ></p-datepicker>
                 </ng-template>
                 <ng-template #output>

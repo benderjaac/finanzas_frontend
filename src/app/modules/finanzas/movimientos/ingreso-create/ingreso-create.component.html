@@ -99,6 +99,7 @@
               formControlName="fecha"
               dateFormat="yy-mm-dd"
               [readonlyInput]="true"
+              appendTo="body"
             ></p-datepicker>
             @if (registerForm.get('fecha')?.hasError('required') && registerForm.get('fecha')?.touched) {
               <small class="text-red-500">
