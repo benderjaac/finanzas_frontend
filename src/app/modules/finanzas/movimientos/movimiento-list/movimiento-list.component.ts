@@ -91,6 +91,7 @@ export class MovimientoListComponent {
   }
 
   getDataItems(event: TableLazyLoadEvent):void{
+    this.cancelAllActiveEditions();
     this.lastEvent=event;
     this.loading = true;
     const ApiQuery = this._filterService.buildQuery(event, this.rowsDefault, this.OrderDefault);
