@@ -1,26 +1,27 @@
 <!-- <div class="bg-sky-800 bg-emerald-800 bg-rose-500 bg-red-600 bg-lime-700 bg-cyan-500 bg-yellow-400 bg-green-500 bg-violet-500 bg-lime-700 bg-orange-600 bg-red-400 bg-orange-800 bg-slate-600 bg-fuchsia-800 bg-indigo-600 bg-teal-300 "></div> -->
 <p-toast />
 <p-table #dt
-    [value]="movimientos"
-    [lazy]="true"
+         stripedRows
+         showGridlines
+         [value]="movimientos"
+         [lazy]="true"
 
-    [paginator]="true"
-    [rowsPerPageOptions]="rowsPerPageOptions"
-    [rows]="rowsDefault"
-    [totalRecords]="totalRecords"
-    [showCurrentPageReport]="true"
-    currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} gastos"
+         [paginator]="true"
+         [rowsPerPageOptions]="rowsPerPageOptions"
+         [rows]="rowsDefault"
+         [totalRecords]="totalRecords"
+         [showCurrentPageReport]="true"
+         currentPageReportTemplate="Mostrando de {first} a {last} del total {totalRecords} gastos"
 
-    filterMode="row"
+         filterMode="row"
 
-    (onLazyLoad)="getDataItems($event)"
+         (onLazyLoad)="getDataItems($event)"
 
-    [loading]="loading"
-    [tableStyle]="{ 'min-width': '50rem', 'min-height': '30rem' }"
+         [loading]="loading"
 
-    dataKey="id"
-    editMode="row"
-    >
+         dataKey="id"
+         editMode="row"
+>
     <ng-template pTemplate="caption">
         <div class="flex items-center justify-between">
             <span class="text-xl font-bold">Movimientos</span>
@@ -34,23 +35,23 @@
 
             </button>
             <button
-              pButton
-              label="Nuevo ingreso"
-              (click)="addIngreso()"
-              icon="pi pi-check"
-              class="w-40"
-              severity="success" text>
+                pButton
+                label="Nuevo ingreso"
+                (click)="addIngreso()"
+                icon="pi pi-check"
+                class="w-40"
+                severity="success" text>
 
             </button>
             <div>
                 <p-button icon="pi pi-eraser"
-                    class="mr-2"
-                    (click)="resetTable()" rounded raised />
+                          class="mr-2"
+                          (click)="resetTable()" rounded raised />
                 <p-button icon="pi pi-filter-fill"
-                    class="mr-2"
-                    (click)="showHiddeFilters()" rounded raised />
+                          class="mr-2"
+                          (click)="showHiddeFilters()" rounded raised />
                 <p-button icon="pi pi-refresh"
-                    (click)="reloadTable()" rounded raised />
+                          (click)="reloadTable()" rounded raised />
             </div>
 
 
@@ -66,7 +67,7 @@
             <th>Acciones</th>
         </tr>
         <!-- filtros -->
-         <tr *ngIf="showFilters">
+        <tr *ngIf="showFilters">
             <th class="min-w-50">
                 <div *ngIf="!filterFecharango" >
                     <p-datePicker
@@ -98,39 +99,39 @@
             </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
-                pInputText
-                [placeholder]="'Contiene...'"
-                type="text"
-                (input)="onFilterInput($event, 'descri', 'contains')"
+                       pInputText
+                       [placeholder]="'Contiene...'"
+                       type="text"
+                       (input)="onFilterInput($event, 'descri', 'contains')"
                 />
             </th>
-           <th>
-            <p-select
-                class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2 w-full"
-                [options]="[
+            <th>
+                <p-select
+                    class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2 w-full"
+                    [options]="[
                     { label: 'Todos', value: '' },
                     { label: 'Ingreso', value: 'Ingreso' },
                     { label: 'Gasto', value: 'Gasto' }
                 ]"
-                placeholder="Operacón"
-                (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
-                appendTo="body"
-            ></p-select>
-           </th>
+                    placeholder="Operacón"
+                    (onChange)="onFilterSelect($event.value, 'tipo', 'contains')"
+                    appendTo="body"
+                ></p-select>
+            </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
-                pInputText
-                [placeholder]="'aprox..'"
-                type="number"
-                (input)="onFilterNumberInput($event, 'monto', 'between')"
+                       pInputText
+                       [placeholder]="'aprox..'"
+                       type="number"
+                       (input)="onFilterNumberInput($event, 'monto', 'between')"
                 />
             </th>
             <th>
                 <input class="border-solid border-1 rounded-sm border-opacity-50 h-10 px-2"
-                pInputText
-                [placeholder]="'Contiene...'"
-                type="text"
-                (input)="onFilterInput($event, 'categoria.nombre', 'contains')"
+                       pInputText
+                       [placeholder]="'Contiene...'"
+                       type="text"
+                       (input)="onFilterInput($event, 'categoria.nombre', 'contains')"
                 />
             </th>
             <th></th>
@@ -142,7 +143,7 @@
                 <p-cellEditor>
                     <ng-template #input>
                         <p-datePicker
-                            class="w-full"
+                            class="max-w-40"
                             id="fecha"
                             [showIcon]="true"
                             dateFormat="yy-mm-dd"
@@ -171,7 +172,7 @@
             </td>
             <td>
                 <span
-                [ngClass]="{
+                    [ngClass]="{
                     'text-green-600': movimiento.tipo === 'Ingreso',
                     'text-red-600': movimiento.tipo === 'Gasto' }">
                     {{ movimiento.tipo }}
@@ -180,30 +181,29 @@
             <td>
                 <p-cellEditor>
                     <ng-template #input>
-                        <p-inputnumber *ngIf="movimiento.tipo === 'Ingreso'"
-                            id="monto"
-                            prefix="$ "
-                            [(ngModel)]="movimiento.monto"
-                            class="border-solid border-1 rounded-sm border-opacity-50 h-10"
-                            appAutofocus
-                            [min]="0.01"
-                            locale="en-US"
-                            [maxFractionDigits]="2"
-                            />
-                            <p-inputnumber *ngIf="movimiento.tipo === 'Gasto'"
-                                id="monto"
-                                prefix="$ "
-                                [(ngModel)]="movimiento.monto"
-                                class="border-solid border-1 rounded-sm border-opacity-50 h-10"
-                                [max]="-0.01"
-                                locale="en-US"
-                                [maxFractionDigits]="2"
-                            />
+                        <p-inputNumber *ngIf="movimiento.tipo === 'Ingreso'"
+                                       id="monto"
+                                       prefix="$ "
+                                       [(ngModel)]="movimiento.monto"
+                                       class ="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                                       [min]="0.01"
+                                       locale="en-US"
+                                       [maxFractionDigits]="2"
+                        />
+                        <p-inputNumber *ngIf="movimiento.tipo === 'Gasto'"
+                                       id="monto"
+                                       prefix="$ "
+                                       [(ngModel)]="movimiento.monto"
+                                       class="border-solid border-1 rounded-sm border-opacity-50 h-10"
+                                       [max]="-0.01"
+                                       locale="en-US"
+                                       [maxFractionDigits]="2"
+                        />
                     </ng-template>
                     <ng-template #output>
                       <span
-                        class="font-bold"
-                      [ngClass]="{ 'text-green-600': movimiento.tipo === 'Ingreso','text-red-600': movimiento.tipo === 'Gasto' }">
+                          class="font-bold"
+                          [ngClass]="{ 'text-green-600': movimiento.tipo === 'Ingreso','text-red-600': movimiento.tipo === 'Gasto' }">
                         {{ movimiento.monto }}
                       </span>
                     </ng-template>
@@ -319,8 +319,8 @@
     contentStyleClass="dialog-content-scroll"
     [resizable]="false">
     <app-gasto-create *ngIf="visibleAddGasto"
-        (msjEvent)="mostrarMensaje($event)"
-        (cerrarDialog)="closeDialog($event)">
+                      (msjEvent)="mostrarMensaje($event)"
+                      (cerrarDialog)="closeDialog($event)">
     </app-gasto-create>
 </p-dialog>
 
@@ -332,7 +332,7 @@
     contentStyleClass="dialog-content-scroll"
     [resizable]="false">
     <app-ingreso-create *ngIf="visibleAddIngreso"
-        (msjEvent)="mostrarMensaje($event)"
-        (cerrarDialog)="closeDialog($event)">
+                        (msjEvent)="mostrarMensaje($event)"
+                        (cerrarDialog)="closeDialog($event)">
     </app-ingreso-create>
 </p-dialog>
