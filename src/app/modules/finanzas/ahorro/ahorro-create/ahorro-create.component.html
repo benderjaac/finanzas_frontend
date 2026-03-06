@@ -39,7 +39,7 @@
         <div  class="mt-6">
           <label for="fecha_inicio" class="block text-sm font-medium text-color mb-1">Fecha de inicio</label>
 
-          <<p-datePicker
+          <p-datePicker
             class="w-full"
             id="fecha_inicio"
             [showIcon]="true"
@@ -47,7 +47,7 @@
             dateFormat="yy-mm-dd"
             [readonlyInput]="true"
             appendTo="body"
-          ></p-datepicker>
+          ></p-datePicker>
           @if (registerForm.get('fecha_inicio')?.hasError('required') && registerForm.get('fecha_inicio')?.touched) {
             <small class="text-red-500">
               Ingrese fecha de inicio

@@ -92,7 +92,7 @@
           <div  class="mt-6">
             <label for="fecha" class="block text-sm font-medium mb-1">Fecha</label>
 
-            <<p-datePicker
+            <p-datePicker
               class="w-full"
               id="fecha"
               [showIcon]="true"
@@ -100,7 +100,7 @@
               dateFormat="yy-mm-dd"
               [readonlyInput]="true"
               appendTo="body"
-            ></p-datepicker>
+            ></p-datePicker>
             @if (registerForm.get('fecha')?.hasError('required') && registerForm.get('fecha')?.touched) {
               <small class="text-red-500">
                 Ingrese fecha

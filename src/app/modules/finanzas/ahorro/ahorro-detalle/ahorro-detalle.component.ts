@@ -17,7 +17,6 @@ import { ProgressBar } from 'primeng/progressbar';
 import { Table, TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { Toast } from 'primeng/toast';
 import { Subject, takeUntil } from 'rxjs';
-import {Ripple} from 'primeng/ripple';
 import { Dialog } from "primeng/dialog";
 import { AhorroEditComponent } from "../ahorro-edit/ahorro-edit.component";
 import { AhorroDepositoCreateComponent } from "../ahorroDeposito-create/ahorroDeposito-create.component";
@@ -28,7 +27,7 @@ import { Select } from "primeng/select";
 
 @Component({
   selector: 'app-ahorro-detalle',
-  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Ripple, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent, Select],
+  imports: [ConfirmPopupModule, TooltipModule, InputNumberModule, FormsModule, DatePickerModule, Toast, TableModule, CommonModule, ButtonModule, ProgressBar, Dialog, AhorroEditComponent, AhorroDepositoCreateComponent, Select],
   templateUrl: './ahorro-detalle.component.html',
   providers: [ConfirmationService, MessageService]
 })

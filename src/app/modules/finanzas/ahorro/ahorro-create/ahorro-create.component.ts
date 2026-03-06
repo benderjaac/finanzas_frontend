@@ -5,13 +5,12 @@ import { AhorroService } from 'app/core/services-api/ahorro.service';
 import { AutofocusDirective } from 'app/modules/utils/autofocus.directive';
 import { ButtonModule } from 'primeng/button';
 import { DatePickerModule } from 'primeng/datepicker';
-import { InputNumber } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-ahorro-create',
-  imports: [AutofocusDirective, InputNumber, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule],
+  imports: [AutofocusDirective, DatePickerModule, ReactiveFormsModule, InputTextModule, ButtonModule],
   templateUrl: './ahorro-create.component.html'
 })
 /**
